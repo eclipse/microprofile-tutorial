@@ -225,7 +225,7 @@ JSON-B (JSON Binding):: A Jakarta EE (formerly Java EE) API for binding Java obj
 JAX-RS (Java API for RESTful Web Services):: A Jakarta EE API for creating web services according to the REST architectural pattern in Java, using annotations to simplify development. It enables the easy creation and management of resources via standard HTTP methods. It is currently known as Jakarta RESTful Web Services.
 
 [[cdi]]
-CDI (Contexts and Dependency Injection):: A set of Java services and APIs for enterprise-grade dependency injection, offering type-safe mechanisms, context lifecycle management, and a framework for decoupling application components. It enhances modularity and facilitates the development of loosely coupled, easily testable applications.
+CDI (Contexts and Dependency Injection):: A Jakarta EE API for enterprise-grade dependency injection, offering type-safe mechanisms, context lifecycle management, and a framework for decoupling application components. It enhances modularity and facilitates the development of loosely coupled, easily testable applications.
 
 [[boilerplate-code]]
 Boilerplate Code:: A piece of code that must be included in many places with little or no alteration.
