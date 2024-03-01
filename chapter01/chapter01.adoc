@@ -122,7 +122,7 @@ Below is the list of MicroProfile Implementations, each offering a platform for 
 
 == Architecture Philosophy 
 
-The overall goal of MicroProfile architecture is to provide a lightweight enterprise-grade framework tailored for building cloud-native applications and enabling developers to build and deploy microservices with Java easily: 
+The overall goal of MicroProfile architecture is to provide a lightweight enterprise-grade framework tailored for building cloud-native applications and enabling developers to build and deploy microservices with Java easily:
 
 - *Simplicity*: MicroProfile APIs are designed to be simple and easy to use. They avoid unnecessary complexity and focus on providing the essential functionality for building microservices.
 
@@ -132,7 +132,7 @@ The overall goal of MicroProfile architecture is to provide a lightweight enterp
 
 - *Community-driven*: It encourages active participation from the Java community for continuous evolution.
 
-- *Vendor-Neutral*: As an Eclipse Foundation project, MicroProfile is vendor-neutral. It's supported by several industry players, ensuring that no single company controls its direction.
+- *Vendor-Neutral*: MicroProfile is vendor-neutral. It’s supported by several industry players, ensuring that no single company controls its direction.
 
 - *Focus on Cloud-Native Applications*: The architecture is specifically tailored for cloud environments. MicroProfile integrates with a number of cloud-native technologies, such as Kubernetes and Istio. This makes it easy to deploy and manage MicroProfile applications in cloud environments.
 
