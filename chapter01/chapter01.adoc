@@ -19,28 +19,28 @@ link:https://microprofile.io/[MicroProfile] is an open-source specification that
 
 MicroProfile was initiated in June 2016 by a collaboration of industry leaders, Java community members, and individual contributors. In the following year, the project was transitioned to the link:https://www.eclipse.org/[Eclipse Foundation] to enhance the project's openness and vendor-neutral stance. Now, MicroProfile has become a key framework for extending Java in the cloud-computing domain, offering a comprehensive suite of APIs tailored for developing microservices in a cloud-native ecosystem.
 
-The **MicroProfile Working Group** currently comprises of the following members: 
+The *MicroProfile Working Group* currently comprises of the following members: 
 
-* Committer Representative (Year 2024)
+Committer Representative (Year 2024)
 
-   ** Emerson Castañeda
+   * Emerson Castañeda
 
-* Java user groups 
+Java user groups 
 
-   ** Atlanta Java User Group (AJUG)
-   ** Association of the German Java User Groups (iJUG)
+   * Atlanta Java User Group (AJUG)
+   * Association of the German Java User Groups (iJUG)
 
-* Corporate Members
+Corporate Members
 
-  ** Hunan AsiaInfo Anhui 
-  ** IBM 
-  ** Fujitsu
-  ** Red Hat
-  ** Primeton
-  ** Payara
-  ** Microsoft
-  ** Tomitribe
-  ** Oracle
+  * Hunan AsiaInfo Anhui 
+  * IBM 
+  * Fujitsu
+  * Red Hat
+  * Primeton
+  * Payara
+  * Microsoft
+  * Tomitribe
+  * Oracle
 
 This collective effort demonstrates MicroProfile's commitment to evolving Java enterprise development for the modern cloud environment, leveraging the expertise of its community.
 
@@ -48,21 +48,21 @@ This collective effort demonstrates MicroProfile's commitment to evolving Java e
 
 The MicroProfile Specification was developed to address the following requirements:
 
-- *Microservices Architecture Adoption*: The industry shift towards microservices architecture offered several benefits like flexibility, scalability, and speed of deployment. At the same time, it has introduced several new challenges for developers due to the added complexities. These include ensuring seamless communication and integration between microservices, securing each microservice individually as well as interactions between them, managing performance and efficiency, designing microservices to be fault-tolerant and resilient to failures, ensuring data consistency across services, managing configurations across multiple environments and managing various independently deployable components. To address these challenges, MicroProfile provides a simplified and optimized set of APIs designed to build and deploy Java-based microservices applications.
+- *Microservices Architecture Adoption*: The industry shift towards microservices architecture has brought several advantages, including improved flexibility, scalability, and speed of deployment. However, it also introduced several new challenges for developers due to the added complexities. These include ensuring seamless integration between microservices, securing each microservice individually as well as interactions between them, managing performance and efficiency, designing microservices to be fault-tolerant and resilient to failures, ensuring data consistency across services, managing configurations across multiple environments and managing various independently deployable components. To address these challenges, MicroProfile provides a simplified and optimized set of APIs designed to build and deploy Java-based microservices applications.
 
-- *Limitations of Traditional Enterprise Java*: Traditional enterprise Java frameworks, like Java EE (now Jakarta EE), were often seen as too monolithic and heavyweight for microservices while evolving too slowly. It led to a demand for a more streamlined and microservices-focused framework.
+- *Limitations of Traditional Enterprise Java*: Traditional enterprise Java frameworks, like Java EE (now Jakarta EE), were often seen as too monolithic and heavyweight for microservices while evolving too slowly. It led to a demand for a more streamlined and microservices-focused framework. MicroProfile fills this gap by providing a lightweight alternative optimized for microservices development.
 
-- *Cloud-Native Application Development*: The rise of cloud-native applications necessitated new features such as external configuration, health checks, and fault tolerance, which existing Java standards did not adequately address. MicroProfile addressed these gaps left for cloud-native application development, making it easier for developers to create resilient, scalable, and manageable microservices using Java.
+- *Cloud-Native Application Development*: The rise of cloud-native applications necessitated new features such as external configuration, health checks, and fault tolerance, which existing Java standards did not adequately address. MicroProfile bridges these gaps left, making it easier for developers to create resilient, scalable, and manageable microservices for cloud-native application development using Java.
 
-- *Community-Driven Innovation*: The Java community saw the need for a platform where they could collaboratively develop and innovate rapidly to keep up with the fast-paced changes in technology and microservice's best practices.
+- *Community-Driven Innovation*: The rapid pace of technological change in microservices necessitated a collaborative platform for innovation. MicroProfile, backed by community and vendor support, promotes rapid evolution to meet these demands.
 
 - *Vendor Neutrality and Interoperability*: There was a need for a framework that could provide standardization across different implementations and environments, ensuring compatibility and avoiding vendor lock-in.
 
 - *Focus on Simplicity and Productivity*: Developers needed a simple, easy-to-understand framework that increased productivity by reducing boilerplate code and focusing on essential microservice functionalities. Well-defined standards and patterns eliminate the need to reinvent the wheel, allowing developers to focus on microservices logic.
 
-- *Support Microservices with familiar programming model*: MicroProfile was founded with support for Java EE's JSON-P, JSON-B, JAX-RS, and CDI to define the core programming model and accelerate adoption.
+- *Support for familiar programming model*: MicroProfile was founded with support for Jakarta JSON Processing, Jakarta JSON Binding, Jakarta RESTful Web Services, and Jakarta Contexts and Dependency Injection (CDI) to define the core programming model and accelerate adoption.
 
-- *Emphasis on Lightweight and Resilient Services*: With the microservices architecture, there's a need for frameworks that support the development of lightweight, resilient, and independently deployable services, which are essential for microservices.
+- *Lightweight and Resilient Services*: With the microservices architecture, there's a need for frameworks that support the development of lightweight, resilient, and independently deployable services, which are essential for microservices.
 
 - *Rapid Adaptation to New Trends*: The technology landscape, especially around microservices, is constantly evolving. A framework like MicroProfile, which is community-driven and rapidly evolving, can adapt quickly to these changes, continually incorporating new practices and technologies.
 
