@@ -64,7 +64,10 @@ The MicroProfile Specification was developed to address the following requiremen
 
 - *Lightweight and Resilient Services*: With the microservices architecture, there's a need for frameworks that support the development of lightweight, resilient, and independently deployable services, which are essential for microservices.
 
-- *Rapid Adaptation to New Trends*: The technology landscape, especially around microservices, is constantly evolving. A framework like MicroProfile, which is community-driven and rapidly evolving, can adapt quickly to these changes, continually incorporating new practices and technologies.
+- *Rapid Adaptation to New Trends*: The technology landscape, especially around microservices, is constantly evolving. A framework like MicroProfile, which is community-driven and rapidly evolving, can adapt quickly to these changes, continually incorporating new practices and technologies, including: 
+  ** *Streaming APIs and Reactive Programming Model*: To facilitate non-blocking communication and data processing, enhancing system responsiveness and scalability.
+  ** *API-First Development (Open API)*: Emphasizing the design and documentation of microservices with an API-first approach, promoting interoperability and clear service contracts.
+  ** *Eventual Consistency and Long Running Actions (LRA)*: Addressing the challenges of data consistency in distributed systems without compromising system performance.
 
 - *Enhanced Observability and Monitoring*: Microservices architectures complicate application monitoring and observability. A framework with built-in support for these capabilities simplifies the management of distributed services.
 
@@ -213,13 +216,13 @@ Vendor Neutrality:: The principle of designing software products and standards n
 Interoperability:: The ability of a software to exchange and make use of information across different platforms and services.
 
 [[json-p]]
-JSON-P (JSON Processing):: A Java API that enables parsing, generating, transforming, and querying JSON data. It facilitates the processing of JSON data within the Java programming environment.
+JSON-P (JSON Processing):: A Jakarta EE (formerly Java EE) API that enables parsing, generating, transforming, and querying JSON data. It facilitates the processing of JSON data within the Java programming environment. Currently it is known as Jakarta JSON Processing.
 
 [[json-b]]
-JSON-B (JSON Binding):: A Java API for binding Java objects to JSON messages and vice versa, streamlining the serialization and deserialization process. It allows custom mappings to handle complex conversion scenarios efficiently.
+JSON-B (JSON Binding):: A Jakarta EE (formerly Java EE) API for binding Java objects to JSON messages and vice versa, streamlining the serialization and deserialization process. It allows custom mappings to handle complex conversion scenarios efficiently. Currently it is known as Jakarta JSON Binding.
 
 [[jax-rs]]
-JAX-RS (Java API for RESTful Web Services):: It supports creating web services according to the REST architectural pattern in Java, using annotations to simplify development. It enables the easy creation and management of resources via standard HTTP methods.
+JAX-RS (Java API for RESTful Web Services):: A Jakarta EE API for creating web services according to the REST architectural pattern in Java, using annotations to simplify development. It enables the easy creation and management of resources via standard HTTP methods. It is currently known as Jakarta RESTful Web Services.
 
 [[cdi]]
 CDI (Contexts and Dependency Injection):: A set of Java services and APIs for enterprise-grade dependency injection, offering type-safe mechanisms, context lifecycle management, and a framework for decoupling application components. It enhances modularity and facilitates the development of loosely coupled, easily testable applications.
