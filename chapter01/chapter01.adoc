@@ -203,10 +203,10 @@ Vendor Neutrality:: The principle of designing software products and standards n
 Interoperability:: The ability of a software to exchange and make use of information across different platforms and services.
 
 [[json-p]]
-JSON-P (JSON Processing):: A Java API that enables parsing, generating, transforming, and querying JSON data. It facilitates the processing of JSON data within the Java programming environment.
+JSON-P (JSON Processing):: A Jakarta EE (formerly Java EE) API that enables parsing, generating, transforming, and querying JSON data. It facilitates the processing of JSON data within the Java programming environment. Currently it is known as Jakarta JSON Processing*.
 
 [[json-b]]
-JSON-B (JSON Binding):: A Java API for binding Java objects to JSON messages and vice versa, streamlining the serialization and deserialization process. It allows custom mappings to handle complex conversion scenarios efficiently.
+JSON-B (JSON Binding):: A Jakarta EE (formerly Java EE) API for binding Java objects to JSON messages and vice versa, streamlining the serialization and deserialization process. It allows custom mappings to handle complex conversion scenarios efficiently. Currently it is known as Jakarta JSON Binding.
 
 [[jax-rs]]
 JAX-RS (Java API for RESTful Web Services):: It supports creating web services according to the REST architectural pattern in Java, using annotations to simplify development. It enables the easy creation and management of resources via standard HTTP methods.
