@@ -15,11 +15,11 @@ This introductory chapter provides a comprehensive overview of the MicroProfile 
 
 == What is MicroProfile
 
-link:https://microprofile.io/[MicroProfile] is an open-source specification that facilitates the development of microservices using enterprise Java technologies. It defines a set of APIs and specifications for building modern, scalable, resilient, and efficient applications based on microservices architecture. The primary goal of MicroProfile is to simplify the development process for Java developers, enabling them to create applications optimized for cloud-native-development.
+link:https://microprofile.io/[MicroProfile] is an open-source specification that enhances enterprise Java technologies for microservices development. It provides a set of APIs and specifications for building modern, scalable, resilient, and efficient microservices-based applications. The primary goal of MicroProfile is to simplify the development for Java developers, enabling them to create applications optimized for cloud-native-development.
 
-A consortium of industry leaders, Java community members, and individual contributors collaborating within an open-source link:https://www.eclipse.org/org/workinggroups/about.php[Eclipse Foundation Working Group] developed MicroProfile. This collaborative approach ensured that MicroProfile was shaped by diverse experiences and requirements, making it a robust and versatile specification extending Java in the cloud-computing domain. 
+MicroProfile was initiated in June 2016 by a collaboration of industry leaders, Java community members, and individual contributors. In the following year, the project was transitioned to the link:https://www.eclipse.org/[Eclipse Foundation] to enhance the project's openness and vendor-neutral stance. Now, MicroProfile has become a key framework for extending Java in the cloud-computing domain, offering a comprehensive suite of APIs tailored for developing microservices in a cloud-native ecosystem.
 
-The MicroProfile Working Group currently comprises of following Java user groups and corporate members: 
+The **MicroProfile Working Group** currently comprises of the following members: 
 
 * Atlanta Java User Group (AJUG)
 * Association of the German Java User Groups (iJUG)
