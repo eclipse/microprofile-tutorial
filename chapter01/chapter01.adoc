@@ -21,17 +21,28 @@ MicroProfile was initiated in June 2016 by a collaboration of industry leaders, 
 
 The **MicroProfile Working Group** currently comprises of the following members: 
 
-* Atlanta Java User Group (AJUG)
-* Association of the German Java User Groups (iJUG)
-* Garden State Java User Group (GSJUG)
-* Hunan AsiaInfo Anhui 
-* IBM 
-* Fujitsu
-* Red Hat
-* Primeton
-* Payara
-* Microsoft
-* Tomitribe
+* Committer Representative (Year 2024)
+
+   ** Emerson Castañeda
+
+* Java user groups 
+
+   ** Atlanta Java User Group (AJUG)
+   ** Association of the German Java User Groups (iJUG)
+
+* Corporate Members
+
+  ** Hunan AsiaInfo Anhui 
+  ** IBM 
+  ** Fujitsu
+  ** Red Hat
+  ** Primeton
+  ** Payara
+  ** Microsoft
+  ** Tomitribe
+  ** Oracle
+
+This collective effort demonstrates MicroProfile's commitment to evolving Java enterprise development for the modern cloud environment, leveraging the expertise of its community.
 
 == Need for MicroProfile
 
