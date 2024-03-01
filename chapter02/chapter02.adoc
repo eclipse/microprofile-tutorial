@@ -1,1 +1,170 @@
+= Chapter 2: Getting Started with MicroProfile
 
+== Introduction 
+
+In this chapter, you'll embark on your MicroProfile journey! We will guide you through creating your first microservice, equipping you with the essential understanding to leverage this robust framework for building modern, cloud-native applications. This journey begins with setting up your development environment, then diving into creating a microservice.
+
+== Topics Covered
+
+- Development Environment Setup
+- Configuring Build Tools
+- Initializing a New MicroProfile Project
+- Choosing right modules for your application
+- Building a RESTful service
+- Deployment
+- Testing your microservices
+- Exploring Further with MicroProfile
+
+== Development Environment Setup
+
+Let's begin by preparing your workspace for MicroProfile development:
+
+=== Java Development Kit (JDK)
+
+MicroProfile, a Java framework, runs on the Java Virtual Machine (JVM), making the Java Development Kit (JDK) an essential component of your development environment. 
+
+To install JDK, follow the steps below:
+
+. *Download*: Visit the official link:https://openjdk.org/[OpenJDK] website and download the JDK version compatible with your operating system.
+
+. *Install*: Follow the installation instructions provided on this official link:https://openjdk.org/install/[OpenJDK Installation] guide.
+
+. *Verify*: After Installation, run the following command in your command line or terminal to verify the Installation: 
+
+[source, bash]
+----
+java -version.
+----
+
+You should an output similar to the one below: 
+----
+openjdk 17.0.10 2024-01-16 LTS
+OpenJDK Runtime Environment Microsoft-8902769 (build 17.0.10+7-LTS)
+OpenJDK 64-Bit Server VM Microsoft-8902769 (build 17.0.10+7-LTS, mixed mode, 
+sharing)
+----
+
+This confirms that JDK 17 has been successfully installed on your system.
+
+NOTE: For most MicroProfile implementations, JDK 11 or later is recommended. In 
+this tutorial, we will be using JDK 17. While OpenJDK is used here, other JDK 
+providers such as Oracle JDK, Amazon Corretto, and Azul Zulu also offer 
+compatible JDK distributions.
+
+=== Build Tools (Maven or Gradle)
+
+Build tools like link:https://maven.apache.org/[Apache Maven] or link:https://gradle.org/[Gradle] are commonly used for managing project dependencies and building Java applications. You can install the one that best fits your project needs. Here's a brief overview to help you decide:
+
+* *Apache Maven*: Known for its convention-over-configuration approach, Maven is a popular choice due to its simple project setup and extensive plugin repository. 
+
+* *Gradle*: Offers a flexible, script-based build configuration, allowing for highly customized build processes. Gradle is renowned for its superior performance, due to its incremental builds  and caching mechanisms. It's a great choice for complex projects requiring customization.
+
+IMPORTANT: If your existing project's build uses Maven wrapper (`mvnw`) or Gradle wrapper (`gradlew`), you don't to install any of these build tools. These wrappers help ensure a consistent build environment without requiring the build tools to be installed on your system. 
+
+==== Installing Apache Maven
+
+To install Maven follow the steps below: 
+
+. Visit the link:https://https://maven.apache.org/install.html[Installing Apache Maven] web page to download the latest version. 
+
+. Follow the installation instructions provided on the site.
+
+. Verify the Maven installation by running this command in your terminal or command line.
+
+----
+mvn -v
+----
+
+You should see output similar to:
+
+----
+Apache Maven 3.9.6 (bc0240f3c744dd6b6ec2920b3cd08dcc295161ae)
+Maven home: /usr/local/sdkman/candidates/maven/current
+Java version: 17.0.10, vendor: Microsoft, runtime: /usr/lib/jvm/msopenjdk-current
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "6.2.0-1019-azure", arch: "amd64", family: "unix"
+----
+
+After Maven is installed, you can configure the _pom.xml_ file in your project to include the MicroProfile dependencies.
+
+==== Gradle
+
+To install Gradle follow the step below: 
+
+. Visit the link:https://gradle.org/install/[Gradle | Installation] web page to download the latest version.
+. Follow the installation instructions provided on the site.
+. Verify the installation by running this command in your terminal or command line.
+
+----
+gradle -version 
+----
+
+You should see output similar to:
+
+----
+Welcome to Gradle 8.6!
+
+Here are the highlights of this release:
+ - Configurable encryption key for configuration cache
+ - Build init improvements
+ - Build authoring improvements
+
+For more details see https://docs.gradle.org/8.6/release-notes.html
+
+------------------------------------------------------------
+Gradle 8.6
+------------------------------------------------------------
+
+Build time:   2024-02-02 16:47:16 UTC
+Revision:     d55c486870a0dc6f6278f53d21381396d0741c6e
+
+Kotlin:       1.9.20
+Groovy:       3.0.17
+Ant:          Apache Ant(TM) version 1.10.13 compiled on January 4 2023
+JVM:          17.0.10 (Microsoft 17.0.10+7-LTS)
+OS:           Linux 6.2.0-1019-azure amd64
+----
+
+After Gradle is installed, you can configure the _build.gradle_ file in your project to include the MicroProfile dependencies.
+
+Whether you opt for Maven's stability and convention or Gradle's flexibility and performance, understanding how to configure and use your chosen build tool is important for MicroProfile development.
+
+=== Integrated Development Environments
+
+Integrated Development Environments (IDEs) enhance developer productivity by providing a rich set of features and extensions such as project boostraping, dependency management, intelligent code completion, configuration assistance, test runners, build, hot deployment and debugging tools. For MicroProfile development, the choice of IDE can significantly affect your development speed and efficiency. Below is a list of popular IDEs and their key features related to Java and MicroProfile development:
+
+==== Eclipse for Enterprise Java and Web Developers
+. link:https://www.eclipse.org/downloads/packages/release/2023-12/r/eclipse-ide-enterprise-java-and-web-developers[Eclipse 2023-12 for Enterprise Java and Web Developers (4.3)] - a widely used IDE for Java development, offering extensive support for Java EE, Jakarta EE, and MicroProfile, among other technologies.
+  * link:https://help.eclipse.org/latest/topic/org.eclipse.jdt.doc.user/gettingStarted/qs-3.htm[Creating your first Java Project] - the official Eclipse documentation containing instructions about crating Java projects.
+. link:https://www.jetbrains.com/idea/[IntelliJ IDEA] - IntelliJ IDEA by JetBrains supports a wide range of programming languages and frameworks, including Java, Kotlin, and frameworks like Spring, Jakarta EE, and MicroProfile.
+  * link:https://www.jetbrains.com/help/idea/2024.1/creating-and-running-your-first-java-application.html[Creating a Java Project Using IntelliJ IDEA 2024.1 ] - refer to this IntelliJ IDEA guide on Creating and Running Your First Java Application.
+. link:https://netbeans.apache.org/front/main/[NetBeans] - an open-source IDE that supports Java development, including Java SE, Java EE, JavaFX, and more. 
+  * link:https://netbeans.apache.org/tutorial/main/kb/docs/java/quickstart/[Java Quick Start Tutorial] - Check out this NetBeans Quick Start Guide for a tutorial on creating a Java application. 
+. link:https://code.visualstudio.com/[Visual Studio Code] - a lightweight, powerful source code editor that supports Java development through extensions. 
+  * link:https://code.visualstudio.com/docs/java/java-tutorial[Getting Started with Java in VS Code] - To start with Java in VS Code, you can follow this documentation.
+
+Selecting an IDE should be based on personal preference, as the best choice varies depending on individual needs, familiarity, and the specific features that enhance your productivity.
+
+=== Setting up MicroProfile Runtime
+
+MicroProfile applications need a runtime that supports MicroProfile specifications or a MicroProfile-compatible server to run your applications. Some popular options include:
+
+- link:https://openliberty.io/[Open Liberty] - A flexible server framework from IBM that supports MicroProfile, allowing developers to build microservices and cloud-native applications with ease.
+  *  link:https://openliberty.io/start/[Downloading Open Liberty] - Open Liberty is known for its dynamic updates and lightweight design, which enhances developer productivity and application performance.
+- link:https://quarkus.io/[Quarkus] - Known for its container-first approach, offering fast startup times and low memory footprint.
+  * link:https://quarkus.io/guides/getting-started[Getting Started with Quarkus] - Quarkus aims to optimize Java for Kubernetes and cloud environments
+- link:https://www.payara.fish/products/payara-micro/[Payara Micro] - A lightweight middleware platform suited for containerized Jakarta EE and MicroProfile applications.
+  * link:https://www.payara.fish/downloads/payara-platform-community-edition/[Payara Platform Community Edition] - It enables easy packaging of applications into a single, runnable JAR file, simplifying deployment and scaling in cloud environments.
+- link:https://www.wildfly.org/[WildFly] - a flexible, lightweight, managed application runtime that offers full Jakarta EE and MicroProfile support.
+  * link:https://www.wildfly.org/downloads/[WildFly Downloads] - WildFly is designed for scalability and flexibility in both traditional and cloud-native environments.
+- link:https://helidon.io/[Helidon] - Developed by Oracle, Helidon MP implements MicroProfile specifications and provides a familiar programming model for Jakarta EE developers, enabling efficient microservice development.
+  * link:https://helidon.io/docs/[Helidon Documentation] - The Helidon MP provides comprehensive documentation to help developers get started with the framework, understand its core concepts, and efficiently develop microservices. 
+- link:https://tomee.apache.org/[TomEE] - Apache TomEE integrates several Apache projects with Apache Tomcat to provide a Jakarta EE environment. TomEE offers support for MicroProfile, allowing developers to build and deploy microservices using the well-known Jakarta EE technologies with additional MicroProfile capabilities.
+  * link:https://tomee.apache.org/download.html[TomEE Downloads] - It allows developers to utilize the familiar Jakarta EE technologies while also leveraging MicroProfile's capabilities for building and deploying microservices. 
+  * link:https://tomee.apache.org/microprofile-6.0/javadoc/[TomEE MicroProfile Documentation] - TomEE aims to provide a lightweight and efficient environment for enterprise applications.
+
+=== Generating a Project using MicroProfile Starter
+
+Generating a project structure using link:chapter02/mp-starter.adoc[MicroProfile Starter].
+
+IMPORTANT: At the time of writing this tutorial, the latest MicroProfile released version was 6.1. We will not be using MicroProfile Starter to generate the project structure as it does not support this version through any of the implementation.
