@@ -203,13 +203,13 @@ Vendor Neutrality:: The principle of designing software products and standards n
 Interoperability:: The ability of a software to exchange and make use of information across different platforms and services.
 
 [[json-p]]
-JSON-P (JSON Processing):: A Jakarta EE (formerly Java EE) API that enables parsing, generating, transforming, and querying JSON data. It facilitates the processing of JSON data within the Java programming environment. Currently it is known as Jakarta JSON Processing*.
+JSON-P (JSON Processing):: A Jakarta EE (formerly Java EE) API that enables parsing, generating, transforming, and querying JSON data. It facilitates the processing of JSON data within the Java programming environment. Currently it is known as Jakarta JSON Processing.
 
 [[json-b]]
 JSON-B (JSON Binding):: A Jakarta EE (formerly Java EE) API for binding Java objects to JSON messages and vice versa, streamlining the serialization and deserialization process. It allows custom mappings to handle complex conversion scenarios efficiently. Currently it is known as Jakarta JSON Binding.
 
 [[jax-rs]]
-JAX-RS (Java API for RESTful Web Services):: It supports creating web services according to the REST architectural pattern in Java, using annotations to simplify development. It enables the easy creation and management of resources via standard HTTP methods.
+JAX-RS (Java API for RESTful Web Services):: A Jakarta EE API for creating web services according to the REST architectural pattern in Java, using annotations to simplify development. It enables the easy creation and management of resources via standard HTTP methods. It is currently known as Jakarta RESTful Web Services.
 
 [[cdi]]
 CDI (Contexts and Dependency Injection):: A set of Java services and APIs for enterprise-grade dependency injection, offering type-safe mechanisms, context lifecycle management, and a framework for decoupling application components. It enhances modularity and facilitates the development of loosely coupled, easily testable applications.
