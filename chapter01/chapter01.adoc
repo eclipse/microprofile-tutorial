@@ -109,7 +109,7 @@ Standalone specifications address more advanced needs that every microservices a
 | link:https://microprofile.io/specifications/microprofile-opentracing/[Open Tracing]|  Integrates distributed tracing by defining a way for services to trace requests across service boundaries, improving observability.
 |=======================
 
-== Current MicroProfile Implementations
+== MicroProfile Implementations
 Below is the list of MicroProfile Implementations, each offering a platform for building and running microservices-based applications:
 
 - link:https://www.payara.fish/products/payara-micro/[Payara Micro^]
@@ -118,6 +118,7 @@ Below is the list of MicroProfile Implementations, each offering a platform for 
 - link:https://github.com/fujitsu/launcher[Launcher^]
 - link:https://quarkus.io/[Quarkus^]
 - link:https://www.wildfly.org/[WildFly^]
+- link:https://helidon.io/[Helidon^]
 
 == Architecture Philosophy 
 
