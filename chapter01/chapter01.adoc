@@ -78,20 +78,20 @@ image::http://microprofile.io/wp-content/uploads/2023/10/microprofile_release_6.
 
 === MicroProfile Platform Component Specifications
 
-The MicroProfile Platform Specification is the core set of MicroProfile specifications designed to provide the foundational functionalities needed for microservices development. These specifications solve specific microservices challenges, such as configuration, fault tolerance, health checks, metrics, security, etc. The table below provides a list of platform specifications of MicroProfile along with their descriptions:
+The MicroProfile Platform Specification is the core set of MicroProfile specifications designed to provide the foundational functionalities needed for microservices development. These specifications solve specific microservices challenges, including configuration, fault tolerance, health checks, metrics, and security. The table below provides a list of platform specifications of MicroProfile along with their descriptions:
 
 [options="header"]
 |=======================
 |Specification          |Description
-|link:https://microprofile.io/specifications/microprofile-config/[Config] |Provides an easy-to-use and flexible system for application configuration.
-|link:https://microprofile.io/specifications/microprofile-fault-tolerance/[Fault Tolerance]|Implements patterns like Circuit Breaker, Bulkhead, Retry, Timeout, and Fallback for building resilient applications.
-|link:https://microprofile.io/specifications/microprofile-jwt-auth/[JWT Authentication]|Defines a standard for using OpenID Connect (OIDC) based JSON Web Tokens(JWT) for role-based access control(RBAC) of microservices endpoints for secure communication.
+|link:https://microprofile.io/specifications/microprofile-config/[Config] | Provides an easy-to-use and flexible system for application configuration.
+|link:https://microprofile.io/specifications/microprofile-fault-tolerance/[Fault Tolerance]| Implements patterns like Circuit Breaker, Bulkhead, Retry, Timeout, and Fallback for building resilient applications.
+|link:https://microprofile.io/specifications/microprofile-jwt-auth/[JWT Authentication]| Defines a standard for using OpenID Connect (OIDC) based JSON Web Tokens(JWT) for role-based access control(RBAC) of microservices endpoints for secure communication.
 |link:https://microprofile.io/specifications/microprofile-metrics/[Metrics] | Define custom application metrics and expose platform metrics on a standard endpoint using a standard format to external monitoring systems.
 |link:https://microprofile.io/specifications/microprofile-health/[Health]  | Allows applications to expose their health and readiness to perform operations to the underlying platform, which is crucial for automated recovery in cloud environments.
 |link:https://microprofile.io/specifications/microprofile-open-api/[Open API] | Facilitates the generation of OpenAPI documentation for RESTful services, making API discovery and understanding easier.
 |link:https://microprofile.io/specifications/microprofile-telemetry/[Telemetry]| Provides a unified set of APIs, libraries, and tools for collecting, processing, and exporting telemetry data (metrics, traces, and logs) from cloud-native applications and services.
 |link:https://microprofile.io/specifications/microprofile-rest-client[Rest Client]| Defines a type-safe approach to invoke RESTful services over HTTP(S), simplifying the development of Rest clients.
-| link:https://jakarta.ee/specifications/coreprofile/10/[Jakarta EE Core Profile 10] | An optimzed Jakarta EE platform, designed specifically for developing microservices and cloud-native Java applications with a reduced set of specifications for a lighter runtime footprint.
+| link:https://jakarta.ee/specifications/coreprofile/10/[Jakarta EE Core Profile 10] | An optimized Jakarta EE platform designed specifically for developing microservices and cloud-native Java applications with a reduced set of specifications for a lighter runtime footprint.
 |=======================
 
 === Standalone (Outside Umbrella) Specifications 
