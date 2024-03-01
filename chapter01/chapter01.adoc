@@ -53,7 +53,10 @@ The MicroProfile Specification was developed to address the following requiremen
 
 - *Emphasis on Lightweight and Resilient Services*: With the microservices architecture, there's a need for frameworks that support the development of lightweight, resilient, and independently deployable services, which are essential for microservices.
 
-- *Rapid Adaptation to New Trends*: The technology landscape, especially around microservices, is constantly evolving. A framework like MicroProfile, which is community-driven and rapidly evolving, can adapt quickly to these changes, continually incorporating new practices and technologies.
+- *Rapid Adaptation to New Trends*: The technology landscape, especially around microservices, is constantly evolving. A framework like MicroProfile, which is community-driven and rapidly evolving, can adapt quickly to these changes, continually incorporating new practices and technologies, including: 
+  ** *Streaming APIs and Reactive Programming Model*: To facilitate non-blocking communication and data processing, enhancing system responsiveness and scalability.
+  ** *API-First Development (Open API)*: Emphasizing the design and documentation of microservices with an API-first approach, promoting interoperability and clear service contracts.
+  ** *Eventual Consistency and Long Running Actions (LRA)*: Addressing the challenges of data consistency in distributed systems without compromising system performance.
 
 - *Enhanced Observability and Monitoring*: Microservices architectures complicate application monitoring and observability. A framework with built-in support for these capabilities simplifies the management of distributed services.
 
