@@ -136,18 +136,24 @@ Integrated Development Environments (IDEs) enhance developer productivity by pro
 ==== Eclipse for Enterprise Java and Web Developers
 . link:https://www.eclipse.org/downloads/packages/release/2023-12/r/eclipse-ide-enterprise-java-and-web-developers[Eclipse 2023-12 for Enterprise Java and Web Developers (4.3)] - a widely used IDE for Java development, offering extensive support for Java EE, Jakarta EE, and MicroProfile, among other technologies.
   * link:https://help.eclipse.org/latest/topic/org.eclipse.jdt.doc.user/gettingStarted/qs-3.htm[Creating your first Java Project] - the official Eclipse documentation containing instructions about crating Java projects.
+
+==== IntelliJ IDEA
 . link:https://www.jetbrains.com/idea/[IntelliJ IDEA] - IntelliJ IDEA by JetBrains supports a wide range of programming languages and frameworks, including Java, Kotlin, and frameworks like Spring, Jakarta EE, and MicroProfile.
+
+==== Apache NetBeans
   * link:https://www.jetbrains.com/help/idea/2024.1/creating-and-running-your-first-java-application.html[Creating a Java Project Using IntelliJ IDEA 2024.1 ] - refer to this IntelliJ IDEA guide on Creating and Running Your First Java Application.
 . link:https://netbeans.apache.org/front/main/[NetBeans] - an open-source IDE that supports Java development, including Java SE, Java EE, JavaFX, and more. 
   * link:https://netbeans.apache.org/tutorial/main/kb/docs/java/quickstart/[Java Quick Start Tutorial] - Check out this NetBeans Quick Start Guide for a tutorial on creating a Java application. 
+
+==== Visual Studio Code
 . link:https://code.visualstudio.com/[Visual Studio Code] - a lightweight, powerful source code editor that supports Java development through extensions. 
   * link:https://code.visualstudio.com/docs/java/java-tutorial[Getting Started with Java in VS Code] - To start with Java in VS Code, you can follow this documentation.
 
-Selecting an IDE should be based on personal preference, as the best choice varies depending on individual needs, familiarity, and the specific features that enhance your productivity.
+Selecting an IDE should be based on personal preference, as the best choice varies depending on individual needs, familiarity, and the specific features that enhance your productivity. Each IDE offers unique advantages for MicroProfile development.
 
 === Setting up MicroProfile Runtime
 
-MicroProfile applications need a runtime that supports MicroProfile specifications or a MicroProfile-compatible server to run your applications. Some popular options include:
+MicroProfile applications need a runtime that supports MicroProfile specifications or a MicroProfile-compatible server to run your applications. Below are some popular options, each with unique features tailored to different needs:
 
 - link:https://openliberty.io/[Open Liberty] - A flexible server framework from IBM that supports MicroProfile, allowing developers to build microservices and cloud-native applications with ease.
   *  link:https://openliberty.io/start/[Downloading Open Liberty] - Open Liberty is known for its dynamic updates and lightweight design, which enhances developer productivity and application performance.
