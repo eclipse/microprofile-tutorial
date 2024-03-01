@@ -146,9 +146,9 @@ Integrated Development Environments (IDEs) enhance developer productivity by pro
 
 ==== Apache NetBeans
 
-*Overview*: link:https://netbeans.apache.org/front/main/[NetBeans] is an open-source IDE that supports Java development, including Java SE, Java EE, JavaFX, and more.
+_Overview_: link:https://netbeans.apache.org/front/main/[NetBeans] is an open-source IDE that supports Java development, including Java SE, Java EE, JavaFX, and more.
 
-*Getting Started*: Check out this link:https://netbeans.apache.org/tutorial/main/kb/docs/java/quickstart/[NetBeans Java Quick Start Tutorial] for a tutorial on creating a Java application.
+_Getting Started_: Check out this link:https://netbeans.apache.org/tutorial/main/kb/docs/java/quickstart/[NetBeans Java Quick Start Tutorial] for a tutorial on creating a Java application.
 
 ==== Visual Studio Code
 
