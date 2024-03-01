@@ -101,8 +101,8 @@ Standalone specifications address more advanced needs that every microservices a
 [options="header"]
 |=======================
 |Specification          |Description
-| link:https://microprofile.io/specifications/microprofile-context-propagation/[Context Propagation] | Defines a way to propagate context between threads and managed executor services, ensuring that the context is consistent during executing asynchronous tasks or across different services.
-| link:https://microprofile.io/specifications/microprofile-graphql/[GraphQL] |Provides a layer on top of Jakarta EE that allows the creation of GraphQL services. This specification makes it easier to build APIs, enabling clients to request exactly the data they need and nothing more.
+| link:https://microprofile.io/specifications/microprofile-context-propagation/[Context Propagation] | Defines a way to propagate context between threads and managed executor services. Ensure that the context is consistent during executing asynchronous tasks or across different services.
+| link:https://microprofile.io/specifications/microprofile-graphql/[GraphQL] | Provides a layer on top of Jakarta EE that allows the creation of GraphQL services. This specification makes it easier to build APIs, enabling clients to request exactly the data they need and nothing more.
 | link:https://microprofile.io/specifications/microprofile-lra/[Long Running Actions (LRA)]| Focuses on providing a model for developing services that participate in long-running processes, ensuring consistency and reliability without necessarily locking data.
 | link:https://microprofile.io/specifications/microprofile-reactive-messaging/[Reactive Messaging]| Aims to facilitate building applications that communicate via reactive streams, enabling the development of event-driven, responsive, and resilient microservices.
 | link:https://microprofile.io/specifications/microprofile-reactive-streams-operators/[Reactive Streams Operators]| Provides a way to process data streams in a reactive manner, allowing for non-blocking system design and improving the efficiency of data processing in microservices.
