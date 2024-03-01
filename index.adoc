@@ -78,7 +78,7 @@ As you can see in the above figure, together these microservices form a robust a
 The code examples in this tutorial are available at this link:https://www.github.com/ttelang/microprofile-examples[repo] (TODO: to be changed).
 
 === Prerequisites
-Microprofile use the Java Platform, and are usually written in the Java programming language. 
+MicroProfile use the Java Platform, and are usually written in the Java programming language. 
 All the examples in this tutorial are written in Java. 
 If you're new to Java, spend some time getting up to speed on the language and platform;
 a good place to start is https://dev.java/learn/[dev.java/learn].
