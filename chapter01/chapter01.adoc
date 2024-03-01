@@ -96,7 +96,7 @@ The MicroProfile Platform Specification is the core set of MicroProfile specific
 
 === Standalone (Outside Umbrella) Specifications 
 
-Standalone specifications address more advanced needs that every microservices application may not require. They allow for innovation and experimentation in areas that are evolving or where there's a need to address niche concerns without burdening the core platform with additional complexity. The table below provides a list of standalone specifications of MicroProfile along with their descriptions:
+Standalone specifications address more advanced needs that every microservices application may not require. They allow for innovation and experimentation in areas that are evolving or where there’s a need to address niche concerns without burdening the core platform with additional complexity. The table below provides a list of standalone specifications of MicroProfile along with their descriptions:
 
 [options="header"]
 |=======================
