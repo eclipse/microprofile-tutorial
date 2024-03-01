@@ -99,7 +99,7 @@ we assume you have a basic understanding of RESTful Web Services.
 
 . Hands-On Experience with Key MicroProfile APIs:
 
-.. Learn to implement Config, Health Check, Metrics, JWT Authentication, Fault Tolerance, Rest Client, and other MicroProfile APIs.
+.. Learn to implement Config, Health, Metrics, JWT Authentication, Fault Tolerance, Rest Client, and other MicroProfile APIs.
 
 .. Understand how to apply these APIs in practical scenarios through the Duke's Forest application case study.
 
