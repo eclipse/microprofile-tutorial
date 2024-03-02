@@ -162,19 +162,41 @@ Selecting an IDE should be based on personal preference, as the best choice vari
 
 MicroProfile applications need a runtime that supports MicroProfile specifications or a MicroProfile-compatible server to run your applications. Below are some popular options, each with unique features tailored to different needs:
 
-- link:https://openliberty.io/[Open Liberty] - A flexible server framework from IBM that supports MicroProfile, allowing developers to build microservices and cloud-native applications with ease.
-  *  link:https://openliberty.io/start/[Downloading Open Liberty] - Open Liberty is known for its dynamic updates and lightweight design, which enhances developer productivity and application performance.
-- link:https://quarkus.io/[Quarkus] - Known for its container-first approach, offering fast startup times and low memory footprint.
-  * link:https://quarkus.io/guides/getting-started[Getting Started with Quarkus] - Quarkus aims to optimize Java for Kubernetes and cloud environments
-- link:https://www.payara.fish/products/payara-micro/[Payara Micro] - A lightweight middleware platform suited for containerized Jakarta EE and MicroProfile applications.
-  * link:https://www.payara.fish/downloads/payara-platform-community-edition/[Payara Platform Community Edition] - It enables easy packaging of applications into a single, runnable JAR file, simplifying deployment and scaling in cloud environments.
-- link:https://www.wildfly.org/[WildFly] - a flexible, lightweight, managed application runtime that offers full Jakarta EE and MicroProfile support.
-  * link:https://www.wildfly.org/downloads/[WildFly Downloads] - WildFly is designed for scalability and flexibility in both traditional and cloud-native environments.
-- link:https://helidon.io/[Helidon] - Developed by Oracle, Helidon MP implements MicroProfile specifications and provides a familiar programming model for Jakarta EE developers, enabling efficient microservice development.
-  * link:https://helidon.io/docs/[Helidon Documentation] - The Helidon MP provides comprehensive documentation to help developers get started with the framework, understand its core concepts, and efficiently develop microservices. 
-- link:https://tomee.apache.org/[TomEE] - Apache TomEE integrates several Apache projects with Apache Tomcat to provide a Jakarta EE environment. TomEE offers support for MicroProfile, allowing developers to build and deploy microservices using the well-known Jakarta EE technologies with additional MicroProfile capabilities.
-  * link:https://tomee.apache.org/download.html[TomEE Downloads] - It allows developers to utilize the familiar Jakarta EE technologies while also leveraging MicroProfile's capabilities for building and deploying microservices. 
-  * link:https://tomee.apache.org/microprofile-6.0/javadoc/[TomEE MicroProfile Documentation] - TomEE aims to provide a lightweight and efficient environment for enterprise applications.
+==== Open Liberty 
+
+link:https://openliberty.io/[Open Liberty] is a flexible server framework from IBM that supports MicroProfile, allowing developers to build microservices and cloud-native applications with ease.Open Liberty is known for its dynamic updates and lightweight design, which enhances developer productivity and application performance.
+
+link:https://openliberty.io/start/[Downloading Open Liberty] page provides access to its latest releases and documentation to help you set up your environment. 
+
+====  Quarkus
+
+link:https://quarkus.io/[Quarkus] is known for its container-first approach, offering fast startup times and low memory footprint. It aims to optimize Java for Kubernetes and cloud environments
+
+This link:https://quarkus.io/guides/getting-started[Getting Started with Quarkus] page will guide you through creating your first Quartus project and exploring its cloud-native capabilities.
+
+==== Payara Micro
+
+link:https://www.payara.fish/products/payara-micro/[Payara Micro]  is a lightweight middleware platform suited for containerized Jakarta EE and MicroProfile applications. 
+
+The link:https://www.payara.fish/downloads/payara-platform-community-edition/[Payara Platform Community Edition] enables easy packaging of applications into a single, runnable JAR file, simplifying deployment and scaling in cloud environments. This site about Payara Platform Community Edition offers downloads and documentation to get started.
+
+==== WildFly
+
+link:https://www.wildfly.org/[WildFly] is a flexible, lightweight, managed application runtime that offers full Jakarta EE and MicroProfile support. WildFly is designed for scalability and flexibility in both traditional and cloud-native environments. 
+
+link:https://www.wildfly.org/downloads/[WildFly Downloads] page offers the latest versions and documentation to get you started.
+
+==== Helidon
+
+Developed by Oracle, link:https://helidon.io/[Helidon] MP implements MicroProfile specifications. It provides a familiar programming model for Jakarta EE developers and enables efficient microservice development.
+
+link:https://helidon.io/docs/[Helidon Documentation] provides comprehensive resources to help developers get started with the framework, understand its core concepts, and develop microservices efficiently.
+
+==== Apache TomEE
+
+link:https://tomee.apache.org/[Apache TomEE] integrates several Apache projects with Apache Tomcat to provide a Jakarta EE environment. It offers support for MicroProfile, allowing developers to build and deploy microservices using the well-known Jakarta EE technologies with additional MicroProfile capabilities.
+
+link:https://tomee.apache.org/download.html[TomEE Downloads] and link:https://tomee.apache.org/microprofile-6.0/javadoc/[TomEE MicroProfile Documentation] page provide the necessary resources to get started with TomEE for MicroProfile development.
 
 === Generating a Project using MicroProfile Starter
 
