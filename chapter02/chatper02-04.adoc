@@ -83,6 +83,6 @@ Now that you have a basic MicroProfile service, consider exploring further:
 
 * MicroProfile Official Website: https://microprofile.io/
 * MicroProfile GitHub Repository: https://github.com/eclipse/microprofile
-* MicroProfile Documentation and Guides: [Official documentation](https://microprofile.io/documentation/)
+* MicroProfile Documentation and Guides: link:https://microprofile.io/documentation/[MicroProfile Official documentation]
 
 After completing this chapter, you should have a basic understanding of MicroProfile and how to start building microservices with it. Continue exploring the specifications and capabilities of MicroProfile to fully leverage its power in your microservices architecture.
