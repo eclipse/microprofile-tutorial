@@ -161,7 +161,7 @@ The context root is part of the URL path that identifies the base path for the a
 
 Below are the steps for popular options. Specific steps will depend on your chosen runtime.
 
-* Open Liberty* 
+*Open Liberty* 
 
 Package your application as a WAR file using Maven or Gradle by adding the packaging tag in `pom.xml`.
 
