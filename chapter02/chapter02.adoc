@@ -158,6 +158,31 @@ _Getting Started_: To start with Java in VS Code, follow this link:https://code.
 
 Selecting an IDE should be based on personal preference, as the best choice varies depending on individual needs, familiarity, and the specific features that enhance your productivity. Each IDE offers unique advantages for MicroProfile development.
 
+=== MicroProfile Starter
+To kickstart your MicroProfile project, use the MicroProfile Starter to generate a sample project with your chosen server and specifications. This tool provides a customizable project structure and generates necessary boilerplate code and configuration.
+
+. Visit the link:https://start.microprofile.io/[MicroProfile] Starter page - the official website for generating the MicroProfile project templates.
+
+. Provide a 'groupId' for your project, it's an identifier for your project and should be unique to avoid conflicts with other libraries or projects.
+
+TIP: Its recommended convention is to start your 'groupId' with the reverse domain name of your organization (for example, 'io.microprofile').
+
+. Enter the 'artifactID', which is the name of your project (e.g., 'mp-ecomm-store').
+
+. Select the *Java SE version* your project will use.
+
+. Select the *MicroProfile version* you want to use. Ideally, you should choose the latest version for the most up-to-date features but also consider the runtime’s support.
+
+. Select the specifications you want to include in your project. These could be Config, Fault Tolerance, JWT Auth, Metrics, Health, Open API, Open Tracing, Rest Client. Choose what is relevant to your application.
+
+. Click the _Download_ button.
+
+. Unzip the generated project and import it into your IDE.
+
+Important: At the time of writing this tutorial, the latest MicroProfile released version was 6.1. The MicroProfile Starter does not currently support this version. Hence, we will not be using MicroProfile Starter to generate the project structure.
+
+This completes the development environment setup. Now we are all set to begin development using MicroProfile.
+
 === Setting up MicroProfile Runtime
 
 MicroProfile applications need a runtime that supports MicroProfile specifications or a MicroProfile-compatible server to run your applications. Below are some popular options, each with unique features tailored to different needs:
