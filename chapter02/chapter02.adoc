@@ -161,23 +161,23 @@ Selecting an IDE should be based on personal preference, as the best choice vari
 === MicroProfile Starter
 To kickstart your MicroProfile project, use the MicroProfile Starter to generate a sample project with your chosen server and specifications. This tool provides a customizable project structure and generates necessary boilerplate code and configuration.
 
-. Visit the link:https://start.microprofile.io/[MicroProfile] Starter page - the official website for generating the MicroProfile project templates.
+* Visit the link:https://start.microprofile.io/[MicroProfile] Starter page - the official website for generating the MicroProfile project templates.
 
-. Provide a 'groupId' for your project, it's an identifier for your project and should be unique to avoid conflicts with other libraries or projects.
+* Provide a `groupId` for your project, it's an identifier for your project and should be unique to avoid conflicts with other libraries or projects.
 
-TIP: Its recommended convention is to start your 'groupId' with the reverse domain name of your organization (for example, 'io.microprofile').
+TIP: Its recommended convention is to start your `groupId` with the reverse domain name of your organization (for example, `io.microprofile`).
 
-. Enter the 'artifactID', which is the name of your project (e.g., 'mp-ecomm-store').
+* Enter the 'artifactID', which is the name of your project (e.g., 'mp-ecomm-store').
 
-. Select the *Java SE version* your project will use.
+* Select the *Java SE version* your project will use.
 
-. Select the *MicroProfile version* you want to use. Ideally, you should choose the latest version for the most up-to-date features but also consider the runtime’s support.
+* Select the *MicroProfile version* you want to use. Ideally, you should choose the latest version for the most up-to-date features but also consider the runtime’s support.
 
-. Select the specifications you want to include in your project. These could be Config, Fault Tolerance, JWT Auth, Metrics, Health, Open API, Open Tracing, Rest Client. Choose what is relevant to your application.
+* Select the specifications you want to include in your project. These could be Config, Fault Tolerance, JWT Auth, Metrics, Health, Open API, Open Tracing, Rest Client. Choose what is relevant to your application.
 
-. Click the _Download_ button.
+* Click the _Download_ button.
 
-. Unzip the generated project and import it into your IDE.
+* Unzip the generated project and import it into your IDE.
 
 Important: At the time of writing this tutorial, the latest MicroProfile released version was 6.1. The MicroProfile Starter does not currently support this version. Hence, we will not be using MicroProfile Starter to generate the project structure.
 
