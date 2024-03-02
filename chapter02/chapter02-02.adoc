@@ -56,7 +56,6 @@ The list below is provided to help you select the appropriate modules for your M
 </dependency>
 ----
 
-*Gradle*
 
 * *MicroProfile Health* allows you to define health endpoints easily. If you're deploying your application in a environment where the service needs to report its health status.
 
@@ -71,7 +70,7 @@ The list below is provided to help you select the appropriate modules for your M
 </dependency>
 ----
 
-*Gradle*
+
 
 * *MicroProfile Metrics* offers a way to generate various metrics from your application, which can be consumed by monitoring tools. You should use this dependency in your microservices if you need to monitor the performance of your application.
 
@@ -86,7 +85,6 @@ The list below is provided to help you select the appropriate modules for your M
 </dependency>
 ----
 
-*Gradle*
 
 * *MicroProfile Fault Tolerance* helps applications in implementing patterns like timeout, retry, bulkhead, circuit breaker, and fallback. Applications requiring resilience and reliability, especially those facing network latency or failure in microservices environments, will benefit from it.
 
@@ -110,7 +108,6 @@ The list below is provided to help you select the appropriate modules for your M
 </dependency>
 ----
 
-*Gradle*
 
 * *MicroProfile OpenAPI* offers tools for generating OpenAPI descriptions of your endpoints automatically for documenting your REST APIs. 
 
@@ -125,8 +122,6 @@ The list below is provided to help you select the appropriate modules for your M
 </dependency>
 ----
 
-*Gradle*
-
 * *MicroProfile Rest Client* simplifies calling RESTful services over HTTP for type-safe invocations of HTTP services for type-safe invocations of HTTP services.
 
 *Maven*
@@ -139,8 +134,6 @@ The list below is provided to help you select the appropriate modules for your M
   <version>3.0</version>
 </dependency>
 ----
-
-*Gradle*
 
 * *MicroProfile Telemetry* integrates OpenTelemetry for distributed tracing For applications that need to trace requests across microservices to diagnose and monitor.
 
@@ -167,16 +160,6 @@ The list below is provided to help you select the appropriate modules for your M
     </dependency>
   </dependencies>
 </project>
-----
-
-*Gradle*
-
-[source, json]
-----
-dependencies {
-  implementation(platform("io.opentelemetry:opentelemetry-bom:1.35.0"))
-  implementation("io.opentelemetry:opentelemetry-api")
-}
 ----
 
 * *Jakarta EE Core Profile* dependency provides the API set included in the Jakarta EE 10 Core Profile, which is optimized for developing microservices and cloud-native Java applications with a reduced set of specifications for a lighter runtime footprint.
