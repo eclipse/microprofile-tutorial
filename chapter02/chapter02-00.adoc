@@ -9,7 +9,7 @@ In this chapter, you'll embark on your MicroProfile journey! We will guide you t
 - Development Environment Setup
 - Configuring Build Tools
 - Initializing a New MicroProfile Project
-- Choosing right modules for your application
+- Choosing Right Modules for your Application
 - Building a RESTful service
 - Deployment
 - Testing your microservices
