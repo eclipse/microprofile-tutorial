@@ -269,3 +269,36 @@ The response should be
   
 This uses an in-memory list; In the next chapter, in a real application you should integrate a database (via Jakarta Persistence API). We will be learning about this in the next chapter. 
 
+*Quarkus*
+
+* Build your application as a native executable or Docker image.
+* Run the generated executable or deploy the Docker image to a container platform.
+* Refer to the Quarkus documentation for deployment guides: link:https://quarkus.io/guides/getting-started[Creating your first application - Quarkus]
+
+*Payara Micro*
+
+* Package your application as a WAR file.
+* Deploy the WAR to a Payara Micro server instance.
+* See the Payara Micro documentation for specific instructions: link:https://www.payara.fish/learn/getting-started-with-payara-micro/[Getting Started with Payara Micro]
+
+*WildFly*
+
+* Package your application as a WAR file.
+* Deploy the WAR to a WildFly server instance.
+* Refer to the WildFly documentation for deployment details: link:https://docs.wildfly.org/31/Developer_Guide.html[WildFly Developer Guide]
+
+*Helidon*
+
+* Choose between Helidon SE (native packaging) or Helidon MP (WAR packaging).
+* Build your application using Gradle.
+* Follow the relevant Helidon documentation for deployment steps: link:https://helidon.io/docs/v4/about/prerequisites[Helidon - Getting Started]
+
+*TomEE*
+
+* Package your application as a WAR file.
+* Deploy the WAR file to the TomEE server instance.
+* Refer to the TomEE documentation for instructions: link:https://tomee.apache.org/latest/examples/serverless-tomee-microprofile.html[Serverless TomEE MicroProfile]
+
+==== Additional Considerations:
+* Containerization: Consider using containerization technologies like Docker and Kubernetes for portability and scalability.
+* Cloud Deployment: Explore cloud platforms like AWS, Azure, or GCP.
