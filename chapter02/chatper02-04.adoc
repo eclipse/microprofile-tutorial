@@ -1,6 +1,8 @@
 == Testing your microservice
 
-Testing is critical for ensuring the reliability and robustness of your microservice. Create a class called ProductResourceTest, which contains unit tests for the ProductService class as below:
+Testing your microservice is critical for ensuring the reliability and robustness of your microservice. Maven being a powerful project build management tool, simplifies this process by automating the test execution. 
+
+Create a class called ProductResourceTest, which contains unit tests for the ProductService class as below:
 
 [source, java]
 ----
@@ -53,6 +55,29 @@ Below are the assertions to test the `getProducts()` method of `ProductService`:
 
 * The `assertNotNull(products)`; assertion checks that products are not `null`. It ensures the method returns a list, even if it’s empty. 
 * The `assertEquals(2, products.size())`; assertion verifies that the list contains two products.
+
+==== Running Unit Tests with Maven
+
+To run the unit tests defined in ProductResourceTest, follow these steps:
+
+* Open a Terminal or Command Prompt: Navigate to the root directory of your project where the pom.xml file is located. This file contains the Maven project definition, including dependencies and test configurations.
+
+* Execute the Maven Test Command: Enter the following command to initiate the execution of the unit tests:
+
+[source, shell]
+----
+$ mvn test
+----
+
+This command tells Maven to execute the test phase of the build lifecycle. Maven will compile the test source code, execute the test cases, and provide a summary of the test execution results.
+
+* Review Test Results: After running the tests, Maven displays the results in the terminal. Look for the Tests run:, Failures:, and Errors: summaries to assess the outcome. For the ProductResourceTest class, ensure that the test methods execute successfully and meet the expected assertions:
+
+* Addressing Failures: If any tests fail, Maven will highlight these failures in the output. Use this information to identify and fix issues in your code. Review the failing tests' output for details on the assertion failures and adjust your microservice implementation accordingly.
+
+* Rerun Tests: After making any necessary changes to your microservice code, rerun the tests using the mvn test command to verify that all issues have been resolved and that your microservice behaves as expected.
+
+By following these steps, you can leverage Maven to efficiently run and manage unit tests for your microservice, ensuring its functionality and reliability before deployment.
 
 == Next Steps
 
