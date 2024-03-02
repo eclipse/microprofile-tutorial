@@ -2,7 +2,7 @@
 
 Choosing the right modules for your MicroProfile application is crucial for ensuring that your application is lean, maintainable, and only includes the necessary functionalities to meet its requirements. 
 
-Before diving into MicroProfile modules, it's essential to have a clear understanding of your application's requirements. Consider aspects such as configuration needs, security, health checks, data metrics, fault tolerance, and the need for distributed tracing. Mapping out these requirements will guide you in selecting the most relevant MicroProfile specifications. MciroProfile provides a selection of APIs that you can choose from based on the specific needs of your application. However, with the variety of specifications available, it's important to understand which ones best fit your project's needs. 
+Before diving into MicroProfile modules, it's essential to have a clear understanding of your application's requirements. Consider aspects such as configuration needs, security, health checks, data metrics, fault tolerance, and the need for distributed tracing. Mapping out these requirements will guide you in selecting the most relevant MicroProfile specifications. MicroProfile provides a selection of APIs that you can choose from based on the specific needs of your application. However, with the variety of specifications available, it's important to understand which ones best fit your project's needs. 
 
 This section aims to help you make informed decisions about which MicroProfile modules to use. 
 
