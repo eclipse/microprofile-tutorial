@@ -1,49 +1,40 @@
 == Testing your microservice
 
-Testing your microservice is critical for ensuring the reliability and robustness of your microservice. Maven being a powerful project build management tool, simplifies this process by automating the test execution. 
-
-Create a class called ProductResourceTest, which contains unit tests for the ProductService class as below:
+Testing your microservice is critical for ensuring the reliability and robustness of your microservice. Maven, being a powerful project build management tool, simplifies this process by automating the test execution.
+To create tests for your microservice, start by creating a class called `ProductResourceTest`, which contains unit tests for the `ProductResource` class as below:
 
 [source, java]
 ----
+// ProductResourceTest.java
 package io.microprofile.tutorial.store.product.resource;
-
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-
 import java.util.List;
-
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
 import io.microprofile.tutorial.store.product.entity.Product;
-
 
 public class ProductResourceTest {
   private ProductResource productResource;
-
 
    @BeforeEach
    void setUp() {
        productResource = new ProductResource();
    }
 
-
    @AfterEach
    void tearDown() {
        productResource = null;
    }
 
-
    @Test
    void testGetProducts() {
        List<Product> products = productResource.getProducts();
-
 
        assertNotNull(products);
        assertEquals(2, products.size());
@@ -51,8 +42,9 @@ public class ProductResourceTest {
 }
 ----
 
-Below are the assertions to test the `getProducts()` method of `ProductService`:
+Explanation: 
 
+Below are the assertions to test the `getProducts()` method of `ProductService`:
 * The `assertNotNull(products)`; assertion checks that products are not `null`. It ensures the method returns a list, even if it’s empty. 
 * The `assertEquals(2, products.size())`; assertion verifies that the list contains two products.
 
@@ -88,6 +80,7 @@ Now that you have a basic MicroProfile service, consider exploring further:
 * Enhancing your service with MicroProfile Fault Tolerance
 
 === Resources
+
 * MicroProfile Official Website: https://microprofile.io/
 * MicroProfile GitHub Repository: https://github.com/eclipse/microprofile
 * MicroProfile Documentation and Guides: [Official documentation](https://microprofile.io/documentation/)
