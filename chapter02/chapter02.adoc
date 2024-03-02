@@ -135,14 +135,14 @@ Integrated Development Environments (IDEs) enhance developer productivity by pro
 
 ==== Eclipse for Enterprise Java and Web Developers
 
-*Overview*: link:https://www.eclipse.org/downloads/packages/release/2023-12/r/eclipse-ide-enterprise-java-and-web-developers[Eclipse for Enterprise Java and Web Developers] is a widely used IDE for Java development, offering extensive support for Java EE, Jakarta EE, and MicroProfile, among other technologies.
+_Overview_: link:https://www.eclipse.org/downloads/packages/release/2023-12/r/eclipse-ide-enterprise-java-and-web-developers[Eclipse for Enterprise Java and Web Developers] is a widely used IDE for Java development, offering extensive support for Java EE, Jakarta EE, and MicroProfile, among other technologies.
 
-*Getting Started*: The official Eclipse documentation containing instructions about creating Java projects - link:https://help.eclipse.org/latest/topic/org.eclipse.jdt.doc.user/gettingStarted/qs-3.htm[Creating your first Java Project]
+_Getting Started_: The official Eclipse documentation containing instructions about creating Java projects - link:https://help.eclipse.org/latest/topic/org.eclipse.jdt.doc.user/gettingStarted/qs-3.htm[Creating your first Java Project]
 
 ==== IntelliJ IDEA
-*Overview*:  link:https://www.jetbrains.com/idea/[IntelliJ IDEA] by JetBrains supports a wide range of programming languages and frameworks, including Java, Kotlin, and frameworks like Spring, Jakarta EE, and MicroProfile.
+_Overview_:  link:https://www.jetbrains.com/idea/[IntelliJ IDEA] by JetBrains supports a wide range of programming languages and frameworks, including Java, Kotlin, and frameworks like Spring, Jakarta EE, and MicroProfile.
 
-*Getting Started*: Refer to this IntelliJ IDEA guide on link:https://www.jetbrains.com/help/idea/2024.1/creating-and-running-your-first-java-application.html[Creating a Java Project Using IntelliJ IDEA 2024.1].
+_Getting Started_: Refer to this IntelliJ IDEA guide on link:https://www.jetbrains.com/help/idea/2024.1/creating-and-running-your-first-java-application.html[Creating a Java Project Using IntelliJ IDEA 2024.1].
 
 ==== Apache NetBeans
 
@@ -152,9 +152,9 @@ _Getting Started_: Check out this link:https://netbeans.apache.org/tutorial/main
 
 ==== Visual Studio Code
 
-*Overview*: link:https://code.visualstudio.com/[Visual Studio Code] is a lightweight, powerful source code editor that supports Java development through extensions.
+_Overview_: link:https://code.visualstudio.com/[Visual Studio Code] is a lightweight, powerful source code editor that supports Java development through extensions.
 
-*Getting Started*: To start with Java in VS Code, follow this link:https://code.visualstudio.com/docs/java/java-tutorial[Getting Started with Java in VS Code] documentation.
+_Getting Started_: To start with Java in VS Code, follow this link:https://code.visualstudio.com/docs/java/java-tutorial[Getting Started with Java in VS Code] documentation.
 
 Selecting an IDE should be based on personal preference, as the best choice varies depending on individual needs, familiarity, and the specific features that enhance your productivity. Each IDE offers unique advantages for MicroProfile development.
 
