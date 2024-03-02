@@ -219,8 +219,6 @@ TIP: Its recommended convention is to start your `groupId` with the reverse doma
 
 * Unzip the generated project and import it into your IDE.
 
-Important: At the time of writing this tutorial, the latest MicroProfile released version was 6.1. The MicroProfile Starter does not currently support this version. Hence, we will not be using MicroProfile Starter to generate the project structure.
-
 This completes the development environment setup. Now we are all set to begin development using MicroProfile.
 
-IMPORTANT: At the time of writing this tutorial, the latest MicroProfile released version was 6.1. We will not be using MicroProfile Starter to generate the project structure as it does not support this version through any of the implementation.
+IMPORTANT: At the time of writing this tutorial, the latest MicroProfile released version was 6.1. The MicroProfile Starter does not currently support this version. Hence, we will not be using MicroProfile Starter to generate the project structure.
