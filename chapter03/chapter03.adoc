@@ -1,1 +1,32 @@
+= Chapter 03: Jakarta EE 10 Core Profile
 
+== Introduction
+
+This chapter delves into the *Jakarta EE 10 Core Profile*, a specification designed specifically for microservices and cloud-native apps. *Jakarta EE* is a comprehensive framework within the Java ecosystem for crafting enterprise-grade applications. Complementing this, *MicroProfile* addresses the intricacies of microservices development, such as configuration management, fault tolerance, health checks, and monitoring. The foundation of MicroProfile is built on the strong and established standards of Jakarta EE, which ensures smooth integration of these modern APIs with the enterprise Java landscape.
+
+In this chapter, through practical examples, we will explore the critical features of the Jakarta EE 10 Core Profile that are most relevant to microservices development, including Contexts and Dependency Injection (CDI), Jakarta REST (formerly JAX-RS), JSON Binding and JSON Processing.
+
+By the end of this chapter, you will gain a comprehensive understanding of Jakarta EE 10 Core Profile as a foundational platform for developing microservices with MicroProfile. You will be able to appreciate the pivotal role of Jakarta EE in the MicroProfile ecosystem and how its core functionalities develop scalable, resilient, and portable cloud-native applications.
+
+== Topics to be covered:
+
+* Understanding the Jakarta EE 10 Core Profile
+* Key Specifications in Core Profile
+** Jakarta Annotations, 
+** Context and Dependency Injection, 
+** Interceptors, 
+** Jakarta JSON Processing, 
+** Jakarta JSON Binding
+** Jakarta REST
+* Managing Component Dependencies
+* Handling HTTP Methods and Resources
+* Best Practices for Building Robust and Scalable Applications
+
+== Understanding the Jakarta EE 10 Core Profile
+
+The Jakarta EE 10 Core Profile is a streamlined subset of the full Jakarta EE platform explicitly designed for building lightweight microservices and cloud-native applications. It provides a standardized foundation for smaller runtime environments, comprising of a curated selection of Jakarta EE specifications:
+* Jakarta Annotations: Enables developers to decorate their code with metadata to influence system configuration and behavior, making the code concise, readable, and maintainable.
+* Jakarta Contexts and Dependency Injection Lite: Facilitates the management of lifecycle contexts of stateful components and the injection of dependencies.
+* Jakarta Interceptors: Offers a means to intercept business method invocations and lifecycle events, ideal for implementing cross-cutting concerns such as logging.
+* Jakarta JSON: Simplifies the parsing, generation, and binding of JSON data for Java objects, crucial for RESTful service communication.
+* Jakarta REST: Provides a framework for creating web services according to the REST architectural pattern, enhancing web API development.
