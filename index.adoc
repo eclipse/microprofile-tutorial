@@ -89,43 +89,43 @@ we assume you have a basic understanding of RESTful Web Services.
 
 === Learning Objectives
 
-. Understanding MicroProfile and Its Ecosystem: 
+* Understanding MicroProfile and Its Ecosystem: 
 
-.. Gain a solid understanding of what MicroProfile is and its role in modern cloud-native application development.
+** Gain a solid understanding of what MicroProfile is and its role in modern cloud-native application development.
 
-.. Learn about the evolution of MicroProfile and its relationship with Jakarta EE.
+** Learn about the evolution of MicroProfile and its relationship with Jakarta EE.
 
-.. Understand how MicroProfile facilitates building microservices.
+** Understand how MicroProfile facilitates building microservices.
 
-. Hands-On Experience with Key MicroProfile APIs:
+* Hands-On Experience with Key MicroProfile APIs:
 
-.. Learn to implement Config, Health Check, Metrics, JWT Authentication, Fault Tolerance, Rest Client, and other MicroProfile APIs.
+** Learn to implement Config, Health Check, Metrics, JWT Authentication, Fault Tolerance, Rest Client, and other MicroProfile APIs.
 
-.. Understand how to apply these APIs in practical scenarios through the Duke's Forest application case study.
+** Understand how to apply these APIs in practical scenarios through the Duke's Forest application case study.
 
-. Building Resilient and Scalable Services:
+* Building Resilient and Scalable Services:
 
-.. Master techniques for developing resilient services using fault tolerance and health checks.
+** Master techniques for developing resilient services using fault tolerance and health checks.
 
-. Securing Microservices:
+* Securing Microservices:
 
-.. Learn the intricacies of securing microservices using MicroProfile JWT and Security API.
+** Learn the intricacies of securing microservices using MicroProfile JWT and Security API.
 
-. Effective Data Management in Microservices:
+* Effective Data Management in Microservices:
 
-.. Understand the role of JPA and JSON-B in MicroProfile for handling data operations in microservices.
+** Understand the role of JPA and JSON-B in MicroProfile for handling data operations in microservices.
 
-. Monitoring and Tracing:
+* Monitoring and Tracing:
 
-.. Implement monitoring strategies using MicroProfile Metrics.
+** Implement monitoring strategies using MicroProfile Metrics.
 
-.. Learn to trace microservice interactions with OpenTracing for enhanced observability.
+** Learn to trace microservice interactions with OpenTracing for enhanced observability.
 
-. Collaborative Learning and Community Engagement:
+* Collaborative Learning and Community Engagement:
 
-.. Participate in Q&A sessions, forums, and interactive discussions.
+** Participate in Q&A sessions, forums, and interactive discussions.
 
-.. Engage with the MicroProfile community for continuous learning and staying updated with the latest trends.
+** Engage with the MicroProfile community for continuous learning and staying updated with the latest trends.
 
 By the end of this tutorial readers will gain the knowledge and skills necessary to design, develop, and deploy robust microservices using MicroProfile, preparing them for advanced roles in software development and architecture in cloud-native environments.
 
