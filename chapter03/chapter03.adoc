@@ -34,6 +34,8 @@ The Jakarta EE 10 Core Profile is a streamlined subset of the full Jakarta EE pl
 
 * *Jakarta REST*: Provides a framework for creating web services according to the REST architectural pattern, enhancing web API development.
 
+== Key Specifications in Jakarta EE 10 Core Profile
+
 Let's delve deeper into some of the specifications included in the Jakarta Core Profile to understand their importance and functionality:
 
 === Jakarta Annotations
@@ -124,9 +126,9 @@ The Jakarta EE 10 Core Profile's focus on these specifications underscores its a
 
 NOTE: For those looking to master developing RESTful Web Services, we strongly encourage you to explore link:https://jakartaee.github.io/jakartaee-documentation/jakartaee-tutorial/current/websvcs/jaxrs/jaxrs.html[Jakarta RESTful Web Services Tutorial]. This comprehensive tutorial offers a deep dive into the Jakarta RESTful Web Services specification, demonstrating how to create, deploy, and manage RESTful services efficiently. 
 
-Jakarta Annotations and CDI plays a central role in integrating different Jakarta EE specifications, such as Jakarta Persistence API (formerly JPA) for database operations and Jakarta RESTful Web Services (formerly JAX-RS) for web services. Let's now enhance the product microservices we developed previously.
+== Managing Component Dependencies
 
-== Implementing Persistence in Our Microservices
+Jakarta Annotations and CDI plays a central role in integrating different Jakarta EE specifications, such as Jakarta Persistence API (formerly JPA) for database operations and Jakarta RESTful Web Services (formerly JAX-RS) for web services. Let's now enhance the product microservices we developed previously.
 
 Jakarta Annotations is used for defining RESTful services and injecting dependencies. For instance, in our product microservices, we can update the `Product` and `ProductRepository` class to include annotations that facilitate entity management and dependency injection:
 
@@ -152,19 +154,15 @@ import jakarta.validation.constraints.NotNull;
 @NoArgsConstructor
 public class Product {
 
-
     @Id
     @GeneratedValue
     private Long id;
 
-
     @NotNull
     private String name;
 
-
     @NotNull
     private String description;
-
 
     @NotNull
     private Double price;
@@ -191,49 +189,39 @@ The `ProductRepository` class serves as a bridge between the application's busin
 ----
 package io.microprofile.tutorial.store.product.repository;
 
-
 import java.util.List;
-
 
 import io.microprofile.tutorial.store.product.entity.Product;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-
 @RequestScoped
 public class ProductRepository {
 
-
    @PersistenceContext(unitName = "product-unit")
    private EntityManager em;
-
 
    public void createProduct(Product product) {
        em.persist(product);
    }
 
-
    public Product updateProduct(Product product) {
        return em.merge(product);
    }
 
-
    public void deleteProduct(Product product) {
        em.remove(product);
    }
-
 
    public List<Product> findAllProducts() {
        return em.createNamedQuery("Product.findAllProducts",
        Product.class).getResultList();
    }
 
-
    public Product findProductById(Long id) {
        return em.find(Product.class, id);
    }
-
 
    public List<Product> findProduct(String name, String description, Double price) {
        return em.createNamedQuery("Event.findProduct", Product.class)
@@ -241,7 +229,6 @@ public class ProductRepository {
            .setParameter("description", description)
            .setParameter("price", price).getResultList();
    }
-
 
 }
 ----
@@ -267,7 +254,7 @@ CDI defines several built-in scopes to manage the lifecycle of beans, each corre
 
 NOTE: To learn more about using built-in scopes in CDI for the lifecycle management of beans, We highly recommend visiting the link:https://jakartaee.github.io/jakartaee-documentation/jakartaee-tutorial/current/cdi/cdi-basic/cdi-basic.html#_using_scopes[Using Scopes] section of the Jakarta EE Tutorial. This resource provides valuable insights into each scope and how to use them effectively in your applications.
 
-=== Using Jakarta RESTful Web Services Annotations 
+== Handling HTTP Methods and Resources 
 
 Jakarta RESTful Web Services annotations are utilized to define endpoints for the web services, facilitating the creation and management of RESTful APIs. The `ProductResource` class demonstrates this:
 
