@@ -33,3 +33,95 @@ The Jakarta EE 10 Core Profile is a streamlined subset of the full Jakarta EE pl
 * *Jakarta JSON*: Simplifies the parsing, generation, and binding of JSON data for Java objects, crucial for RESTful service communication.
 
 * *Jakarta REST*: Provides a framework for creating web services according to the REST architectural pattern, enhancing web API development.
+
+Let's delve deeper into some of the specifications included in the Jakarta Core Profile to understand their importance and functionality:
+
+=== Jakarta Annotations
+
+This specification simplifies the code by reducing the need for external configuration files and making the intentions behind code clear. Annotations are extensively used across various Jakarta EE specifications. 
+
+==== Key Features of Jakarta Annotation
+
+* *Simplification of Configuration*: Annotations reduce the need for XML configuration files, making the setup more straightforward and less error-prone.
+
+* *Enhanced Readability and Maintenance*: Code decorated with annotations is easier to read and maintain, as the configuration is co-located with the code it configures.
+
+* *Wide Adoption*: Used across the Jakarta EE platform for a variety of purposes, including dependency injection, defining REST endpoints, and configuring beans.
+
+=== Jakarta Contexts and Dependency Injection (CDI) - CDI Lite
+
+CDI is the specification that unifies the Jakarta EE platform by providing a consistent way to manage the lifecycle of stateful components and their interactions. The CDI Lite section of the specification is tailored for environments where full CDI support may be too heavyweight, such as microservices and serverless deployments.
+
+==== Key Features of Contexts and Dependency Injection (CDI) - CDI Lite
+
+* *Type-safe Dependency Injection*: Enables the injection of beans in a type-safe manner, reducing runtime errors and improving developer productivity.
+
+* *Contextual Lifecycle Management*: Manages the lifecycle of beans according to well-defined contexts, simplifying state management across different scopes.
+
+* *Interceptors and Decorators*: Supports the use of interceptors and decorators for adding behavior to beans or for altering their behavior in a non-invasive manner.
+
+NOTE: The link:https://jakartaee.github.io/jakartaee-documentation/jakartaee-tutorial/current/cdi/cdi-basic/cdi-basic.html[CDI Lite Tutorial] is an invaluable resource, if you are looking to gain a solid foundation in CDI Lite and its role within the Jakarta EE ecosystem, especially in the context of building lightweight microservices and cloud-native applications. It will take you through the basics, advanced features, and the practical application of CDI Lite, equipping you with the knowledge to make the most out of this powerful specification.
+
+=== Jakarta Interceptors
+
+Jakarta Interceptors allow developers to define methods that intercept business method invocations and lifecycle events on Jakarta EE components. This is particularly useful for implementing cross-cutting concerns such as logging, transactions, security, and more, without cluttering business logic..
+
+==== Key Features of Jakarta Interceptors
+
+* Separation of Concerns: Helps in separating cross-cutting concerns (like logging, transaction management, and security) from business logic.
+
+* Reusability: Interceptors can be defined once and applied to multiple beans, promoting code reuse.
+
+* Configurability: Interceptors can be enabled, disabled, or reordered through configuration, offering flexibility in their application.
+
+NOTE: For an in-depth understanding of Jakarta Interceptors, We highly recommend you to read the Jakarta Interceptors Tutorial. This tutorial  covers everything from basic concepts to advanced usage scenarios, providing a solid foundation for effectively utilizing interceptors in your projects.
+
+=== Jakarta JSON Processing 
+
+Jakarta JSON Processing (JSON-P) is a specification in the Jakarta EE platform that provides a portable API to parse, generate, transform, and query JSON data in a Java application. It is part of the larger ecosystem of Jakarta EE specifications designed to facilitate the development of enterprise applications with support for modern data formats and protocols, including JSON, which is widely used in web services and RESTful APIs.
+
+==== Key Features of Jakarta JSON Processing
+
+* Parsing and Generation: JSON-P allows for both the parsing of JSON data into a Java representation and the generation of JSON data from Java objects. This can be done using either a streaming API for efficiency with large data sets or a more intuitive object model API for ease of use.
+
+* Object Model API: This API provides a way to build or manipulate JSON data using a DOM-like tree structure. It enables developers to create, access, and modify JSON data in a flexible manner.
+
+* Streaming API: The streaming API (JsonParser and JsonGenerator) offers a lower-level, event-based approach to parsing and generating JSON. It is highly efficient, making it suitable for processing large volumes of JSON data with minimal memory overhead.
+
+* Data Binding: While JSON-P itself does not directly support data binding (converting between JSON and Java POJOs), it lays the groundwork for such functionality, which is further extended by Jakarta JSON Binding (JSON-B).
+
+NOTE: For an in-depth exploration of Jakarta JSON Processing, including understanding JSON's syntax, its applications in web services, and the programming models for manipulating JSON data, readers are encouraged to visit the Jakarta EE tutorial. This tutorial offers comprehensive guidance on both the object and streaming models for JSON data handling, suitable for beginners and advanced users alike. Learn more at the Jakarta EE 
+Documentation on JSON Processing.
+
+=== Jakarta JSON Binding
+
+Jakarta JSON Binding (JSON-B) is a specification within the Jakarta EE platform that provides a high-level API for converting (binding) Java objects to and from JSON documents. It sits on top of Jakarta JSON Processing (JSON-P) and offers a more convenient way to work with JSON data than manually parsing and generating JSON using JSON-P's lower-level APIs. JSON-B is designed to simplify the task of serializing Java objects into JSON and deserializing JSON into Java objects, making it an essential tool for developing modern Java enterprise applications that interact with web services, RESTful APIs, and microservices.
+
+==== Key Features of Jakarta JSON Binding
+
+* Automatic Binding: JSON-B can automatically bind Java objects to JSON and vice versa without requiring manual parsing, significantly simplifying code and reducing boilerplate.
+
+* Customization: It provides annotations that allow developers to customize the serialization and deserialization process, such as changing property names in JSON, including or excluding specific fields, and handling custom data types.
+
+* Support for Java Generics: JSON-B can handle complex objects, including those that use Java Generics, ensuring type safety during the binding process.
+Integration with JSON-P: JSON-B is built on top of JSON-P and can seamlessly integrate with it, allowing developers to mix high-level object binding with low-level JSON processing as needed.
+
+NOTE: If you are interested in diving deeper into the specifics of JSON Binding, We highly recommend you to visit the Jakarta EE tutorial. It provides detailed insights into how JSON Binding works, including the processes for converting Java objects to JSON and vice versa. This knowledge is crucial for effectively managing JSON data in Java-based enterprise applications. Learn more at the Jakarta EE Documentation on JSON Binding.
+
+=== Jakarta RESTful Web Services
+
+Jakarta RESTful Web Services is a specification for creating web services according to the Representational State Transfer (REST) architectural pattern. It provides annotations to define resources and operations, making it straightforward to develop APIs for web applications.
+
+==== Key Features of Jakarta RESTful Web Services
+
+* Annotation-driven Development: Simplifies the creation of web services by using annotations to define resources, HTTP methods, and response types.
+
+* Flexible Data Format Support: While JSON is commonly used, JAX-RS supports a variety of data formats, providing flexibility in API design.
+
+* Client API: Includes a client API for creating HTTP requests to RESTful services, facilitating communication between microservices.
+
+The Jakarta EE 10 Core Profile's focus on these specifications underscores its aim to provide a lightweight, yet comprehensive platform for developing modern Java applications suited for microservices architectures and cloud-native environments.
+
+NOTE: For those looking to master developing RESTful Web Services, we strongly encourage you to explore Jakarta RESTful Web Services Tutorial. This comprehensive tutorial offers a deep dive into the Jakarta RESTful Web Services specification, demonstrating how to create, deploy, and manage RESTful services efficiently. 
+
+Jakarta Annotations and CDI plays a central role in integrating different Jakarta EE specifications, such as Jakarta Persistence API (formerly JPA) for database operations and Jakarta RESTful Web Services (formerly JAX-RS) for web services. Let's now enhance the product microservices we developed previously.
