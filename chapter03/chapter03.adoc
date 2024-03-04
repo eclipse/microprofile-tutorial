@@ -130,6 +130,8 @@ Jakarta Annotations and CDI plays a central role in integrating different Jakart
 
 Jakarta Annotations is used for defining RESTful services and injecting dependencies. For instance, in our product microservices, we can update the `Product` and `ProductRepository` class to include annotations that facilitate entity management and dependency injection:
 
+=== Entity class
+
 [source, java]
 ----
 package io.microprofile.tutorial.store.product.entity;
@@ -180,3 +182,336 @@ Explanation:
 * `@NamedQuery`: These annotations define Jakarta Persistence API named queries for common operations, such as retrieving all products or finding a product by its ids. These can be used throughout the application to interact with the database in a consistent manner.
 
 * `@Data`, `@AllArgsConstructor`, and `@NoArgsConstructor`: These annotations from Project Lombok automatically generate boilerplate code such as getters, setters, a no-arguments constructor, and an all-arguments constructor. This keeps the entity class concise and focused on its fields and annotations related to Jakarta Persistence.
+
+=== Repository class
+
+The `ProductRepository` class serves as a bridge between the application's business logic layer and the database, performing CRUD (Create, Read, Update, Delete) operations on `Product` entities. It exemplifies the separation of concerns, a fundamental principle in enterprise Java applications, by cleanly segregating the data access logic from the business logic.
+
+[source, java]
+----
+package io.microprofile.tutorial.store.product.repository;
+
+
+import java.util.List;
+
+
+import io.microprofile.tutorial.store.product.entity.Product;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+
+@RequestScoped
+public class ProductRepository {
+
+
+   @PersistenceContext(unitName = "product-unit")
+   private EntityManager em;
+
+
+   public void createProduct(Product product) {
+       em.persist(product);
+   }
+
+
+   public Product updateProduct(Product product) {
+       return em.merge(product);
+   }
+
+
+   public void deleteProduct(Product product) {
+       em.remove(product);
+   }
+
+
+   public List<Product> findAllProducts() {
+       return em.createNamedQuery("Product.findAllProducts",
+       Product.class).getResultList();
+   }
+
+
+   public Product findProductById(Long id) {
+       return em.find(Product.class, id);
+   }
+
+
+   public List<Product> findProduct(String name, String description, Double price) {
+       return em.createNamedQuery("Event.findProduct", Product.class)
+           .setParameter("name", name)
+           .setParameter("description", description)
+           .setParameter("price", price).getResultList();
+   }
+
+
+}
+----
+
+Explanation:
+
+* `ProductRepository`: This class utilizes Jakarta Persistence API (JPA) for database operations, encapsulating the CRUD (Create, Read, Update, Delete) operations along with methods to find products by various criteria. 
+
+* `@RequestScoped`: This CDI annotation for ProductRepository class indicates that an instance of this class is created for each HTTP request to ensure that database operations are handled within the context of a single request.
+
+* `@PersistenceContext`: This annotation injects an entity manager instance, em, specifying the persistence unit product-unit. The entity manager is 
+the primary JPA interface for database interactions.
+
+* The methods createProduct(), updateProduct(), deleteProduct(), findAllProducts(), and findProductById() methods define CRUD operations that might be performed by the repository. These methods utilize the EntityManager instance to persist, merge, remove, and query for product entities.
+
+* The EntityManager is responsible for managing the persistence context and performing CRUD operations on the entities. 
+
+The `ProductRepository` serves as a foundational example for developers to understand how to construct a data access layer in a MicroProfile application, emphasizing the significance of CDI in managing component lifecycles and dependencies, as well as showcasing the application of Jakarta Persistence for Object Relational Mapping(ORM) based data access.
+
+=== Lifecycle Management of Beans in Jakarta EE
+
+CDI defines several built-in scopes to manage the lifecycle of beans, each corresponding to a specific context within the application. When a bean is needed, the CDI container automatically creates it within its defined scope, manages its lifecycle, and destroys it when the context ends. This process is largely transparent to the developer, simplifying development.
+
+NOTE: To learn more about using built-in scopes in CDI for the lifecycle management of beans, We highly recommend visiting the link:https://jakartaee.github.io/jakartaee-documentation/jakartaee-tutorial/current/cdi/cdi-basic/cdi-basic.html#_using_scopes[Using Scopes] section of the Jakarta EE Tutorial. This resource provides valuable insights into each scope and how to use them effectively in your applications.
+
+=== Using Jakarta RESTful Web Services Annotations 
+
+Jakarta RESTful Web Services annotations are utilized to define endpoints for the web services, facilitating the creation and management of RESTful APIs. The `ProductResource` class demonstrates this:
+
+[source, java]
+----
+package io.microprofile.tutorial.store.product.resource;
+
+
+import java.util.List;
+
+
+import io.microprofile.tutorial.store.product.entity.Product;
+import io.microprofile.tutorial.store.product.repository.ProductRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+
+
+@Path("/products")
+@ApplicationScoped
+public class ProductResource {
+
+
+    @Inject
+    private ProductRepository productRepository;
+
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public List<Product> getProducts() {
+        // Return a list of products
+        return productRepository.findAllProducts();
+    }
+
+
+    // Additional endpoint methods
+}
+----
+
+The `@ApplicaitonScoped` is an CDI annotation that specifies that the bean is application-scoped, meaning there will be a single instance of `ProductResource` for the entire application, which promotes better resource utilization and performance.
+
+The `@Inject` annotation is commonly used in CDI to inject instances into the application classes without needing to do manual lookups or new instance creations. For example, When `ProductResource` needed a repository to fetch products from a database, we used `@Inject` to incorporate that repository seamlessly.
+
+`@Path` and `@GET`: Defines the URI path and HTTP method for accessing the `getProducts` endpoint.
+
+== Defining RESTful APIs
+
+When creating a REST API, you typically start by defining the resources that your API will expose. A unique URI identifies each resource. You then define the operations that can be performed on each resource. These operations are typically CRUD operations: create, read, update, and delete.
+Let us now create a RESTful API to manage a list of products for a store. This RESTful API allows client applications to access the product stored as resources on the server.
+
+The API is implemented using Jakarta EE and REST architectural style. The API has the following methods:
+
+* `GET /api/products`: Retrieves a list of products
+
+* `POST /api/products`: Creates a new product, the product details are provided as JSON in the request body
+
+* `PUT /api/products`: Updates an existing product, the updated product details are provided as JSON in the request body
+
+* `DELETE /api/products/{id}`: Deletes a product, the product id is provided in the request URL path
+
+Multiple annotations can be used together in a single method to support multiple media types. For example, When both `@Consumes(MediaType.APPLICATION_JSON)` and `@Produces(MediaType.APPLICATION_XML)` are used together in a single method, then the method can consume JSON and produce XML.
+
+Table 3-1 shows a list of some of the popular Media types along with their constant fields in `jakarta.ws.rs.core.MediaType` class and corresponding HTTP ContentType:
+
+[options="header"]
+|===
+|Media Type |Constant Field |Description
+
+|`application/json`
+|`MediaType.APPLICATION_JSON`
+|JSON format, used for representing structured data.
+
+|`application/xml`
+|`MediaType.APPLICATION_XML`
+|XML format, used for representing structured data in XML format.
+
+|`text/xml`
+|`MediaType.TEXT_XML`
+|XML format, primarily used for XML data that is human-readable.
+
+|`text/plain`
+|`MediaType.TEXT_PLAIN`
+|Plain text format, used for unstructured text data.
+
+|`text/html`
+|`MediaType.TEXT_HTML`
+|HTML format, used for markup data that can be rendered by web browsers.
+
+|`application/octet-stream`
+|`MediaType.APPLICATION_OCTET_STREAM`
+|Binary data stream, used for transmitting files or streaming.
+
+|`application/x-www-form-urlencoded`
+|`MediaType.APPLICATION_FORM_URLENCODED`
+|Web form format, used for submitting form data in HTTP requests.
+
+|`multipart/form-data`
+|`MediaType.MULTIPART_FORM_DATA`
+|Multipart format, used for uploading files through web forms.
+
+|`application/vnd.api+json`
+|Custom
+|JSON API format, a specification for how clients should request and modify resources.
+
+|`application/hal+json`
+|Custom
+|Hypertext Application Language (HAL) JSON format, used for linking between resources in APIs.
+|===
+
+=== Implementing REST APIs for Managing Products Data
+
+After having successfully performed the development and testing of the GET method of `ProductResource` to fetch the list of product resources. Let’s now call the create, update and delete methods for our Products REST API. For this you only need to add additional methods of our `ProductResource` class.
+
+==== Creating a Product
+
+[source,java]
+----
+@POST
+@Consumes(MediaType.APPLICATION_JSON)
+@Transactional
+public Response createProduct(Product product) {
+   System.out.println("Creating product");
+   productRepository.createProduct(product);
+   return Response.status(Response.Status.CREATED)
+         .entity("New product created").build();
+}
+----
+
+Explanation:
+
+The `createProduct()` method is annotated with `@POST`, which means it can be invoked via an HTTP POST request. The `@Consumes(MediaType.APPLICATION_JSON)` annotation says it will consume JSON data. This method takes a single parameter, which is of type `Product``. This parameter will be populated with the data sent in the HTTP POST request. The method creates a new Product object and adds it to the list of products. Finally, the method returns a `Response` object with a status code of 201 (Created) and a message indicating that a new product has been created.
+
+===== Verifying the POST request
+
+You can use a REST client such as link:https://www.postman.com/[Postman] or the cURL command line utility to test the HTTP methods (including PUT, POST, DELETE). To verify the POST request, you can use the following cURL command. This sends  a JSON object representing a new product to your microservice.
+
+Command:
+
+[source, bash]
+----
+$ curl -H 'Content-Type: application/json' -d '{ "id": "3", "name":"iPhone 14", "description":"Apple iPhone 14", "price":"799.99"}' -X POST http://localhost:9080/mp-ecomm-store/api/products
+----
+
+Output:
+
+----
+New product created
+----
+
+This command specifies the content type as JSON and sends a data payload representing a product with an ID of 3, the name "iPhone 14", a description of "Apple iPhone 14", and a price of 799.99. The `-X POST` parameter indicates that this is a POST request. Upon successful execution, your service should process this data and add the new product to the database.
+
+Next you can verify the addition of the new product, by calling the GET method using cURL or browser as described previously to list all products. This request should now return an updated list of products, including the newly added product.
+
+----
+$ curl http://localhost:9080/mp-ecomm-store/api/products
+----
+
+=== Updating a Product 
+
+Updating existing product information is a common operation for RESTful services managing a catalog of items. The `PUT` request method is designed for these scenarios, allowing you to modify an existing product's details. The code snippet below demonstrates updating the product: 
+
+[source, java]
+----
+@PUT
+@Consumes(MediaType.APPLICATION_JSON)
+@Transactional
+public Response updateProduct(Product product) {
+   // Update an existing product
+   Response response;
+   System.out.println("Updating product");
+   Product updatedProduct = productRepository.updateProduct(product);
+   
+   if (updatedProduct != null) {
+       response = Response.status(Response.Status.OK)
+                .entity("Product updated").build();
+   } else {
+       response = Response.status(Response.Status.NOT_FOUND)
+               .entity("Product not found").build();
+   }
+   return response;
+}
+----
+
+Explanation: 
+
+* The `@PUT` annotation defines that the method `updateProduct()` can be invoked via an HTTP PUT request.
+
+* As in the POST method, the `@Consumes(MediaType.APPLICATION_JSON)` annotation specifies the method will consume JSON data. This method takes a single parameter, which is of type `Product`. This parameter will be populated with the data sent in the HTTP PUT request. The method updates the product with the same id as the one sent in the request.
+
+* If a product with the same id is not found, the method returns a 404 (Not Found) error. Finally, the method returns a `Response` object with a status code of 204 (No Content) and a message indicating that an existing product has been updated.
+
+===== Verifying the PUT request
+
+To test the PUT request, you can use the following cURL command. 
+
+----
+$ curl -H 'Content-Type: application/json' -d '{ "id": "3","name":"iPhone14", "description":"Apple iPhone 14", "price":"749"}' -X PUT  http://localhost:5050/mp-ecomm-store/api/products
+----
+
+Next you can verify the updation of the new product, by calling the GET method using cURL or browser as described previously to list all products. 
+
+----
+$ curl http://localhost:9080/mp-ecomm-store/api/products
+----
+
+=== Deleting a Product
+
+[source, java]
+----
+@DELETE
+@Path("products/{id}")
+public Response deleteProduct(@PathParam("id") Long id) {
+     // Delete a product
+     Response response;
+     System.out.println("Deleting product with id: " + id);
+     Product product = productRepository.findProductById(id);
+     if (product != null) {
+         productRepository.deleteProduct(product);
+         response = Response.status(Response.Status.OK)
+                 .entity("Product deleted").build();
+     } else {
+        response = Response.status(Response.Status.NOT_FOUND)
+                .entity("Product not found").build();
+     }
+     return response;
+}
+----
+
+Explanation: 
+
+* The `@DELETE` annotation defines that the method `deleteProduct()` can be invoked via an HTTP DELETE request. 
+
+* The @Path annotation specifies the id path parameter that will be used to identify which product to delete. This method takes a single parameter of type `Long` and is annotated with the `@PathParam` annotation. This parameter will be populated with the `id` path parameter from the HTTP DELETE request. 
+
+* The method deletes the product with the same `id` as the one sent in the request. If a product with the same id is not found, the method returns a 404 (Not Found) error. Finally, the method returns a Response object with a status code of 204 (No Content) and a message indicating that an existing product has been deleted.
+
+IMPORTANT: The code demonstrated in this chapter is not production quality. It was highly simplified to explain to you the fundamental principles of the REST API. In the upcoming chapters, you will be further building upon this code. By implementing many features from the latest MicroProfile and Jakarta EE standards, you would be making it more a robust microservice that is also cloud-ready. You would also learn to containerize, scale, deploy and manage this application.
+
+== Summary
+
+This chapter has laid a solid foundation on the Jakarta EE 10 Core Profile, emphasizing its crucial role in the development of microservices using MicroProfile. By delving into key specifications and through practical implementation examples, you have been equipped with the necessary knowledge to utilize the Jakarta EE 10 Core Profile's features for creating scalable, resilient, and portable cloud-native applications.
+
+Additionally, this chapter guided you through the creation of RESTful web services using Jakarta EE Restful Web Services APIs, providing an overview of REST (Representational State Transfer), it aimed to familiarize you with the basics of REST, enabling you to create and deploy a RESTful web service independently. 
+
+As we move forward, the next chapter will delve deeper into the REST architectural pattern, exploring standard conventions, design considerations, and best practices. It will cover many advanced concepts essential for building RESTful web services tailored for cloud-native and microservices-based applications, preparing you for more sophisticated aspects of modern application development.
