@@ -1,4 +1,4 @@
-== Chapter 9: MicroProfile OpenAPI
+== Chapter 4: MicroProfile OpenAPI
 
 === Introduction 
 
@@ -310,4 +310,5 @@ The MicroProfile OpenAPI annotations can be used to document any Jakarta Restful
 All of these annotations are defined in the org.eclipse.microprofile.openapi.annotations package.
 
 == Summary
-We have learned most of the essential concepts related to the MicroProfile Framework. In the next chapter, we will see how to secure a RESTful Web Service using the JWT Propagation feature of the MicroProfile.
+
+By integrating the MicroProfile OpenAPI, developers can generate detailed, OpenAPI-compliant documentation automatically, fostering better understanding and interaction among services. By annotating `ProductResource` class, we generated API documentation as per Open API specification. This will ensure the services are readily discoverable, understandable, and usable, thereby accelerating development cycles and fostering a more robust and collaborative developer ecosystem. 
