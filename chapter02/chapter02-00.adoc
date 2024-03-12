@@ -33,7 +33,7 @@ To install JDK, follow the steps below:
 
 [source, bash]
 ----
-java -version.
+java -version
 ----
 
 You should an output similar to the one below: 
