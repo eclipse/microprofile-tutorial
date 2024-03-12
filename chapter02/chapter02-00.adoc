@@ -48,7 +48,7 @@ This confirms that JDK 17 has been successfully installed on your system.
 
 NOTE: For most MicroProfile implementations, JDK 11 or later is recommended. In 
 this tutorial, we will be using JDK 17. While OpenJDK is used here, other JDK 
-providers such as Oracle JDK, Amazon Corretto, and Azul Zulu also offer 
+providers such as Oracle JDK, Amazon Corretto, Azul Zulu, OpenJ9 also offer 
 compatible JDK distributions.
 
 === Build Tools (Maven or Gradle)
