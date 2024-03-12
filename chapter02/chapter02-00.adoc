@@ -164,7 +164,7 @@ MicroProfile applications need a runtime that supports MicroProfile specificatio
 
 ==== Open Liberty 
 
-link:https://openliberty.io/[Open Liberty] is a flexible server framework from IBM that supports MicroProfile, allowing developers to build microservices and cloud-native applications with ease.Open Liberty is known for its dynamic updates and lightweight design, which enhances developer productivity and application performance.
+link:https://openliberty.io/[Open Liberty] is a flexible server framework from IBM that supports MicroProfile, allowing developers to build microservices and cloud-native applications with ease. Open Liberty is known for its dynamic updates and lightweight design, which enhances developer productivity and application performance.
 
 link:https://openliberty.io/start/[Downloading Open Liberty] page provides access to its latest releases and documentation to help you set up your environment. 
 
