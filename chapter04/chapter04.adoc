@@ -111,7 +111,7 @@ Explanation:
 
 These annotations enrich the `ProductResource` class with metadata necessary for generating comprehensive and descriptive OpenAPI documentation automatically.
 
-We have also annotated the `getProducts()` method with the @APIResponse annotation to document the successful response from the operation. The `responseCode` field is used to specify the status code of the response, and the `description` field is used to provide a brief description of the response. There are two possible responses – a successful response containing a list of produdts with a 200 status code, and an unsuccessful response with a 400 status code, if no products are found. The content field is used to specify the schema of the response content. In this example, the response content is a list of MyObjects.
+We have also annotated the `getProducts()` method with the @APIResponse annotation to document the successful response from the operation. The `responseCode` field is used to specify the status code of the response, and the `description` field is used to provide a brief description of the response. There are two possible responses – a successful response containing a list of produdts with a 200 status code, and an unsuccessful response with a 400 status code, if no products are found. The content field is used to specify the schema of the response content. In this example, the response content is a list of `Product`s.
 
 Finally, we need to add the following property to the src/main/resources/META-INF/microprofile-config.properties file:
 
