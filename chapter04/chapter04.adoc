@@ -281,9 +281,6 @@ The MicroProfile OpenAPI annotations can be used to document any Jakarta Restful
 | @Parameter
 | Provides information on parameters to the operation, including query parameters, header parameters, and path parameters.
 
-| @ParameterIn
-| Specifies the location of a request parameter, such as `QUERY`, `PATH`, etc.
-
 | @Tag
 | Adds metadata to a single tag that is used by the Operation. It helps in categorizing operations by resources or any other qualifier.
 
