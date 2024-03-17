@@ -33,7 +33,7 @@ MicroProfile OpenAPI provides a suite of Java APIs that allows developers to def
 
 Developers can quickly generate documentation for their microservices using MicroProfile OpenAPI. The documentation includes information on what services are provided, how to invoke them, and what data types are used. It generates comprehensive metadata about services, ensuring interoperability across diverse platforms and tools. Also, documentation can generate client code to access the web services.
 
-This specification streamlines the creation of OpenAPI documentation for RESTful services using a unified approach. It generates comprehensive metadata about services, ensuring interoperability across diverse platforms and tools. The OpenAPI Specification fuels a rich ecosystem of tools that automate and support:
+The OpenAPI Specification fuels a rich ecosystem of tools that automate and support. This specification streamlines the creation of OpenAPI documentation for RESTful services using a unified approach. It generates comprehensive metadata about services, ensuring interoperability across diverse platforms and tools:
 
 * *API Documentation Generation*: Intuitive interactive documentation portals emerge directly from the specification.
 * *Client SDK Creation*: Client libraries in various languages can be automatically generated.
