@@ -30,7 +30,7 @@ The Jakarta EE 10 Core Profile is a streamlined subset of the full Jakarta EE pl
 
 * *Jakarta Interceptors*: Offers a means to intercept business method invocations and lifecycle events, ideal for implementing cross-cutting concerns such as logging.
 
-* *Jakarta JSON*: Simplifies the parsing, generation, and binding of JSON data for Java objects, crucial for RESTful service communication.
+* *Jakarta JSON Processing and Jakarta JSON Binding*: Simplifies the parsing, generation, and binding of JSON data for Java objects, crucial for RESTful service communication.
 
 * *Jakarta REST*: Provides a framework for creating web services according to the REST architectural pattern, enhancing web API development.
 
