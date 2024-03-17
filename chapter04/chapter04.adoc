@@ -23,7 +23,7 @@ The OpenAPI specification enables creation of a well-defined, clear and comprehe
 
 == Introduction to MicroProfile OpenAPI
 
-MicroProfile OpenAPI specification builds upon the widely recognized OpenAPI Specification (OAS) and leverages annotations from the Jakarta Restful Web Services specification. The primary focus of MicroProfile OpenAPI is on defining REST APIs that utilize JSON within the context of HTTP.
+The MicroProfile OpenAPI specification builds upon the widely recognized OpenAPI Specification (OAS) and leverages annotations from the Jakarta Restful Web Services specification. The primary focus of MicroProfile OpenAPI is on defining REST APIs that utilize JSON within the context of HTTP.
 
 The specification aims to provide a uniform way of describing APIs so that it is both human-readable and machine-readable.  It facilitates the creation of APIs that are consistent, well-documented, and easily consumable by both humans and machines. 
 
