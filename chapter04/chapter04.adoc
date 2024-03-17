@@ -130,8 +130,10 @@ To view the generated documentation, we can use the OpenAPI UI tool. The Open AP
 The OpenAPI UI tool can be accessed at the following URL:
 
 ----
-http://localhost:8080/openapi/
+http://localhost:<port>/openapi/
 ----
+
+Rpleace `<port>` with the actual port used by your runtime. 
 
 The `/openapi` endpoint is used to get information about the OpenAPI specification generated from the comments in the source code annotations. It returns information in YAML format.
 
@@ -233,6 +235,7 @@ MicroProfile OpenAPI allows developers to produce these specifications directly 
 To open Swagger UI for the API documentation generated using MicroProfile OpenAPI, you will need to deploy your application to a server that supports MicroProfile, such as Open Liberty, WildFly, Quarkus, or Payara Micro. These servers automatically generate the OpenAPI documentation for your RESTful services based on the annotations in your code. 
 
 Next, visit the following URL to launch the Swagger UI: 
+
 ----
 http://localhost:8080/openapi/ui
 ----
