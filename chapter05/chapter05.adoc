@@ -141,3 +141,138 @@ These classes and interfaces provide a robust configuration mechanism
 that is easy to use and extend. Developers can leverage these APIs to
 externalize configuration from their applications, making them more
 flexible and more accessible to run in different environments.
+
+== Implementing Configuration Properties
+
+The Config API allows you to define configuration properties in many ways, including property files, environment variables, and system properties. To use the Config API, we’ll need to include the following dependency in our _pom.xml_ file:
+
+[source, xml]
+----
+<dependency>
+  <groupId>org.eclipse.microprofile.config</groupId>
+  <artifactId>microprofile-config-api</artifactId>
+  <version>3.1</version>
+</dependency>
+----
+
+For Gradle, modify your _build.gradle_ file with the following dependency: 
+
+[source]
+----
+implementation 'org.eclipse.microprofile.config:microprofile-config-api:3.1'
+----
+
+Let’s now modify the `getProducts()` method to return a `jakarta.ws.rs.core.Response` object instead of a list of Product entities directly, we can utilize the `Response` class to build our response.  This approach allows for a more standardized and flexible API response handling, including the ability to set HTTP status codes and headers. 
+
+Lets create a configuration file with the name _microprofile-config.properties_ and the content as below: 
+
+[source]
+----
+# microprofile-config.properties
+product.maintenanceMode=false
+----
+
+This configuration file should be placed in the _src/main/resources/META-INF/_ directory of your application.
+
+=== Reading Configuration Properties
+
+Next inject this configuration value to a private variable in the ProductResource and consume this within all the operations of this service.
+
+MicroProfile Config will automatically detect and use the properties defined in this file, allowing you to externalize configuration and easily adjust the behavior of your application based on the environment in which it is deployed.
+
+Below is the updated `ProductResource` class and `getProducts()` method:
+
+[source, java]
+----
+package io.microprofile.tutorial.store.product.resource;
+
+import io.microprofile.tutorial.store.product.entity.Product;
+import io.microprofile.tutorial.store.product.repository.ProductRepository;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+
+import java.util.List;
+
+@Path("/products")
+@ApplicationScoped
+public class ProductResource {
+
+   @Inject
+   @ConfigProperty(name="product.maintenanceMode", defaultValue="false")
+   private boolean maintenanceMode;
+  
+   @Inject
+   private ProductRepository productRepository;
+
+   @GET
+   @Produces(MediaType.APPLICATION_JSON)
+   @Transactional
+   
+   // OpenAPI code 
+   // … 
+   
+   public Response getProducts() {
+
+       List<Product> products = productRepository.findAllProducts();
+
+       // If in maintenance mode, return Service Unavailable status
+       if (maintenanceMode) {
+          return Response
+                  .status(Response.Status.SERVICE_UNAVAILABLE)
+                  .entity("The product catalog service is currently in maintenance mode. Please try again later.")
+                  .build();
+
+       // If products found, return products and OK status
+       } else if (products != null && !products.isEmpty()) {
+           return Response
+                   .status(Response.Status.OK)
+                   .entity(products).build();
+
+      // If products not found, return Not Found status and message
+      } else {
+          return Response
+                  .status(Response.Status.NOT_FOUND)
+                  .entity("No products found")
+                  .build();
+      }
+   }
+}
+----
+
+Explanation: 
+
+- `@Inject`: This CDI annotation enables dependency injection. It tells the container to inject an instance of a specified bean at runtime. As we have learnt previously, dependency injection enables loose coupling between classes and their dependencies, making the code more modular, easier to test, and maintain.
+
+- `@ConfigProperty(name="product.maintenanceMode", defaultValue="false")`: This MicroProfile Config annotation used along with @Inject to inject configuration property values into beans. It allows developers to externalize configuration from the application code, making applications more flexible and environment-agnostic. The name parameter specifies the key of the configuration property to be injected. In this case, "product.maintenanceMode" is the key for a property that controls whether this service is in maintenance mode. The defaultValue provides a default value to be used if the specified configuration property is not found in any of the configured sources. Here, the default value is "false", indicating that, by default, the service is not in maintenance mode unless explicitly configured otherwise.
+- `private boolean maintenanceMode`: This field is set to the value of the product.maintenanceMode configuration property. Due to the `defaultValue ="false"`, if the configuration is not specified elsewhere, maintenanceMode will be false, meaning the service operates normally.
+
+- `private ProductRepository productRepository`: This field is injected with an instance of ProductRepository.  This class abstracts the data access operations for products. This injection decouples the class from the specific implementation of the repository, making the code more modular and easier to adapt or replace parts of it in the future.
+
+- The `getProducts()` method retrieves all products from the repository by calling `productRepository.findAllProducts()`, which queries the database to retrieve a list of all available products.
+Before proceeding to return the list of products, the method checks the maintenanceMode flag. If maintenanceMode is true, the service is currently undergoing maintenance, and thus, it is not appropriate to perform regular operations. The method constructs and returns a Response with a 503 Service Unavailable HTTP status code, along with a message indicating that the product catalog service is in maintenance mode.
+
+- If the service is not in maintenance mode, then the method checks if the list of retrieved products is not `null` and not empty. 
+
+- If products are found, it constructs a Response with a status of `200 OK` and includes the list of products as the response entity. This indicates a successful operation where product data is found and returned. 
+
+- If the products list is null or empty, indicating no products were found, the method constructs and returns a `Response` with a `404 Not Found` status code and a message stating that no products were found.
+
+When we deploy the application and invoke the `/api/products` endpoint, we should see the list of products as below:
+
+[source, json]
+[{"description":"Apple iPhone 15 Pro","id":1,"name":"iPhone 15 Pro","price":999.0}]
+----
+
