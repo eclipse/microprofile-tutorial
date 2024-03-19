@@ -1,1 +1,143 @@
+= Chapter 5: MicroProfile Configuration
 
+This chapter focuses on MicroProfile Configuration, a key feature that allows developers to externalize configuration properties from their code. You can adapt configuration parameters to different environments (development, testing, production) without altering the core code. It provides flexibility and adaptability for microservices in different environments. 
+
+== Topics to be covered
+
+- Understanding MicroProfile Configuration
+- Different environments required for Microservices development 
+- Working with Various Configuration Sources
+- Key capabilities of MicroProfile Configuration
+- Implementing Configuration Properties
+- Creating a Custom Configuration Source
+- Dynamic Updates and Handling Configuration Change Events
+- Managing Configuration for Different Environments
+- Securing Configuration and Best Practices
+
+== Understanding MicroProfile Configuration
+
+*MicroProfile Configuration* is a specification that allows developers to inject configuration values into applications. The MicroProfile Configuration APIs will enable developers to externalize configuration and access it from within your application. By separating configuration data (like database URLs, API credentials, feature flags) from the codebase, you make it easier to modify these settings without recompiling and redeploying the application. 
+
+For instance, with MicroProfile Config, you can configure connection settings for a database enhancing flexibility and adaptability across different environments in our MicroProfile e-commerce application. You can update configurations seamlessly, sometimes even while the application is running (for dynamic config sources), minimizing downtime and streamlining deployment processes. This is essential for microservices that may run in diverse setups. 
+
+== Different environments required for Microservices development
+
+When developing microservices, it’s essential to establish various
+environments to accommodate different stages of the development
+lifecycle. Each environment serves distinct purposes, ensuring the
+application is thoroughly tested, secure, and efficient before its
+deployment to production. Below are the critical environments typically
+set up for developing microservices:
+
+- *Development Environment*—Developers write new code, implement features,
+and perform basic unit testing in this environment, which is where the
+initial development occurs. This environment is usually configured to
+use local or development databases with dummy data for testing. The
+logging level used in this environment is generally verbose for
+debugging purposes.
+
+- *Testing or QA Environment*—This environment is dedicated to rigorous
+testing, including automated tests, integration tests, and manual
+testing by QA engineers to identify bugs or issues. Configuration here
+mirrors production settings as closely as possible and connects to a
+testing database. For error tracing, detailed logging may be enabled in
+this environment.
+
+- *Staging Environment*—This is a production-like environment for final
+testing of the changes before deployment to production. It ensures that
+your microservices perform as expected under production conditions. This
+environment is configured with settings identical to the production
+environment. It typically uses a copy of production data that is
+sanitized of sensitive data.
+
+- *Production Environment*—This is the live environment where the
+microservice is fully deployed and accessible to end-users. It’s
+optimized for security, performance, and reliability and configured to
+access actual user data with all security features fully enabled.
+Performance monitoring tools are also set up here to ensure smooth
+operations.
+
+Using the above set of environments, development teams can streamline
+the development process, enhance quality, and ensure the microservices
+are robust and ready for production use. Your development team may also
+require additional environments for specific needs like automation,
+penetration testing, and stress testing, depending on the unique needs
+of the microservices.
+
+== Working with Various Configuration Sources
+
+MicroProfile Config allows applications to retrieve configuration
+properties from a variety of sources. By default, MicroProfile Config
+includes various built-in configuration sources, but you can also define
+custom sources. Below we discuss how to work with these various
+configuration sources.
+
+=== Built-in Configuration Sources
+
+MicroProfile Config defines default configuration sources that are
+automatically enabled:
+
+*System Properties:* Configuration values defined as system properties
+can be accessed by MicroProfile Config. These properties can be set at
+runtime using the `-D` flag when starting the JVM.
+
+*Environment Variables:* Environment variables available in the system
+can be used as configuration sources. They are useful for setting
+configuration properties external to the application, especially in
+containerized environments.
+
+*MicroProfile Config Properties File:* A properties file named
+_microprofile-config.properties_ can be placed in the _META-INF_ directory
+of your application. This file is particularly useful for setting
+default configuration values that ship with the application.
+
+== Types of Configuration Sources
+
+A *static configuration source* is the one where the data does not change once the application has started. Examples include the microprofile-config.properties file and most custom implementations that read from a database or a service at startup. 
+
+On the other hand, *a dynamic configuration source* is one that can change its data at runtime. System properties and some custom implementations that periodically check for changes in a remote configuration service are examples of dynamic sources.
+
+MicroProfile Config allows applications to read from these dynamic sources as easily as from static ones. However, whether a configuration source supports dynamic behavior depends on its implementation.
+
+== Key capabilities of MicroProfile Configuration
+
+The MicroProfile Configuration specifications offer a set of APIs that
+enable you to handle your application’s configuration efficiently. They
+allow you to easily manage and customize your application’s
+configurations, making it a valuable tool for developers.
+
+The MicroProfile Configuration APIs provide the following capabilities
+for managing the configuration settings of your application:
+
+- It allows reading and writing configuration values.
+- It allows applications to retrieve configuration values reliably,
+supporting various sources, such as property files, system properties,
+environment variables, and more.
+- Observe changes to configuration values using config events, making
+tracking and managing changes to your application’s configuration
+easier.
+
+The MicroProfile Configuration API provides several classes, allowing
+easy integration of configuration values. Below is the list of key
+classes and interfaces included in the MicroProfile Configuration API:
+
+- `Config` - the class that is the main entry point to the configuration API
+and provides access to configuration data. The Config class provides
+static methods that can be used to access configuration properties.
+- `ConfigProvider` - a utility class for getting the Config instance. It
+allows retrieving the static instance of the Config object.
+- `ConfigBuilder` - An interface used to create a Config instance manually.
+It can add default sources, converters, and configuration sources.
+- `ConfigSource` - This class represents a source of configuration values.
+It reads configuration data from a specific source, such as system
+properties, environment variables, files, or data stores.
+- `Property` - It represents a key/value pair in the configuration data.
+- `Converter<T>` - This interface implements custom converters that convert
+configuration values from String to any desired type.
+- `PropertyExpression` - An interface supporting expression evaluation
+within configuration values, allowing dynamic substitution.
+
+These classes and interfaces provide a robust configuration mechanism
+that is easy to use and extend. Developers can leverage these APIs to
+externalize configuration from their applications, making them more
+flexible and more accessible to run in different environments.
