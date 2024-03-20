@@ -396,3 +396,186 @@ public class PaymentServiceConfigSource implements ConfigSource{
 ----
 
 NOTE: When integrating with external configuration providers, it’s essential to consider security aspects, especially when dealing with sensitive configuration data. Use secure communication channels (e.g., HTTPS) to retrieve configuration from external services. Manage access control meticulously to prevent unauthorized access to sensitive configuration. Consider encrypting sensitive configuration values and decrypting them within your ConfigSource or application logic.
+
+=== Registering a `ConfigSource`
+
+To register a custom `ConfigSource` implementation with MicroProfile Config, you need to include the fully qualified class name of your custom `ConfigSource` in this resource file _/META-INF/services/org.eclipse.microprofile.config.spi.ConfigSource_. 
+
+This `PaymentService` would be a part of the e-Commerce application, handling payment transactions by utilizing configurations that determine which payment gateway to use and how to authenticate with it. By externalizing these configurations, the e-Commerce platform can easily switch payment providers or update API keys without needing to adjust the codebase, providing flexibility and enhancing security.
+
+=== Accessing the Configuration Data
+
+First, create a class to represent the payment information sent by clients as below:
+
+[source, java]
+----
+package io.microprofile.tutorial.store.payment.entity;
+
+import java.math.BigDecimal;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class PaymentDetails {
+   private String cardNumber;
+   private String cardHolderName;
+   private String expirationDate; // Format MM/YY
+   private String securityCode;
+   private BigDecimal amount;
+}
+----
+
+The `PaymentDetails` class succinctly encapsulates the necessary attributes for processing payments. This class can be used to pass payment details for processing payments, validating card details, and logging transaction information. 
+
+Next, implement the `PaymentService` class, which utilizes MicroProfile Config to inject the necessary configurations. It represents a simple service that could call a payment gateway API using the configurations provided by the custom `ConfigSource`.
+
+[source, java]
+----
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+
+@Path("/authorize")
+@RequestScoped
+public class PaymentService {
+
+    @Inject
+    @ConfigProperty(name = "payment.gateway.apiKey")
+    private String apiKey;
+
+    @Inject
+    @ConfigProperty(name = "payment.gateway.endpoint")
+    private String endpoint;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response processPayment(PaymentDetails paymentDetails) {
+        // Example logic to call the payment gateway API
+        System.out.println("Processing payment with details: " + paymentDetails.toString());
+        System.out.println("Calling payment gateway API at: " + endpoint);
+        // Assuming a successful payment operation for demonstration purposes
+        // Actual implementation would involve calling the payment gateway and handling the response
+        
+        // Dummy response for successful payment processing
+        String result = "{\"status\":\"success\", \"message\":\"Payment processed successfully.\"}";
+        return Response.ok(result, MediaType.APPLICATION_JSON).build();
+    }
+}
+----
+
+Explanation: 
+- `@Path("/authorize")`: Defines the base URI for the RESTful service. This class will handle requests made to URIs that start with `/payment/api/authorize`.
+- `@RequestScoped`: Indicates that a new instance of `PaymentService` is created for each HTTP request.
+- `@POST`: Specifies that the `processPayment` method will respond to HTTP POST requests, which is appropriate for operations that change server state (in this case, processing a payment).
+- `@Consumes(MediaType.APPLICATION_JSON)`: Indicates that the method expects requests to have a payload formatted as JSON, aligning with how payment details might be sent.
+- `@Produces(MediaType.APPLICATION_JSON)`: Specifies that the method produces JSON-formatted responses, useful for indicating the result of the payment processing operation.
+- `Response processPayment(PaymentDetails paymentDetails)`: The method now returns a Response object, allowing for more flexible HTTP response handling. The PaymentDetails parameter would be a POJO (Plain Old Java Object) representing the payment information sent by the client.
+
+The clients can call to process payments through the e-Commerce application using this RESTful web service endpoint. The actual logic for calling the payment gateway API and handling the response would be implemented within this method, utilizing the injected configuration properties for authentication and endpoint URL.
+
+`ConfigSources` are hierarchical, which means that we can override properties from one `ConfigSource` with another `ConfigSource`. For example, we could create a `ConfigSource` that reads configuration data from a file, and another `ConfigSource` that reads configuration data from system properties. The system properties would take precedence over the file-based `ConfigSource`, which would take precedence over the default `ConfigSource`.
+
+- `Property getProperty(String propertyName)` : Returns information about the given property. If the property is not found, this method returns `null`.
+
+=== Enabling MicroProfile Config in Open Liberty
+
+Open Liberty requires a `server.xml` file for server configuration. This file should be located at `/src/main/liberty/config/server.xml` within your project. To enable MicroProfile Config, you need to include the `mpConfig` feature in the `<featureManager>` section.
+
+[source, xml]
+----
+<server description="MicroProfile Tutorial Server">
+  <featureManager>
+    <feature>mpConfig-1.4</feature> <!-- Use the appropriate version -->
+    <!-- Include other features as needed -->
+  </featureManager>
+----
+
+=== Managing Configuration for Different Environments
+
+Managing configurations for different environments is a crucial aspect of modern application development, especially in microservices architectures where applications may run in development, testing, staging, and production environments with varying configurations. MicroProfile Config provides the flexibility to handle environment-specific configurations efficiently. Here’s how to manage configurations for different environments using MicroProfile Config:
+
+*Use of Profiles*: MicroProfile Config does not explicitly define the concept of profiles for managing environment-specific configurations. However, developers can implement a profile-like mechanism using custom ConfigSource implementations or by organizing configuration properties in a way that differentiates them by environment. For instance, you could prefix configuration keys with the environment name:
+
+* `dev.database.url`
+
+* `test.database.url`
+
+* `prod.database.url`
+
+Then, you can programmatically or conditionally load configurations based on the active environment.
+
+*Environment Variables and System Properties*: Leveraging environment variables and system properties is a common and effective way to provide environment-specific configurations. MicroProfile Config automatically includes ConfigSources for both system properties and environment variables, allowing for easy overrides of configurations per environment:
+
+[source, java]
+----
+String databaseUrl = ConfigProvider.getConfig().getValue("database.url", String.class);
+----
+
+*Custom ConfigSources*: For more complex scenarios or to integrate with external configuration management systems (e.g., Consul, Etcd, AWS Parameter Store), you can implement custom ConfigSources. These sources can dynamically load configurations based on the environment, either by connecting to external services or by loading environment-specific files:
+
+[source, java]
+----
+public class MyEnvironmentConfigSource implements ConfigSource {
+    // Implementation that loads configurations based on the detected environment
+}
+----
+
+*Configuration Isolation*: It’s essential to isolate configurations for different environments to prevent accidental leaks of sensitive information (e.g., production database credentials). This can be achieved by using: 
+- separate configuration files for each environment, stored securely and only accessible by the application running in that environment. 
+- Utilizing external secrets management tools to store sensitive configurations, with access controlled by the environment.
+
+*CI/CD Integration*: Integrate environment-specific configuration management into your CI/CD pipelines. Ensure that the correct configurations are applied automatically as part of the deployment process for each environment.
+
+=== Strategies for Handling Configuration Change Events
+
+Although direct support for configuration change events is not provided by MicroProfile Config specification itself, applications can implement their mechanisms or use external libraries to achieve this functionality. To implement dynamic updates in your MicroProfile Config usage, you might need to adopt one of the following approaches:
+
+- *Manual Refresh:* Provide a mechanism (e.g., an admin-restricted endpoint) to manually trigger a refresh of the configuration. This approach gives control over when changes are applied but requires manual intervention.
+- *Polling*: Implement a scheduler that periodically checks certain configuration properties for changes. This approach is straightforward but might introduce latency between the actual change and its detection.
+- *Event-driven Updates*: If your configuration source supports event notifications (for example, a database trigger or a cloud service event), you can set up listeners that update your application’s configuration in response to these events.
+- *Application-level Event Handling*: Design your application components to subscribe to a custom event bus or notification system. When a configuration change is detected (via polling or custom ConfigSource), publish an event to this bus, triggering subscribed components to update their configurations.
+- *Custom Configuration Source*: Develop a custom ConfigSource that includes logic to listen for changes in the underlying configuration store (such as a database, filesystem, or cloud service). This ConfigSource can then notify the application of changes, prompting it to refresh configuration properties.
+- *Runtime Extensions*: Some MicroProfile runtimes may offer extensions that support dynamic configuration and change event handling. Check the documentation of your runtime environment for such features and best practices for their usage.
+- *Framework/Library Support*: Use a third-party library or framework that extends MicroProfile Config with change event support. These libraries might offer annotations or listener interfaces to react to configuration changes automatically.
+- *External Configuration Management Tools*: Utilize configuration management tools or services that offer webhook or messaging functionalities to notify your application of configuration changes. Upon receiving a notification, the application can reload its configuration context.
+
+While MicroProfile Config provides the mechanisms to read from dynamic configuration sources, it does not specify a standard way to listen for changes in configuration properties directly within its API as of version 3.1. Applications need to implement their logic or use additional libraries/frameworks to detect changes in configuration sources and react accordingly.
+
+However, some implementations of MicroProfile Config might offer extensions or additional functionalities to support configuration change events. For example, an application can poll a configuration source at intervals to detect changes or use a notification system that triggers configuration reloads.
+
+== Best Practices and Securing Configuration in MicroProfile Config 
+
+Here are some recommended practices for using MicroProfile Config:
+
+*Graceful Configuration Reloads*: Ensure that your application can gracefully handle configuration reloads, especially in critical components that depend on configuration properties for their operation. 
+
+*Minimize Performance Impact*: Design your dynamic configuration update mechanism to minimize performance impacts, especially if using polling mechanisms. 
+
+*Secure Configuration Management*: When implementing custom solutions for dynamic configuration, pay attention to security aspects, particularly if configurations include sensitive information. Securing sensitive configuration properties is crucial for maintaining the security and integrity of applications. 
+
+*Encrypt Sensitive Configuration Values*: Sensitive information, such as passwords, tokens, and API keys, should be encrypted in the configuration source. Decryption can be handled programmatically within the application or through integration with external secrets management systems.
+
+*Use Environment-Specific Configuration Files*: Separate configuration files for different environments (development, testing, production) can help minimize the risk of exposing sensitive data. For instance, development configurations might use placeholder values, whereas production configurations access secrets from a secure vault or environment variables.
+
+*Leverage External Secrets Management*: Integrating with external secrets management tools (like HashiCorp Vault, AWS Secrets Manager, or Azure Key Vault) ensures that sensitive configurations are stored securely and accessed dynamically at runtime. These tools provide mechanisms to control access to secrets and often include auditing capabilities.
+
+*Use Environment Variables for Sensitive Values*: Environment variables can be a secure way to provide configuration to applications, especially for containerized or cloud-native applications. This approach leverages the underlying platform’s security model to protect sensitive information.
+
+*Implement Access Control*: Ensure that only authorized personnel have access to configuration files, especially those containing sensitive information. Use file permissions, access control lists (ACLs), or similar mechanisms provided by the operating system or hosting environment.
+
+*Audit and Monitor Configuration Access*: Regularly audit access to configuration files and monitor for unauthorized access attempts. This can help detect potential security breaches and ensure that only authorized changes are made to the configuration.
+
+*Configuration Validation*: Validate configuration data at startup to ensure that it meets the application’s expected format and values. This step can prevent configuration errors and detect tampering or unauthorized changes.
+
+*Keep Configuration Data Updated*: Regularly review and update configuration data to ensure that it reflects the current operational and security needs. Remove unused properties and update secrets periodically to reduce the risk of compromise.
