@@ -273,6 +273,126 @@ Before proceeding to return the list of products, the method checks the `mainten
 When we deploy the application and invoke the `/api/products` endpoint, we should see the list of products as below:
 
 [source, json]
+----
 [{"description":"Apple iPhone 15 Pro","id":1,"name":"iPhone 15 Pro","price":999.0}]
 ----
 
+=== Specifying Default Values for a `ConfigProperty`
+
+For non-critical properties, providing a default value using the defaultValue attribute of the @ConfigProperty annotation ensures that your application has a fallback option. We can specify a default value to be used if the property does not exist as below:
+
+[source, java]
+----
+public class ProductResource {
+
+   @Inject
+   @ConfigProperty(name="product.maintenanceMode", defaultValue="false")
+   private boolean maintenanceMode;
+   … 
+----
+
+In the example above , the `false` default value will be used if the `product.maintenanceMode` property does not exist.
+
+=== Type Conversion in `ConfigProperty`
+
+`ConfigProperty` also supports type conversion, so we can inject our configuration data into fields of any type:
+
+[source, java]
+----
+   @Inject
+   @ConfigProperty(name="product.maintenanceMode", defaultValue="false")
+   private boolean maintenanceMode;
+----
+
+In this example, the `product.maintenanceMode` property will be converted to an `Boolean` before it is injected into the `maintenanceMode` field. If the conversion fails, a `org.eclipse.microprofile.config.ConversionFailedException` will be thrown.
+
+=== Converting Configuration data to a POJO
+
+We can also use the Config API to convert our configuration data to a POJO:
+
+[source, java]
+----
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+
+public class MyApplication {
+    @Inject
+    private MaintenanceMessage message;
+}
+
+
+public class MaintenanceMessage {
+    @ConfigProperty(name="product.maintenanceMessage")
+    private String message;
+}
+----
+
+In this example, we’re injecting a property named "product.maintenanceMessage" into the message field of our MaintenanceMessage class. If the property does not exist, a `org.eclipse.microprofile.config.ConfigPropertyNotFoundException` will be thrown.
+
+=== Creating a Custom `ConfigSource`
+
+As we saw, the Config API makes it easy to inject configuration properties into an application. The Config API defines a contract for config implementations. A ConfigSource is used to read configuration data from a particular source. For example, we could create a ConfigSource that reads configuration data from a file.
+
+`ConfigSource` interface has the following methods: 
+- `String getName()` : Returns the name of the ConfigSource. 
+- `int getOrdinal()` : Returns the ordinal of the ConfigSource. Ordinals are used to determine the precedence of ConfigSources. A higher ordinal means a higher precedence. 
+- `Map<String, String> getProperties()` : Returns a map of the properties in this ConfigSource. The keys in the map are the property names, and the values are the property values. 
+- `getValue(String propertyName)` : Returns the value of the given property. If the property is not found, this method returns null. 
+- `Set getPropertyNames()` : Returns a Set of the property names in this ConfigSource.
+
+Let’s implement a feature in our MicroProfile e-Commerce application to integrate payment gateway configuration dynamically by creating a PaymentServiceConfigSource (a custom ConfigSource) which could fetch API keys and endpoints. This would ensure that payment service configurations are up-to-date and can be changed without redeploying the application.
+
+MicroProfile Config provides a flexible framework for integrating with various external configuration providers, enabling applications to load configurations from sources beyond the default system properties, environment variables, and microprofile-config.properties files. This capability is crucial for modern applications that may need to pull configuration from dynamic sources like cloud services, databases, or custom APIs.
+
+The following is an implementation of a `ConfigSource` that reads configuration data from a file:
+
+[source, java]
+----
+package io.microprofile.tutorial.store.payment.config;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.microprofile.config.spi.ConfigSource;
+
+public class PaymentServiceConfigSource implements ConfigSource{
+  
+   private Map<String, String> properties = new HashMap<>();
+
+   public PaymentServiceConfigSource() {
+       // Load payment service configurations dynamically
+       // This example uses hardcoded values for demonstration
+       properties.put("payment.gateway.apiKey", "secret_api_key");
+       properties.put("payment.gateway.endpoint", "https://api.paymentgateway.com");
+   }
+
+   @Override
+   public Map<String, String> getProperties() {
+       return properties;
+   }
+
+   @Override
+   public String getValue(String propertyName) {
+       return properties.get(propertyName);
+   }
+
+   @Override
+   public String getName() {
+       return "PaymentServiceConfigSource";
+   }
+
+   @Override
+   public int getOrdinal() {
+       // Ensuring high priority to override default configurations if necessary
+       return 600;
+   }
+
+   @Override
+   public Set<String> getPropertyNames() {
+       // Return the set of all property names available in this config source
+       return properties.keySet();}
+}
+----
+
+NOTE: When integrating with external configuration providers, it’s essential to consider security aspects, especially when dealing with sensitive configuration data. Use secure communication channels (e.g., HTTPS) to retrieve configuration from external services. Manage access control meticulously to prevent unauthorized access to sensitive configuration. Consider encrypting sensitive configuration values and decrypting them within your ConfigSource or application logic.
