@@ -134,7 +134,7 @@ You can check out the actual code here - https://github.com/eclipse/microprofile
 
 ==== The `HealthCheckResponse` class
 
-The `HealthCheckResponse` class is used to represent the result of a health check invocation. It contains information about the health check, such as name, state (up or down), and data.
+The `HealthCheckResponse` class is used to represent the result of a health check invocation. It contains information about the health check, such as name, state (up or down), and data that can be used for troubleshooting.
 
 The `call()` method of `HealthCheck` interface is used to perform the actual health check and return a `HealthCheckResponse` object:
 
@@ -176,11 +176,11 @@ public class HealthCheckResponse {
 }
 ----
 
-The provided code snippet offers a conceptual and simplified implementation of the HealthCheckResponse class to illustrate how health check responses can be structured within the MicroProfile Health framework. To view the actual HealthCheckResponse class source code, please visit: https://github.com/eclipse/microprofile-health/blob/main/api/src/main/java/org/eclipse/microprofile/health/HealthCheckResponse.java
+The provided code snippet offers a conceptual and simplified implementation of the `HealthCheckResponse` class to illustrate how health check responses can be structured within the MicroProfile Health framework. To view the actual `HealthCheckResponse` class source code, please visit: https://github.com/eclipse/microprofile-health/blob/main/api/src/main/java/org/eclipse/microprofile/health/HealthCheckResponse.java
 
 ==== The `HealthCheckResponseBuilder` class
 
-The HealthCheckResponseBuilder abstract class provides a fluent API for constructing instances of HealthCheckResponse. This means you can chain method calls to set various properties of the response in a single statement, improving code readability and maintainability.
+The `HealthCheckResponseBuilder` abstract class provides a fluent API for constructing instances of `HealthCheckResponse`. This means you can chain method calls to set various properties of the response in a single statement, improving code readability and maintainability.
 
 [source, java]
 ----
@@ -214,7 +214,7 @@ public abstract class HealthCheckResponseBuilder {
 }
 ----
 
-The above code snippet offers a conceptual and simplified definition of the HealthCheckResponseBuilder abstract class to illustrate how health check responses can be structured within the MicroProfile Health framework. For the actual HealthCheckResponseBuilder abstract class source code, please visit: https://github.com/eclipse/microprofile-health/blob/main/api/src/main/java/org/eclipse/microprofile/health/HealthCheckResponseBuilder.java
+The above code snippet offers a conceptual and simplified definition of the `HealthCheckResponseBuilder` abstract class to illustrate how health check responses can be structured within the MicroProfile Health framework. For the actual `HealthCheckResponseBuilder` abstract class source code, please visit: https://github.com/eclipse/microprofile-health/blob/main/api/src/main/java/org/eclipse/microprofile/health/HealthCheckResponseBuilder.java
 
 === Steps for Implementing Health Checks
 
@@ -246,7 +246,7 @@ The health information can be used by other tools to help keep our application r
 
 ==== Implementing Health Checks
 
-Health checks in MicroProfile are implemented as CDI beans that implement the HealthCheck interface. Each health check procedure is a method that returns a HealthCheckResponse. You can define different types of health checks (readiness, liveness, and startup) depending on the type of check by annotating the health check class with @Readiness, @Liveness, or @Startup. These methods return a HealthCheckResponse object, which includes the health check status (UP or DOWN) and additional metadata about the health check.
+Health checks in MicroProfile are implemented as CDI beans that implement the `HealthCheck` interface. Each health check procedure is a method that returns a `HealthCheckResponse`. You can define different types of health checks (readiness, liveness, and startup) depending on the type of check by annotating the health check class with `@Readiness`, `@Liveness`, or `@Startup`. These methods return a `HealthCheckResponse` object, which includes the health check status (UP or DOWN) and additional metadata about the health check.
 
 Readiness Check: 
 
@@ -345,7 +345,7 @@ public class ProductServiceLivenessCheck implements HealthCheck {
 }
 ----
 
-The above code uses the HealthCheckResponseBuilder to construct the response. Depending on the outcome of checkDatabaseConnection(), the health check response is marked either "up" or "down", and relevant data is added to the response using .withData(key, value). This approach allows for rich, descriptive health check responses that can convey detailed status information, not just binary up/down states.
+The above code uses the HealthCheckResponseBuilder to construct the response. Depending on the outcome of `checkDatabaseConnection()`, the health check response is marked either "up" or "down", and relevant data is added to the response using `.withData(key, value)`. This approach allows for rich, descriptive health check responses that can convey detailed status information, not just binary up/down states.
 
 Startup Check: 
 
@@ -396,9 +396,11 @@ Integrating MicroProfile Health checks with Kubernetes probes allows you to leve
 
 Here's a basic overview of how each type of MicroProfile Health check maps to Kubernetes probes:
 
-*Liveness Probes:* Determine if a container is running and healthy. If a liveness probe fails, Kubernetes will kill the container and create a new one based on the restart policy.*
-*Readiness Probes: Determine if a container is ready to serve traffic. If a readiness probe fails, Kubernetes will stop sending traffic to that container until it passes again.
-*Startup Probes:* Determine if a container application has started. These are useful for applications that have a long startup time to prevent them from being killed by Kubernetes before they are up and running.
+* *Liveness Probes:* Determine if a container is running and healthy. If a liveness probe fails, Kubernetes will kill the container and create a new one based on the restart policy.
+
+* *Readiness Probes: Determine if a container is ready to serve traffic. If a readiness probe fails, Kubernetes will stop sending traffic to that container until it passes again.
+
+* *Startup Probes:* Determine if a container application has started. These are useful for applications that have a long startup time to prevent them from being killed by Kubernetes before they are up and running.
 
 To configure these probes in your Kubernetes pod, you can use the livenessProbe, readinessProbe, and startupProbe fields in your container specification. Here's an example of how you might define a readiness probe in your Kubernetes pod configuration, that utilizes a MicroProfile Health endpoint: 
 
