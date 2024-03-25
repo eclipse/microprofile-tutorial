@@ -392,7 +392,7 @@ This approach allows you to tailor health checks to the operational specifics of
 
 ==== Kubernetes Probe Configuration
 
-Integrating MicroProfile Health checks with Kubernetes probes allows you to leverage Kubernetes' native capabilities to manage the lifecycle of your applications based on their current health status. Specifically, you can map Liveness, Readiness, and Startup probes in Kubernetes to the corresponding health check types defined by the MicroProfile Health specification.
+Integrating MicroProfile Health checks with Kubernetes probes allows you to leverage Kubernetes' native capabilities to manage the lifecycle of your containers based on their current health status. Specifically, you can map Liveness, Readiness, and Startup probes in Kubernetes to the corresponding health check types defined by the MicroProfile Health specification.
 
 Here's a basic overview of how each type of MicroProfile Health check maps to Kubernetes probes:
 
@@ -400,42 +400,33 @@ Here's a basic overview of how each type of MicroProfile Health check maps to Ku
 *Readiness Probes: Determine if a container is ready to serve traffic. If a readiness probe fails, Kubernetes will stop sending traffic to that container until it passes again.
 *Startup Probes:* Determine if a container application has started. These are useful for applications that have a long startup time to prevent them from being killed by Kubernetes before they are up and running.
 
-To configure these probes in your Kubernetes deployment, you can use the livenessProbe, readinessProbe, and startupProbe fields in your container specification. Here's an example of how you might define a readiness probe in your Kubernetes deployment configuration, that utilizes a MicroProfile Health endpoint: 
+To configure these probes in your Kubernetes pod, you can use the livenessProbe, readinessProbe, and startupProbe fields in your container specification. Here's an example of how you might define a readiness probe in your Kubernetes pod configuration, that utilizes a MicroProfile Health endpoint: 
 
 [source, yaml]
 ----
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
-  name: my-microprofile-application
+  name: mp-pod
 spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: my-microprofile-application
-  template:
-    metadata:
-      labels:
-        app: my-microprofile-application
-    spec:
-      containers:
-      - name: my-microprofile-application
-        image: myimage:v1
-        ports:
-        - containerPort: 8080
-        readinessProbe:
-          httpGet:
-            path: /health/ready
-            port: 8080
-          initialDelaySeconds: 15
-          timeoutSeconds: 2
-          periodSeconds: 5
-          failureThreshold: 3
+  containers:
+  - name: my-mp-app
+    image: myimage:v1
+ports:
+- containerPort: 8080
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: 8080
+  initialDelaySeconds: 15
+  timeoutSeconds: 2
+  periodSeconds: 5
+  failureThreshold: 3
 ----
 
 In the above example, the readinessProbe is configured to make an HTTP GET request to the `/health/ready` endpoint, which is the default endpoint provided by MicroProfile Health for readiness checks. Similarly, you can configure livenessProbe and startupProbe by specifying `/health/live` and `/health/startup` endpoints respectively.
 
-It's important to adjust the `initialDelaySeconds`, `timeoutSeconds`, `periodSeconds`, and `failureThreshold` according to the specifics of your application to ensure that Kubernetes accurately reflects the state of your application based on its health checks.
+It's important to adjust the `initialDelaySeconds`, `timeoutSeconds`, `periodSeconds`, and `failureThreshold` according to the specifics of your application to ensure that Kubernetes accurately reflects the state of your containers based on its health checks.
 
 === Best Practices for Effective Health Checks
 
