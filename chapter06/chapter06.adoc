@@ -177,7 +177,9 @@ public class HealthCheckResponse {
 ----
 
 The provided code snippet offers a conceptual and simplified implementation of the HealthCheckResponse class to illustrate how health check responses can be structured within the MicroProfile Health framework. To view the actual HealthCheckResponse class source code, please visit: https://github.com/eclipse/microprofile-health/blob/main/api/src/main/java/org/eclipse/microprofile/health/HealthCheckResponse.java
-The HealthCheckResponseBuilder abstract class
+
+==== The `HealthCheckResponseBuilder` class
+
 The HealthCheckResponseBuilder abstract class provides a fluent API for constructing instances of HealthCheckResponse. This means you can chain method calls to set various properties of the response in a single statement, improving code readability and maintainability.
 
 [source, java]
@@ -214,10 +216,12 @@ public abstract class HealthCheckResponseBuilder {
 
 The above code snippet offers a conceptual and simplified definition of the HealthCheckResponseBuilder abstract class to illustrate how health check responses can be structured within the MicroProfile Health framework. For the actual HealthCheckResponseBuilder abstract class source code, please visit: https://github.com/eclipse/microprofile-health/blob/main/api/src/main/java/org/eclipse/microprofile/health/HealthCheckResponseBuilder.java
 
+=== Steps for Implementing Health Checks
 
-Steps for Implementing Health Checks
 Below are the steps for implementing Health Checks for each of the microservices: 
-Add MicroProfile Health Dependency: To utilize MicroProfile Health in a Java project, include the MicroProfile Health API dependency in your pom.xml or build.gradle file. 
+
+Add MicroProfile Health Dependency: To utilize MicroProfile Health in a Java project, include the MicroProfile Health API dependency in your _pom.xml_ or _build.gradle_ file. 
+
 For maven, add:
 
 [source, xml]
@@ -235,6 +239,8 @@ For gradle, add:
 ----
 implementation 'org.eclipse.microprofile.health:microprofile-health-api:4.0.1'
 ----
+
+NOTE: When implementing MicroProfile Health checks, including the MicroProfile Health API dependency in your project is not enough. You need an actual implementation on the classpath. This could be a MicroProfile-compatible server runtime such as Open Liberty, Quarkus, Payara Micro, or WildFly. Without an implementation present at runtime, the application will not be able to execute health checks.
 
 The health information can be used by other tools to help keep our application running well.
 
@@ -385,38 +391,69 @@ Once defined, these health check procedures are automatically discovered and inv
 This approach allows you to tailor health checks to the operational specifics of each microservice, providing a robust mechanism for observing and managing your application’s health in a cloud-native environment.
 
 ==== Kubernetes Probe Configuration
-In your Kubernetes deployment configuration, define the readiness probe to use the /health/ready endpoint, which MicroProfile exposes for readiness checks. Kubernetes will automatically handle this as a combined startup and readiness probe if no explicit startup probe is defined.
-readinessProbe:
+
+Integrating MicroProfile Health checks with Kubernetes probes allows you to leverage Kubernetes' native capabilities to manage the lifecycle of your applications based on their current health status. Specifically, you can map Liveness, Readiness, and Startup probes in Kubernetes to the corresponding health check types defined by the MicroProfile Health specification.
+
+Here's a basic overview of how each type of MicroProfile Health check maps to Kubernetes probes:
+
+*Liveness Probes:* Determine if a container is running and healthy. If a liveness probe fails, Kubernetes will kill the container and create a new one based on the restart policy.*
+*Readiness Probes: Determine if a container is ready to serve traffic. If a readiness probe fails, Kubernetes will stop sending traffic to that container until it passes again.
+*Startup Probes:* Determine if a container application has started. These are useful for applications that have a long startup time to prevent them from being killed by Kubernetes before they are up and running.
+
+To configure these probes in your Kubernetes deployment, you can use the livenessProbe, readinessProbe, and startupProbe fields in your container specification. Here's an example of how you might define a readiness probe in your Kubernetes deployment configuration, that utilizes a MicroProfile Health endpoint: 
 
 [source, yaml]
 ----
-httpGet:
-  path: /health/ready
-  port: 8080
-initialDelaySeconds: 10
-periodSeconds: 5
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-microprofile-application
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-microprofile-application
+  template:
+    metadata:
+      labels:
+        app: my-microprofile-application
+    spec:
+      containers:
+      - name: my-microprofile-application
+        image: myimage:v1
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+          initialDelaySeconds: 15
+          timeoutSeconds: 2
+          periodSeconds: 5
+          failureThreshold: 3
 ----
 
-If you specifically want to use Kubernetes' startup probe feature, you can configure it similarly in your Kubernetes deployment YAML.
-This approach lets you leverage MicroProfile Health in a cloud-native environment effectively, ensuring your application is only considered ready after successful completion of essential startup checks.
+In the above example, the readinessProbe is configured to make an HTTP GET request to the `/health/ready` endpoint, which is the default endpoint provided by MicroProfile Health for readiness checks. Similarly, you can configure livenessProbe and startupProbe by specifying `/health/live` and `/health/startup` endpoints respectively.
+
+It's important to adjust the `initialDelaySeconds`, `timeoutSeconds`, `periodSeconds`, and `failureThreshold` according to the specifics of your application to ensure that Kubernetes accurately reflects the state of your application based on its health checks.
 
 === Best Practices for Effective Health Checks
 
 Here are some best practices for implementing and utilizing health checks effectively:
 
-* Clearly Define Health Check Types: Use readiness, liveness, and startup checks appropriately to reflect the state of your microservices. This helps in accurately signaling the service’s ability to handle traffic and its current operational state.
+* *Clearly Define Health Check Types*: Use readiness, liveness, and startup checks appropriately to reflect the state of your microservices. This helps in accurately signaling the service’s ability to handle traffic and its current operational state.
 
-* Implement Meaningful Health Checks: Ensure that your health checks meaningfully reflect the operational aspects they are intended to monitor. Avoid trivial checks that do not accurately represent the service’s health.
+* *Implement Meaningful Health Checks*: Ensure that your health checks meaningfully reflect the operational aspects they are intended to monitor. Avoid trivial checks that do not accurately represent the service’s health.
 
-* Utilize Health Check Responses: Make effective use of the health check responses, including the UP/DOWN status and additional metadata. This information can be valuable for logging and reporting on the health state of your services.
+* *Utilize Health Check Responses*: Make effective use of the health check responses, including the UP/DOWN status and additional metadata. This information can be valuable for logging and reporting on the health state of your services.
 
-* Secure Health Check Endpoints: Consider the security of your health check endpoints, especially if they expose sensitive details about the application’s state. 
+* *Secure Health Check Endpoints*: Consider the security of your health check endpoints, especially if they expose sensitive details about the application’s state. 
 
-* Monitor Health Check Performance: Health checks should be lightweight and not introduce significant overhead. Monitor the performance of your health checks and optimize as needed to prevent impacting the application’s performance.
+* *Monitor Health Check Performance*: Health checks should be lightweight and not introduce significant overhead. Monitor the performance of your health checks and optimize as needed to prevent impacting the application’s performance.
 
-* Logging Health Check Results: Implementing logging within your health check procedures can provide insights into the health status over time. Log entries can be made when health check statuses change or when significant health-related events occur.
+* *Logging Health Check Results*: Implementing logging within your health check procedures can provide insights into the health status over time. Log entries can be made when health check statuses change or when significant health-related events occur.
 
-* Reporting and Alerting: Based on logged health check results, implement reporting mechanisms to visualize the health over time and set up alerting for when health checks fail. This could be integrated with existing monitoring and alerting tools.
+* *Reporting and Alerting*: Based on logged health check results, implement reporting mechanisms to visualize the health over time and set up alerting for when health checks fail. This could be integrated with existing monitoring and alerting tools.
 
 By following these best practices, you can effectively implement and expose health checks in your MicroProfile applications, improving observability and reliability, especially in cloud-native environments.
 
@@ -428,6 +465,4 @@ The essence of MicroProfile Health lies in its standardized mechanism for micros
 
 Implementing health checks involves creating procedures annotated with the respective health check annotations. These procedures return a HealthCheckResponse indicating the service's health status (UP or DOWN). These checks are automatically exposed via predefined HTTP endpoints, allowing easy integration with orchestration tools like Kubernetes.
 
-The chapter also touched on best practices for effective health checks, including defining meaningful checks, utilizing health check responses, handling failures gracefully, and securing health check endpoints. Additionally, it highlighted the importance of logging and reporting for health checks, suggesting using logging frameworks to capture detailed information about health status changes and errors.
-
-In conclusion, MicroProfile Health offers a robust framework for monitoring and managing the health of microservices, ensuring that services remain reliable and available in dynamic cloud environments. By following the guidelines and best practices outlined in this chapter, developers can effectively implement and leverage health checks to maintain the overall health of their applications.
+The chapter also touched on best practices for effective health checks, including defining meaningful checks, utilizing health check responses, handling failures gracefully, and securing health check endpoints. In conclusion, MicroProfile Health offers a robust framework for monitoring and managing the health of microservices, ensuring that services remain reliable and available in dynamic cloud environments. By following the guidelines and best practices outlined in this chapter, developers can effectively implement and leverage health checks to maintain the overall health of their applications.
