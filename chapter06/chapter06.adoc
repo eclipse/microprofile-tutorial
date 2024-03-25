@@ -1,0 +1,116 @@
+== Chapter 6: MicroProfile Health
+
+=== Introduction
+
+This chapter provides an in-depth exploration of MicroProfile Health, a critical component for ensuring the reliability and 
+availability of microservices. This specification aims to enhance the observability of microservices in a cloud environment 
+where automatic scaling, failover, and recovery are essential for maintaining service availability and reliability. In this 
+chapter, we will learn about different types of health checks and standard health indicators provided by MicroProfile.
+
+=== Topics to be covered:
+
+- Overview of MicroProfile Health
+- Types of Health Checks
+- Standard Health Checks
+- Implementing and Exposing Health Checks
+- Logging and Reporting Health Checks
+- Best Practices for Effective Health Checks
+
+=== Overview of MicroProfile Health
+
+The MicroProfile Health specification offers a standardized mechanism for microservices to report their health status. In the 
+context of microservices, "health"  refers to the ability of a microservice to perform its functions correctly and efficiently. 
+The health check mechanism is crucial for operating microservices in a cloud or containerized environment where automated processes
+need to make decisions about whether to restart a failing service, reroute traffic away from an unhealthy service, or take 
+other actions to maintain overall system reliability.
+  
+Let’s delve into the essentials of MicroProfile Health, its importance, and how it works.
+
+=== Key Concepts
+
+At its core, the MicroProfile Health specification defines a mechanism for microservices to report their health status via HTTP. 
+These health checks can be used by external systems to verify the operational status of the services. This is crucial in modern cloud 
+environments where automated processes.
+
+==== Health Check
+
+A *health check* is a test that can be used to determine the health of an application or service. This mechanism is implemented via
+standard HTTP endpoints that respond with the health status of the service. These endpoints are typically exposed at predefined paths, 
+such as `/health`, `/health/live` (for liveness), `/health/ready` (for readiness), and `/health/started` (for startup). Health status is
+communicated through a simple JSON format, which can be easily interpreted by humans and machines. Applications servers that support 
+MicroProfile may offer built-in mechanisms or simplified configurations to define such health checks. 
+
+=== Types of Health Checks
+
+MicroProfile Health Check defines three main types of health checks, each with its own annotation to indicate the MicroProfile Health
+runtime about the type of check being performed, allowing it to execute and report health check responses appropriately. These are:
+
+==== Liveness Checks
+
+Liveness checks help to determine if a microservice is in a state where it can perform its functions correctly. A failing liveness
+check suggests that the microservice is in a broken state, and the only way to recover might be to restart the microservice. This 
+  type of health check is crucial for detecting deadlocks, infinite loops, or any conditions that render the microservice unresponsive
+or dysfunctional. Liveness checks are annotated with `@Liveness`.
+
+==== Readiness Checks
+
+Readiness checks are used to determine if a microservice is ready to process requests. If a readiness check fails, it indicates that
+the microservice should not receive any inbound requests because it’s not ready to handle them properly. This can be due to the 
+application still initializing, waiting for dependencies, or any other condition that would prevent it from correctly processing
+incoming requests. Readiness checks are annotated with `@Readiness`.
+
+==== Startup Checks
+
+Startup checks are designed for verifying the microservice’s health immediately after it has started. This type of check is useful 
+for applications that require additional initialization time or need to perform certain actions before they are ready to serve requests.
+Including startup checks in the health checking mechanism is crucial because if we hit the liveness probe before the application is fully
+initialized, it could cause a continuous restart loop. Startup checks provide a mechanism to postpone other health checks until certain 
+startup conditions are fulfilled. This ensures that readiness and liveness probes are not prematurely activated, allowing the microservice 
+adequate time to complete its initialization processes, such as loading configurations, establishing database connections, or performing 
+necessary pre-service tasks.These checks are annotated with `@Startup`. 
+
+== Exposing Health Checks
+
+Health checks are exposed via HTTP endpoints automatically without additional configuration needed from the developer’s side. The runtime
+environment provides these endpoints:
+
+* `/health`: Aggregates all health check responses.
+* `/health/live`: Returns responses from liveness checks.
+* `/health/ready`: Returns responses from readiness checks.
+* `/health/started`: Returns responses from startup checks.
+
+These endpoints return a JSON object containing the overall status (UP or DOWN) and individual health check responses, including their names,
+statuses, and optional data.
+
+=== Example JSON Response
+
+For example a `LivenessCheck`, if accessed via `/health/live`, the JSON response might look something like this when the service is healthy:
+
+[source, json]
+----
+{
+  "status": "UP",
+  "checks": [
+    {
+      "name": "LivenessCheck",
+      "status": "UP"
+    }
+  ]
+}
+----
+
+If the service is unhealthy, the "status" field would be "DOWN", and additional data might be provided to indicate the cause of the health check failure.
+Each type of health check is implemented as a procedure annotated with the respective annotation. Each procedure returns a `HealthCheckResponse` indicating
+the health status (UP or DOWN) and optionally includes additional details. Implementing these health check types in microservices architecture ensures 
+that services are only used when they are in a healthy state and can correctly process requests. This enhances the overall reliability and 
+maintainability of applications.
+
+=== Standard Health Check
+
+Applications can implement multiple health checks of each kind. The overall health status reported by the application is a logical AND of all individual 
+health checks. A special endpoint `/health` aggregates the results from all three types of checks.
+
+
+
+
+
