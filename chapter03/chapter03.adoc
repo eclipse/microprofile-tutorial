@@ -60,7 +60,7 @@ CDI is the specification that unifies the Jakarta EE platform by providing a con
 
 * *Contextual Lifecycle Management*: Manages the lifecycle of beans according to well-defined contexts, simplifying state management across different scopes.
 
-* *Interceptors and Decorators*: Supports the use of interceptors and decorators for adding behavior to beans or for altering their behavior in a non-invasive manner.
+* *Interceptors*: Supports the use of interceptors for adding behavior to beans or for altering their behavior in a non-invasive manner.
 
 NOTE: The link:https://jakartaee.github.io/jakartaee-documentation/jakartaee-tutorial/current/cdi/cdi-basic/cdi-basic.html[CDI Lite Tutorial] is an invaluable resource, if you are looking to gain a solid foundation in CDI Lite and its role within the Jakarta EE ecosystem, especially in the context of building lightweight microservices and cloud-native applications. It will take you through the basics, advanced features, and the practical application of CDI Lite, equipping you with the knowledge to make the most out of this powerful specification.
 
