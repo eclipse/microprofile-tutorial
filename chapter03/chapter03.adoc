@@ -112,7 +112,7 @@ NOTE: If you are interested in diving deeper into the specifics of JSON Binding,
 
 === Jakarta RESTful Web Services
 
-Jakarta RESTful Web Services is a specification for creating web services according to the Representational State Transfer (REST) architectural pattern. It provides annotations to define resources and operations, making it straightforward to develop APIs for web applications.
+Jakarta RESTful Web Services(Jakarta REST) is a specification for creating web services according to the Representational State Transfer (REST) architectural pattern. It provides annotations to define resources and operations, making it straightforward to develop APIs for web applications.
 
 ==== Key Features of Jakarta RESTful Web Services
 
