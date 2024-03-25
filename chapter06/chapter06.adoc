@@ -110,7 +110,324 @@ maintainability of applications.
 Applications can implement multiple health checks of each kind. The overall health status reported by the application is a logical AND of all individual 
 health checks. A special endpoint `/health` aggregates the results from all three types of checks.
 
+==== Implementing and Exposing Health Check
+
+To implement health checks for microservices using MicroProfile Health, you would generally follow a pattern to define health check procedures that align with the services' operational characteristics. The Health Check API allows us to expose information about the health of our application. This information can be used by load balancers and other tools to determine if an application is healthy. 
+
+==== The `HealthCheck` interface
+
+The `HealthCheck` functional interface uses CDI beans with annotations (`@Liveness`, `@Readiness`, and, `@Startup`) to mark a class as a health checker for liveness, readiness and startup. They are automatically discovered and registered by the runtime. Implementations of this interface are expected to be provided by applications.
+
+The Health Check API defines a contract for health check implementations. A health check is a Java class that implements the HealthCheck functional interface:
+
+[source, java]
+----
+package org.eclipse.microprofile.health;
+
+@FunctionalInterface
+public interface HealthCheck {
+  HealthCheckResponse call();
+}
+----
+
+You can check out the actual code here - https://github.com/eclipse/microprofile-health/blob/main/api/src/main/java/org/eclipse/microprofile/health/HealthCheck.java
+
+==== The `HealthCheckResponse` class
+
+The `HealthCheckResponse` class is used to represent the result of a health check invocation. It contains information about the health check, such as name, state (up or down), and data.
+
+The `call()` method of `HealthCheck` interface is used to perform the actual health check and return a `HealthCheckResponse` object:
+
+[source, java]
+----
+package org.eclipse.microprofile.health;
+
+public class HealthCheckResponse {
+   
+   private static final Logger LOGGER =    Logger.getLogger(HealthCheckResponse.class.getName());
+    
+    // the name of the health check.
+    private final String name; 
+    
+    // the outcome of the health check
+    private final Status status;     
+
+    // information about the health check.
+    private final Optional<Map<String, Object>> data; 
+    
+    // Status enum definition
+    public enum Status {
+        UP, DOWN
+    }
+
+   // Getters
+    public String getName() {
+        return name;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Optional<Map<String, Object>> getData() {
+        return data;
+    }
+
+}
+----
+
+The provided code snippet offers a conceptual and simplified implementation of the HealthCheckResponse class to illustrate how health check responses can be structured within the MicroProfile Health framework. To view the actual HealthCheckResponse class source code, please visit: https://github.com/eclipse/microprofile-health/blob/main/api/src/main/java/org/eclipse/microprofile/health/HealthCheckResponse.java
+The HealthCheckResponseBuilder abstract class
+The HealthCheckResponseBuilder abstract class provides a fluent API for constructing instances of HealthCheckResponse. This means you can chain method calls to set various properties of the response in a single statement, improving code readability and maintainability.
+
+[source, java]
+----
+package org.eclipse.microprofile.health;
+
+public abstract class HealthCheckResponseBuilder {
+	
+    // Sets the name of the health check response.
+    public abstract HealthCheckResponseBuilder name(String name) {
+        this.name = name;
+    }
+
+    // Sets the status of the health check to UP
+    public abstract HealthCheckResponseBuilder up();
+
+    // Sets the status of the health check to DOWN
+    public abstract HealthCheckResponseBuilder down(); 
+
+    // Adds additional string data to the health check response
+    public HealthCheckResponseBuilder withData(String key, String value); 
+    
+    // Adds additional numeric data to the health check response
+    public HealthCheckResponseBuilder withData(String key, long value);
+
+    // Sets the status of the health check response  
+    public abstract HealthCheckResponseBuilder status(boolean up); 
+
+    // Builds and returns the HealthCheckResponse instance
+    public abstract HealthCheckResponse build();
+
+}
+----
+
+The above code snippet offers a conceptual and simplified definition of the HealthCheckResponseBuilder abstract class to illustrate how health check responses can be structured within the MicroProfile Health framework. For the actual HealthCheckResponseBuilder abstract class source code, please visit: https://github.com/eclipse/microprofile-health/blob/main/api/src/main/java/org/eclipse/microprofile/health/HealthCheckResponseBuilder.java
 
 
+Steps for Implementing Health Checks
+Below are the steps for implementing Health Checks for each of the microservices: 
+Add MicroProfile Health Dependency: To utilize MicroProfile Health in a Java project, include the MicroProfile Health API dependency in your pom.xml or build.gradle file. 
+For maven, add:
 
+[source, xml]
+----
+<dependency>
+  <groupId>org.eclipse.microprofile.health</groupId>
+  <artifactId>microprofile-health-api</artifactId>
+  <version>4.0.1</version>
+</dependency>
+----
 
+For gradle, add:
+
+[source]
+----
+implementation 'org.eclipse.microprofile.health:microprofile-health-api:4.0.1'
+----
+
+The health information can be used by other tools to help keep our application running well.
+
+==== Implementing Health Checks
+
+Health checks in MicroProfile are implemented as CDI beans that implement the HealthCheck interface. Each health check procedure is a method that returns a HealthCheckResponse. You can define different types of health checks (readiness, liveness, and startup) depending on the type of check by annotating the health check class with @Readiness, @Liveness, or @Startup. These methods return a HealthCheckResponse object, which includes the health check status (UP or DOWN) and additional metadata about the health check.
+
+Readiness Check: 
+
+[source, java]
+----
+package io.microprofile.tutorial.store.product.health;
+
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Readiness;
+
+import io.microprofile.tutorial.store.product.entity.Product;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+@Readiness
+@ApplicationScoped
+public class ProductServiceHealthCheck implements HealthCheck {
+
+    @PersistenceContext
+    EntityManager entityManager;
+
+    @Override
+    public HealthCheckResponse call() {
+        if (isDatabaseConnectionHealthy()) {
+            return HealthCheckResponse.named("ProductServiceReadinessCheck")
+                    .up()
+                    .build();
+        } else {
+            return HealthCheckResponse.named("ProductServiceReadinessCheck")
+                    .down()
+                    .build();
+        }
+    }
+
+    private boolean isDatabaseConnectionHealthy(){
+        try {
+            // Perform a lightweight query to check the database connection
+            entityManager.find(Product.class, 1L);
+            return true;
+        } catch (Exception e) {
+            System.err.println("Database connection is not healthy: " + e.getMessage());
+            return false;
+        }        
+    }
+}
+----
+
+Liveness Check: 
+
+[source, java]
+----
+package io.microprofile.tutorial.store.product.health;
+
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
+import org.eclipse.microprofile.health.Liveness;
+
+import jakarta.enterprise.context.ApplicationScoped;
+
+@Liveness
+@ApplicationScoped
+public class ProductServiceLivenessCheck implements HealthCheck {
+
+   @Override
+   public HealthCheckResponse call() {
+       Runtime runtime = Runtime.getRuntime();
+       long maxMemory = runtime.maxMemory(); // Maximum amount of memory the JVM will attempt to use
+       long allocatedMemory = runtime.totalMemory(); // Total memory currently allocated to the JVM
+       long freeMemory = runtime.freeMemory(); // Amount of free memory within the allocated memory
+       long usedMemory = allocatedMemory - freeMemory; // Actual memory used
+       long availableMemory = maxMemory - usedMemory; // Total available memory
+
+       long threshold = 100 * 1024 * 1024; // threshold: 100MB
+
+     	 // Including diagnostic data in the response	
+       HealthCheckResponseBuilder responseBuilder = HealthCheckResponse.named("systemResourcesLiveness")
+            .withData("FreeMemory", freeMemory)
+            .withData("MaxMemory", maxMemory)
+            .withData("AllocatedMemory", allocatedMemory)
+            .withData("UsedMemory", usedMemory)
+            .withData("AvailableMemory", availableMemory);
+
+        if (availableMemory > threshold) {
+            // The system is considered live
+            responseBuilder = responseBuilder.up();
+        } else {
+            // The system is not live.
+            responseBuilder = responseBuilder.down();
+        }
+
+        return responseBuilder.build();
+    }
+}
+----
+
+The above code uses the HealthCheckResponseBuilder to construct the response. Depending on the outcome of checkDatabaseConnection(), the health check response is marked either "up" or "down", and relevant data is added to the response using .withData(key, value). This approach allows for rich, descriptive health check responses that can convey detailed status information, not just binary up/down states.
+
+Startup Check: 
+
+[source, java]
+----
+package io.microprofile.tutorial.store.product.health;
+
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+
+import jakarta.ejb.Startup;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.PersistenceUnit;
+
+@Startup
+@ApplicationScoped
+public class ProductServiceStartupCheck implements HealthCheck{
+
+    @PersistenceUnit
+    private EntityManagerFactory emf;
+    
+    @Override
+    public HealthCheckResponse call() {
+        if (emf != null && emf.isOpen()) {
+            return HealthCheckResponse.up("ProductServiceStartupCheck");
+        } else {
+            return HealthCheckResponse.down("ProductServiceStartupCheck");
+        }
+    }
+}
+----
+
+=== Integration with CDI
+
+The specification also emphasizes the importance of integrating health checks with the application’s Context and Dependency Injection (CDI) context, enabling health check procedures to be automatically discovered and invoked by the runtime.
+MicroProfile Health thus provides a robust and standardized way to implement health checks, facilitating the management and orchestration of microservices in a cloud environment.
+
+=== Deployment and Access
+
+Once defined, these health check procedures are automatically discovered and invoked by the MicroProfile Health runtime. They are accessible through standardized HTTP endpoints provided by MicroProfile Health (`/health`, `/health/live`, `/health/ready`, `/health/started`) and can be used by orchestration tools (like Kubernetes) or monitoring systems to manage and monitor the health of your microservices.
+
+This approach allows you to tailor health checks to the operational specifics of each microservice, providing a robust mechanism for observing and managing your application’s health in a cloud-native environment.
+
+==== Kubernetes Probe Configuration
+In your Kubernetes deployment configuration, define the readiness probe to use the /health/ready endpoint, which MicroProfile exposes for readiness checks. Kubernetes will automatically handle this as a combined startup and readiness probe if no explicit startup probe is defined.
+readinessProbe:
+
+[source, yaml]
+----
+httpGet:
+  path: /health/ready
+  port: 8080
+initialDelaySeconds: 10
+periodSeconds: 5
+----
+
+If you specifically want to use Kubernetes' startup probe feature, you can configure it similarly in your Kubernetes deployment YAML.
+This approach lets you leverage MicroProfile Health in a cloud-native environment effectively, ensuring your application is only considered ready after successful completion of essential startup checks.
+
+=== Best Practices for Effective Health Checks
+
+Here are some best practices for implementing and utilizing health checks effectively:
+
+* Clearly Define Health Check Types: Use readiness, liveness, and startup checks appropriately to reflect the state of your microservices. This helps in accurately signaling the service’s ability to handle traffic and its current operational state.
+
+* Implement Meaningful Health Checks: Ensure that your health checks meaningfully reflect the operational aspects they are intended to monitor. Avoid trivial checks that do not accurately represent the service’s health.
+
+* Utilize Health Check Responses: Make effective use of the health check responses, including the UP/DOWN status and additional metadata. This information can be valuable for logging and reporting on the health state of your services.
+
+* Secure Health Check Endpoints: Consider the security of your health check endpoints, especially if they expose sensitive details about the application’s state. 
+
+* Monitor Health Check Performance: Health checks should be lightweight and not introduce significant overhead. Monitor the performance of your health checks and optimize as needed to prevent impacting the application’s performance.
+
+* Logging Health Check Results: Implementing logging within your health check procedures can provide insights into the health status over time. Log entries can be made when health check statuses change or when significant health-related events occur.
+
+* Reporting and Alerting: Based on logged health check results, implement reporting mechanisms to visualize the health over time and set up alerting for when health checks fail. This could be integrated with existing monitoring and alerting tools.
+
+By following these best practices, you can effectively implement and expose health checks in your MicroProfile applications, improving observability and reliability, especially in cloud-native environments.
+
+=== Summary
+
+This chapter provided a comprehensive overview of MicroProfile Health, emphasizing its critical role in enhancing the observability and reliability of microservices within cloud environments. Key topics included an introduction to the MicroProfile Health specification, detailed explanations of health check types (liveness, readiness, and startup checks), and guidance on implementing, exposing, and effectively utilizing these health checks.
+
+The essence of MicroProfile Health lies in its standardized mechanism for microservices to report health status via HTTP endpoints, facilitating automated decision-making processes like scaling, failover, and recovery in cloud or containerized environments. The specification defines three primary types of health checks: liveness, readiness, and startup checks, each designed to assess different aspects of a microservice's operational status.
+
+Implementing health checks involves creating procedures annotated with the respective health check annotations. These procedures return a HealthCheckResponse indicating the service's health status (UP or DOWN). These checks are automatically exposed via predefined HTTP endpoints, allowing easy integration with orchestration tools like Kubernetes.
+
+The chapter also touched on best practices for effective health checks, including defining meaningful checks, utilizing health check responses, handling failures gracefully, and securing health check endpoints. Additionally, it highlighted the importance of logging and reporting for health checks, suggesting using logging frameworks to capture detailed information about health status changes and errors.
+
+In conclusion, MicroProfile Health offers a robust framework for monitoring and managing the health of microservices, ensuring that services remain reliable and available in dynamic cloud environments. By following the guidelines and best practices outlined in this chapter, developers can effectively implement and leverage health checks to maintain the overall health of their applications.
