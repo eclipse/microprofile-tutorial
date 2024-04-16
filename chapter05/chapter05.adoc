@@ -109,7 +109,7 @@ configurations, making it a valuable tool for developers.
 The MicroProfile Configuration APIs provide the following capabilities
 for managing the configuration settings of your application:
 
-- It allows reading and writing configuration values.
+- It allows reading configuration values.
 - It allows applications to retrieve configuration values reliably,
 supporting various sources, such as property files, system properties,
 environment variables, and more.
