@@ -496,7 +496,7 @@ Open Liberty requires a `server.xml` file for server configuration. This file sh
 ----
 <server description="MicroProfile Tutorial Server">
   <featureManager>
-    <feature>mpConfig-1.4</feature> <!-- Use the appropriate version -->
+    <feature>mpConfig-3.1</feature> <!-- Use the appropriate version -->
     <!-- Include other features as needed -->
   </featureManager>
 ----
