@@ -113,9 +113,6 @@ for managing the configuration settings of your application:
 - It allows applications to retrieve configuration values reliably,
 supporting various sources, such as property files, system properties,
 environment variables, and more.
-- Observe changes to configuration values using config events, making
-tracking and managing changes to your application’s configuration
-easier.
 
 The MicroProfile Configuration API provides several classes, allowing
 easy integration of configuration values. Below is the list of key
