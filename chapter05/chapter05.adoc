@@ -131,8 +131,6 @@ properties, environment variables, files, or data stores.
 - `Property` - It represents a key/value pair in the configuration data.
 - `Converter<T>` - This interface implements custom converters that convert
 configuration values from String to any desired type.
-- `PropertyExpression` - An interface supporting expression evaluation
-within configuration values, allowing dynamic substitution.
 
 These classes and interfaces provide a robust configuration mechanism
 that is easy to use and extend. Developers can leverage these APIs to
