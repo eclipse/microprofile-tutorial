@@ -388,7 +388,7 @@ public class PaymentServiceConfigSource implements ConfigSource{
 }
 ----
 
-The above code snippet demonstrates flexibility provided by MicroProfile Config for integrating with various external configuration providers, enabling applications to load configurations from sources beyond the default system properties, environment variables, and microprofile-config.properties files. This capability is crucial for modern applications that may need to pull configuration from dynamic sources like cloud services, databases, or custom APIs.
+The above code snippet demonstrates MicroProfile Config's flexibility in integrating with various external configuration providers. This enables applications to load configurations from sources beyond the default system properties, environment variables, and microprofile-config.properties files. This capability is crucial for modern applications that may need to pull configuration from dynamic sources like cloud services, databases, or custom APIs.
 
 NOTE: When integrating with external configuration providers, it’s essential to consider security aspects, especially when dealing with sensitive configuration data. Use secure communication channels (e.g., HTTPS) to retrieve configuration from external services. Manage access control meticulously to prevent unauthorized access to sensitive configuration. Consider encrypting sensitive configuration values and decrypting them within your ConfigSource or application logic.
 
