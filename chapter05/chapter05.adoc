@@ -337,8 +337,6 @@ As we saw, the Config API makes it easy to inject configuration properties into 
 
 Let’s implement a feature in our MicroProfile e-Commerce application to integrate payment gateway configuration dynamically by creating a PaymentServiceConfigSource (a custom ConfigSource) which could fetch API keys and endpoints. This would ensure that payment service configurations are up-to-date and can be changed without redeploying the application.
 
-MicroProfile Config provides a flexible framework for integrating with various external configuration providers, enabling applications to load configurations from sources beyond the default system properties, environment variables, and microprofile-config.properties files. This capability is crucial for modern applications that may need to pull configuration from dynamic sources like cloud services, databases, or custom APIs.
-
 The following is an implementation of a `ConfigSource` that reads configuration data from a file:
 
 [source, java]
@@ -389,6 +387,8 @@ public class PaymentServiceConfigSource implements ConfigSource{
        return properties.keySet();}
 }
 ----
+
+The above code snippet demonstrates flexibility provided by MicroProfile Config for integrating with various external configuration providers, enabling applications to load configurations from sources beyond the default system properties, environment variables, and microprofile-config.properties files. This capability is crucial for modern applications that may need to pull configuration from dynamic sources like cloud services, databases, or custom APIs.
 
 NOTE: When integrating with external configuration providers, it’s essential to consider security aspects, especially when dealing with sensitive configuration data. Use secure communication channels (e.g., HTTPS) to retrieve configuration from external services. Manage access control meticulously to prevent unauthorized access to sensitive configuration. Consider encrypting sensitive configuration values and decrypting them within your ConfigSource or application logic.
 
