@@ -581,11 +581,8 @@ Dynamic configuration management is essential for modern applications, providing
 
 While the MicroProfile Config specification provides a powerful and flexible framework for configuration management, handling dynamic updates and configuration change events may require additional custom development or the use of external tools. By considering the strategies mentioned above, developers can effectively manage configuration changes, ensuring their microservices remain responsive and resilient in dynamic environments.
 
-While MicroProfile Config provides a flexible and powerful framework for managing application configurations, securing sensitive data within those configurations requires careful consideration and the implementation of additional security measures. By following best practices for configuration security, developers can help protect their applications from potential threats and vulnerabilities.
-
-While MicroProfile Config provides the core functionality for handling configurations in Java microservices, managing configurations across different environments requires careful planning and implementation. Utilizing environment variables, custom ConfigSources, and integrating with external configuration and secrets management systems are effective strategies to achieve this.
+The MicroProfile Config specification offers a robust and adaptable framework for managing application configurations. By implementing MicroProfile Config, developers can effectively manage configuration changes, ensuring their microservices remain responsive and resilient in dynamic environments.
 
 Integrating external configuration providers with MicroProfile Config extends the flexibility and dynamism of configuration management in microservices architectures. By implementing custom ConfigSources, applications can seamlessly adapt to various environments and configuration paradigms, pulling configuration data from virtually any source.
 
 Handling missing or invalid configurations in MicroProfile Config involves using default values, optional properties, custom ConfigSource implementations, and appropriate exception handling. By following these practices, you can ensure that your application remains robust and flexible, even in the face of configuration challenges.
-
