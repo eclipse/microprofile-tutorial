@@ -10,10 +10,13 @@ chapter, we will learn about different types of health checks and standard healt
 === Topics to be covered:
 
 - Overview of MicroProfile Health
+- Key Concepts
 - Types of Health Checks
-- Standard Health Checks
-- Implementing and Exposing Health Checks
-- Logging and Reporting Health Checks
+- Exposing Health Checks
+- Steps for Implementing Health Checks
+- Integration with CDI
+- Accessing Health Checks
+- Kubernetes Probe Configuration
 - Best Practices for Effective Health Checks
 
 === Overview of MicroProfile Health
@@ -30,7 +33,8 @@ Let’s delve into the essentials of MicroProfile Health, its importance, and ho
 
 At its core, the MicroProfile Health specification defines a mechanism for microservices to report their health status via HTTP. 
 These health checks can be used by external systems to verify the operational status of the services. This is crucial in modern cloud 
-environments where automated processes.
+environments where automated processes continuously monitor service health, initiate failover procedures, and manage load balancing 
+to ensure high availability and reliability.
 
 ==== Health Check
 
@@ -69,7 +73,7 @@ startup conditions are fulfilled. This ensures that readiness and liveness probe
 adequate time to complete its initialization processes, such as loading configurations, establishing database connections, or performing 
 necessary pre-service tasks.These checks are annotated with `@Startup`. 
 
-== Exposing Health Checks
+=== Exposing Health Checks
 
 Health checks are exposed via HTTP endpoints automatically without additional configuration needed from the developer’s side. The runtime
 environment provides these endpoints:
@@ -82,7 +86,7 @@ environment provides these endpoints:
 These endpoints return a JSON object containing the overall status (UP or DOWN) and individual health check responses, including their names,
 statuses, and optional data.
 
-=== Example JSON Response
+==== Example JSON Response
 
 For example a `LivenessCheck`, if accessed via `/health/live`, the JSON response might look something like this when the service is healthy:
 
@@ -105,7 +109,7 @@ the health status (UP or DOWN) and optionally includes additional details. Imple
 that services are only used when they are in a healthy state and can correctly process requests. This enhances the overall reliability and 
 maintainability of applications.
 
-=== Standard Health Check
+==== Standard Health Check
 
 Applications can implement multiple health checks of each kind. The overall health status reported by the application is a logical AND of all individual 
 health checks. A special endpoint `/health` aggregates the results from all three types of checks.
@@ -384,13 +388,13 @@ public class ProductServiceStartupCheck implements HealthCheck{
 The specification also emphasizes the importance of integrating health checks with the application’s Context and Dependency Injection (CDI) context, enabling health check procedures to be automatically discovered and invoked by the runtime.
 MicroProfile Health thus provides a robust and standardized way to implement health checks, facilitating the management and orchestration of microservices in a cloud environment.
 
-=== Deployment and Access
+=== Accessing Health Checks
 
 Once defined, these health check procedures are automatically discovered and invoked by the MicroProfile Health runtime. They are accessible through standardized HTTP endpoints provided by MicroProfile Health (`/health`, `/health/live`, `/health/ready`, `/health/started`) and can be used by orchestration tools (like Kubernetes) or monitoring systems to manage and monitor the health of your microservices.
 
 This approach allows you to tailor health checks to the operational specifics of each microservice, providing a robust mechanism for observing and managing your application’s health in a cloud-native environment.
 
-==== Kubernetes Probe Configuration
+=== Kubernetes Probe Configuration
 
 Integrating MicroProfile Health checks with Kubernetes probes allows you to leverage Kubernetes' native capabilities to manage the lifecycle of your containers based on their current health status. Specifically, you can map Liveness, Readiness, and Startup probes in Kubernetes to the corresponding health check types defined by the MicroProfile Health specification.
 
