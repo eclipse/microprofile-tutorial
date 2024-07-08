@@ -17,7 +17,6 @@ By the end of this chapter, you will have a deep understanding of MicroProfile M
 - Types of Metrics
 - MicroProfile Metrics Dependency
 - Metrics Annotations
-- Using Metadata with Metrics
 - Categories of Metrics
 - Metric Registry
 - Instrumenting Microservices with Metrics
@@ -54,7 +53,7 @@ The MicroProfile Metrics specification includes four different types of metrics 
 
 2. *Gauge*: It is a metric type that measures an instantaneous value of something , which can arbitrarily go up or down. It’s used to capture the value of a metric at a particular point in time like the size of a queue, memory usage, or current number of active user sessions. Gauges are typically used for values that fluctuate over time and provide a current "gauge" of what's happening.
 
-3. *Histograms*: They provide a distribution of values for a given metric, which are useful for identifying performance outliers. It measures the frequency of values in different ranges (or "buckets") and is useful for tracking the distribution of values, such as response times or data sizes. Histograms can give insights into the variability, average, median, percentiles, and trends of the measured data over time.
+3. *Histograms*: They provide a distribution of values for a given metric, which are useful for identifying performance outliers. It measures the frequency of values in different ranges (or "buckets") and is useful for tracking the distribution of values, such as response times or data sizes. Histograms can give insights into the average, percentiles, and trends of the measured data over time.
 
 4. *Timer*: It is a specialized metric type that aggregates timing durations and provides count, total time, mean, minimum, and maximum duration, and it usually reports the duration distribution as well. It effectively combines a Histogram and a Meter, measuring the rate of events and the time duration of each event. Timers are invaluable for tracking the duration of certain activities or operations within your application, such as processing time or method execution time.
 
@@ -102,38 +101,6 @@ MicroProfile Metrics defines a set of annotations to be used for exposing metric
 
 Besides annotations, MicroProfile Metrics also defines a set of programmatic APIs for working with metrics. These APIs can be used to register custom metrics or access existing metrics.
 
-=== Using Metadata for Metrics
-
-In MicroProfile Metrics, metadata plays a crucial role in defining, understanding, and managing the various metrics that applications expose. Metadata essentially provides descriptive information about a metric, such as its name, description, type, unit of measurement, and additional tags or labels. This information not only aids in the identification and categorization of metrics but also enhances their interpretability, making it easier for developers, operators, and monitoring tools to understand what each metric represents and how it should be used.
-
-==== Components of Metadata
-
-- *Name*: A unique identifier for the metric. Naming conventions are important for clarity and consistency.
-- *Description*: A human-readable description of what the metric measures and any additional context.
-- *Type*: Specifies the type of metric (e.g., Counter, Gauge, Timer, etc.), which determines how its data should be interpreted.
-- *Unit of Measurement*: Indicates the unit in which the metric value is reported (e.g., milliseconds, bytes, requests per second), crucial for understanding the scale and magnitude of the metric.
-- *Tags/Labels*: Key-value pairs that provide additional dimensions to a metric, such as the module or component it relates to, enabling more granular analysis and filtering.
-
-==== Example
-
-Consider a metric that tracks the number of user login attempts in a web application. The metadata for this metric might look like this:
-
-- Name: `login_attempts`
-- Description: `"Counts the number of user login attempts, including successes and failures."`
-- Type: `Counter`
-- Unit: `attempts`
-- Tags: `{ action="login", outcome="success|failure" }`
-
-This metadata tells us that `login_attempts` is a counter metric, meaning it will increment over time, tracking login attempts. The description provides context on what is being counted, and the tags allow for differentiation between successful and failed attempts.
-
-==== Purpose and Importance of Metadata
-
-- *Identification*: Metadata helps uniquely identify a metric within the application or across different systems. The name and tags associated with a metric can precisely pinpoint its source and purpose.
-- *Documentation*: Through descriptive texts and labels, metadata serves as documentation for metrics, explaining their meaning, usage, and any relevant context that users might need to interpret the data correctly.
-- *Standardization*: By defining expected metadata for metrics, MicroProfile Metrics promotes standardization across applications and tools, facilitating easier integration with monitoring and analysis tools.
-- *Categorization and Filtering*: Metadata allows metrics to be categorized and filtered based on tags or other attributes. This is particularly useful in complex systems with numerous metrics, enabling users to focus on the most relevant data points.
-- *Configuration*: Some metadata fields can influence how a metric is collected, stored, or displayed by monitoring systems, offering a degree of control over the metrics pipeline.
-
 === Categories of Metrics
 
 In MicroProfile Metrics, metrics are organized into three distinct scopes: Base, Vendor, and Application. This categorization is designed to clearly separate metrics by their origin and relevance, making it easier for developers and operators to monitor and manage the performance of their microservices. Each scope serves a specific purpose and contains a different set of metrics:
@@ -149,6 +116,8 @@ Application metrics are exposed under the path `/metrics?scope=vendor`.
 
 Besides the standard metrics above, MicroProfile Metrics also supports custom metrics. You can use custom metrics to track application-specific information not covered by the standard metrics.
 
+Note: In version 5.x, base metrics have become optional. This allows for flexibility in environments where these metrics may not be necessary or where they can be sourced from alternative monitoring tools.
+
 === Metric Registry
 
 The *MetricRegistry* component acts as a container for storing and managing metrics within an application. It provides a structured way to collect, organize, and access various types of metrics (e.g., counters, gauges, histograms, timers, and metered metrics) for monitoring the behavior and performance of applications. It offers a centralized repository where metrics can be registered, updated, and retrieved. This allows applications to consistently monitor critical operational and performance statistics.
@@ -163,10 +132,13 @@ MicroProfile Metrics defines several types of registries, categorized by their s
 
 - Vendor Scope (`MetricRegistry.Type.VENDOR`): Contains metrics that are specific to the implementation of the MicroProfile platform being used. These metrics offer insights into vendor-specific features and optimizations.
 
+A metric registry is created as per the above scopes to enable the organization of metrics based on their origin and relevance.
+
 ==== Instrumenting Microservices with MicroProfile Metrics
 
 Instrumenting microservices with MicroProfile Metrics enables developers to gain detailed insights into their application's operational health and performance. This level of observability is essential for maintaining scalable and resilient microservice architectures in dynamic environments.
-Tracking response time using @Timed
+
+==== Tracking response time using `@Timed`
 
 MicroProfile Metrics also allows you to track a method's response time as a timed metric. The code example below shows how to use the @Timed annotation to track the response time.
 
@@ -190,7 +162,7 @@ public class ProductResource {
     // …
 ----
   
-It will expose a metric called `productLookupTime`, which will track the amount of time spent in the `getProduct()` method in milliseconds.
+It will expose a metric called `productLookupTime`, which will track the amount of time spent in the `getProduct()` method in seconds.
 You can visit the following URL `++https://localhost:<port>/metrics?scope=application++` (Replace `<port>` with the actual port where the server is running) to see the response time of this method as below:
 
 [source]
@@ -202,13 +174,13 @@ productLookupTime_seconds_max{method="getProduct",mp_scope="application",} 0.002
 …
 ----
 
-==== Tracking number of invocations
+==== Tracking number of invocations using `@Counted`
+
 MicroProfile Metrics also allows you to track the number of invocations of a method as a counter metric. The code example below shows how to use the `@Counted` annotation to track the invocation count.
 
 [source, java]
 ----
 import org.eclipse.microprofile.metrics.Metrics;
-import org.eclipse.microprofile.metrics.MetricType;
 
 public class ProductResource {
 
