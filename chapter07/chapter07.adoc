@@ -25,17 +25,13 @@ By the end of this chapter, you will have a deep understanding of MicroProfile M
 
 === Introduction to MicroProfile Metrics
 
-It is essential to monitor its status regularly to ensure smooth microservice operations. You can monitor a microservice using two different techniques: Metrics and health checking. Health checks provide information on the health status of a service, such as whether it is up and running, while Metrics offer more detailed information on its performance, such as response times, throughput, and error rates. In the previous chapter, we discussed health checks and their importance. This chapter will cover the MicroProfile Metrics specification, which provides a standardized way of collecting and exposing performance data for Java microservices.
+It is essential to monitor to monitor your microservices to ensure smooth operations. You can monitor a microservice using two different techniques: Metrics and health checking. Health checks provide information on the health status of a service, such as whether it is up and running, while Metrics offer more detailed information on its performance, such as response times, throughput, and error rates. In the previous chapter, we discussed health checks and their importance. This chapter will cover the MicroProfile Metrics specification, which provides a standardized way of collecting and exposing performance data for Java microservices.
 
 *MicroProfile Metrics* is a specification for developers who want to measure their applications' performance more thoroughly. It provides a set of annotations and APIs to track various metrics related to the application's health and performance. For instance, developers can use these APIs to track metrics such as the number of requests processed, the response time of each request, and the size of the response sent back to the client. 
 
-This specification defines a standardized format for exposing these metrics, which other tools and frameworks can easily collect and track. By using this specification, developers can monitor the performance of their applications in real time and identify any issues that may impact the user experience. 
+This specification defines a standardized format for exposing metrics, which other tools and frameworks can easily collect and track. By using this specification, developers can monitor the performance of their applications in real time and identify any issues that may impact the user experience. 
 
-Moreover, this specification defines a set of standard metrics that we can expose in various formats, such as JMX (Java Management Extensions), JSON (JavaScript Object Notation), or Prometheus. Developers can choose the format that works best for their needs. With the help of this tool, developers can optimize their applications for better performance, ensuring that they meet the requirements of their consumers while delivering a seamless experience.
-
-*JMX* is a robust platform that provides developers the tools to monitor and manage Java applications efficiently. It offers a wide range of features that allow developers to identify and diagnose various application problems, including performance issues, memory leaks, and other critical errors. By leveraging JMX, developers can ensure their Java applications run efficiently and effectively, leading to a better user experience. With JMX, developers can gain insights into their applications that would otherwise be difficult to obtain, making it an essential tool for anyone building and managing Java applications.
-
-In addition to JMX, developers can benefit from JSON's clear and concise way of representing data. *JSON* allows developers to represent a wide range of data types, including strings, numbers, arrays, and objects. It is also widely supported across different programming languages and platforms, making it ideal for transmitting data between systems and platforms.
+Moreover, this specification defines a set of standard metrics that we can expose in Prometheus. With the help of this tool, developers can optimize their applications for better performance, ensuring that they meet the requirements of their consumers while delivering a seamless experience.
 
 *Prometheus* is a powerful tool designed to monitor and collect metrics from your services. It provides a highly efficient time-series database system that securely stores your data for long-term analysis. With Prometheus, you can easily visualize and gain insights into your system's performance, allowing you to make informed decisions and optimize your services for better efficiency and reliability.
   
@@ -186,7 +182,7 @@ public class ProductResource {
     @Timed(name = "productLookupTime",
             tags = {"method=getProduct"},
             absolute = true, 
-            description = "Time needed to lookup for a products")
+            description = "Time spent lookup up a products")
     public Product getProduct(@PathParam("id") Long productId) {
         return productService.getProduct(productId);
     }
@@ -195,7 +191,7 @@ public class ProductResource {
 ----
   
 It will expose a metric called `productLookupTime`, which will track the amount of time spent in the `getProduct()` method in milliseconds.
-You can visit the following URL `++https://localhost:<port>/metrics?scope=application++` (Replace `<port>` with the actual port where the server is running) to see the Response time of this method as below:
+You can visit the following URL `++https://localhost:<port>/metrics?scope=application++` (Replace `<port>` with the actual port where the server is running) to see the response time of this method as below:
 
 [source]
 ----
@@ -271,6 +267,8 @@ The gauge metric `productCatalogSize` can be accessed through the following endp
 
 This custom metric implementation provides a real-time insight into the size of your product catalog, which can be invaluable for monitoring the scale of your service's data and understanding its behavior over time.
 
+Vendors may, by their own implementation, support `/metrics?name=<name>` to directly retrieve that metric from all scopes. However, the specification itself only illustrates `/metrics?scope=<scope>&name=<name>`.
+
 === Summary
 
-This Chapter delved into the intricacies of MicroProfile Metrics, illuminating its role as a pivotal specification for efficiently monitoring microservices. Now you are equipped with a thorough understanding of diverse metric types and their application for monitoring microservice performance. This chapter highlighted the need of regular microservice monitoring via metrics and health checks, emphasizing metrics for detailed performance insights such as response times and throughput. Through practical examples, this chapter showcases how to instrument microservices with MicroProfile Metrics, leveraging standard metrics, and creating custom metrics to monitor microservices comprehensively.
+This Chapter delved into the intricacies of MicroProfile Metrics, illuminating its role as a pivotal specification for efficiently monitoring microservices. Now you are equipped with a thorough understanding of diverse metric types and their application for monitoring microservice performance. This chapter highlighted the need for regular microservice monitoring via metrics and health checks, emphasizing metrics for detailed performance insights such as response times and throughput. Through practical examples, this chapter showcases how to instrument microservices with MicroProfile Metrics, leveraging standard metrics, and creating custom metrics to monitor microservices comprehensively.
