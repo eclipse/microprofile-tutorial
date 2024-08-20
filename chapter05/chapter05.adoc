@@ -299,7 +299,7 @@ In the example above , the `false` default value will be used if the `product.ma
    private boolean maintenanceMode;
 ----
 
-In this example, the `product.maintenanceMode` property will be converted to an `Boolean` before it is injected into the `maintenanceMode` field. If the conversion fails, a `org.eclipse.microprofile.config.ConversionFailedException` will be thrown.
+In this example, the `product.maintenanceMode` property will be converted to an `Boolean` before it is injected into the `maintenanceMode` field.
 
 === Converting Configuration data to a POJO
 
