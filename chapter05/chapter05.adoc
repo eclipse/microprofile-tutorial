@@ -323,6 +323,7 @@ public class MaintenanceMessage {
 ----
 
 In this example, we’re injecting a property named "product.maintenanceMessage" into the message field of our MaintenanceMessage class.
+
 === Creating a Custom `ConfigSource`
 
 As we saw, the Config API makes it easy to inject configuration properties into an application. The Config API defines a contract for config implementations. A ConfigSource is used to read configuration data from a particular source. For example, we could create a ConfigSource that reads configuration data from a file.
