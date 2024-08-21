@@ -116,7 +116,7 @@ Application metrics are exposed under the path `/metrics?scope=application`.
 - *Vendor Metrics* are specific to a particular vendor or technology. These metrics provide insights into the performance and behavior of the runtime's internal components and extensions. Since different MicroProfile implementations may offer additional features or optimize certain areas differently, vendor metrics can vary widely between runtimes. They allow runtime vendors to expose unique metrics that are relevant to their implementation, offering users the ability to monitor vendor-specific aspects of their applications.
 Application metrics are exposed under the path `/metrics?scope=vendor`.
 
-Besides the standard metrics above, MicroProfile Metrics also supports custom metrics. You can use custom metrics to track application-specific information not covered by the standard metrics.
+Besides the standard scopes above, MicroProfile Metrics also supports custom scopes. You can use custom metrics to group application-specific information not covered by the standard metrics.
 
 Note: In version 5.x, base metrics have become optional. This allows for flexibility in environments where these metrics may not be necessary or where they can be sourced from alternative monitoring tools.
 
