@@ -49,7 +49,7 @@ MicroProfile Metrics offers a range of customizable metrics that can be used to 
 
 The MicroProfile Metrics specification includes four different types of metrics that serve specific monitoring purposes: Counter, Gauge, Histogram, and Timer. Each of these types offers unique insights into different aspects of application behavior and performance. Below is the breakdown of available metric types:
 
-1. *Counter*: A Counter is a simple metric type that represents a single numerical value that can only increase or be reset to zero. It's typically used to count occurrences of certain events, such as the number of requests processed, items created, or tasks completed. Since counters can only go up, they are resettable to start counting from zero again, which is particularly useful for tracking totals over a specific interval. 
+1. *Counter*: It is a simple metric type that represents a single numerical value that can only increase over time. This metric is typically used to count occurrences of certain events, such as the number of requests processed, items created, or tasks completed. Monitoring tools like Prometheus are commonly used to analyze changes in the Counter's value over specific intervals. These tools can track the differences in the Counter's value across time periods, providing insights into the rate of occurrences and trends. 
 
 2. *Gauge*: It is a metric type that measures an instantaneous value of something , which can arbitrarily go up or down. It’s used to capture the value of a metric at a particular point in time like the size of a queue, memory usage, or current number of active user sessions. Gauges are typically used for values that fluctuate over time and provide a current "gauge" of what's happening.
 
