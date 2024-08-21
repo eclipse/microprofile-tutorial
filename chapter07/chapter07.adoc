@@ -92,13 +92,13 @@ MicroProfile Metrics defines a set of annotations to be used for exposing metric
 | Annotation | Description
 
 | `@Timed`
-| It times how long a method takes to execute and exposes this information as a metric.
+| Times how long a method takes to execute and exposes this information as a metric.
 
 | `@Counted`
-| It tracks how many times a method is invoked and exposes this information as a metric.
+| Tracks how many times a method is invoked and exposes this information as a metric.
 
 | `@Gauge`
-| It allows you to expose a custom metric that can be any value. It is useful for exposing application-specific metrics.
+| Enables you to expose a custom metric that can be any value. It is useful for exposing application-specific metrics.
 |===
 
 Besides annotations, MicroProfile Metrics also defines a set of programmatic APIs for working with metrics. These APIs can be used to register custom metrics or access existing metrics.
