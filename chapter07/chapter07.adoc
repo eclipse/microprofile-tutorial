@@ -122,7 +122,7 @@ Note: In version 5.x, base metrics have become optional. This allows for flexibi
 
 === Metric Registry
 
-The *MetricRegistry* component acts as a container for storing and managing metrics within an application. It provides a structured way to collect, organize, and access various types of metrics (e.g., counters, gauges, histograms, timers, and metered metrics) for monitoring the behavior and performance of applications. It offers a centralized repository where metrics can be registered, updated, and retrieved. This allows applications to consistently monitor critical operational and performance statistics.
+The *MetricRegistry* component acts as a container for storing and managing metrics within an application. It provides a structured way to collect, organize, and access various types of metrics (e.g., counters, gauges, histograms, and timers) for monitoring the behavior and performance of applications. It offers a centralized repository where metrics can be created and retrieved. This allows applications to consistently monitor critical operational and performance statistics.
 
 ==== Types of Metric Registries
 
