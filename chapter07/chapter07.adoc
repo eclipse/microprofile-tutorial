@@ -51,11 +51,11 @@ The MicroProfile Metrics specification includes four different types of metrics 
 
 1. *Counter*: It is a simple metric type that represents a single numerical value that can only increase over time. This metric is typically used to count occurrences of certain events, such as the number of requests processed, items created, or tasks completed. Monitoring tools like Prometheus are commonly used to analyze changes in the Counter's value over specific intervals. These tools can track the differences in the Counter's value across time periods, providing insights into the rate of occurrences and trends. 
 
-2. *Gauge*: It is a metric type that measures an instantaneous value of something , which can arbitrarily go up or down. It’s used to capture the value of a metric at a particular point in time like the size of a queue, memory usage, or current number of active user sessions. Gauges are typically used for values that change over time, providing a current "gauge" of the system's state..
+2. *Gauge*: It is a metric type that measures an instantaneous value of something , which can arbitrarily go up or down. It’s used to capture the value of a metric at a particular point in time like the size of a queue, memory usage, or current number of active user sessions. Gauges are typically used for values that change over time, providing a current "gauge" of the system's state.
 
 3. *Histograms*: They provide a distribution of values for a given metric, which are useful for identifying performance outliers. It measures the frequency of values in different ranges (or "buckets") and is useful for tracking the distribution of values, such as response times or data sizes. Histograms can give insights into the average, percentiles, and trends of the measured data over time.
 
-4. *Timer*: It is a specialized metric type that aggregates timing durations and provides data such as the count, total time, mean, and maximum duration. It also usually reports the duration distribution. Timers are invaluable for tracking the duration of certain activities or operations within your application, such as processing time or method execution time.
+4. *Timer*: It is a specialized metric type that aggregates timing durations and provides data such as the count, total time, mean, and maximum duration. It can also report the duration distribution. Timers are invaluable for tracking the duration of certain activities or operations within your application, such as processing time or method execution time.
 
 Note: Counters, Histograms, and Timers, which are updated synchronously when annotations or API calls are made to update them, Gauges are registered as callbacks. These callbacks are invoked to retrieve their value at the moment the list of metrics is requested, typically by a monitoring tool calling the /metrics endpoint. This allows Gauges to provide a real-time snapshot of dynamic values as they fluctuate.
 
@@ -126,7 +126,7 @@ The *MetricRegistry* component acts as a container for storing and managing metr
 
 ==== Types of Metric Registries
 
-MicroProfile Metrics defines several types of registries, categorized by their scope:
+MicroProfile Metrics creates metric registries for each scope:
 
 - Application Scope (`MetricRegistry.Type.APPLICATION`): Contains custom metrics that are specific to the application. These are typically the metrics that developers explicitly create and register to monitor application-specific behaviors.
 
@@ -156,7 +156,7 @@ public class ProductResource {
     @Timed(name = "productLookupTime",
             tags = {"method=getProduct"},
             absolute = true, 
-            description = "Time spent lookup up a products")
+            description = "Time spent looking up products")
     public Product getProduct(@PathParam("id") Long productId) {
         return productService.getProduct(productId);
     }
@@ -170,7 +170,7 @@ You can visit the following URL `++https://localhost:<port>/metrics?scope=applic
 [source]
 ----
 …
-# HELP productLookupTime_seconds_max Time needed to lookup for a products
+# HELP productLookupTime_seconds_max Time spent to lookup up products
 # TYPE productLookupTime_seconds_max gauge
 productLookupTime_seconds_max{method="getProduct",mp_scope="application",} 0.002270643
 …
