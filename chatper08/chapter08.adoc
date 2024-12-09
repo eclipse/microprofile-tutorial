@@ -1,1 +1,19 @@
+= Chapter 8: MicroProfile Fault Tolerance
 
+Microservices architecture involves breaking down applications into smaller, autonomous services, improving development flexibility, agility, and scalability. However, this design approach does bring in additional complexity, particularly regarding fault tolerance. *MicroProfile Fault Tolerance* tackles this issue by providing a mechanism to ensure resilience and maintain reliability despite failures.
+
+This chapter explains how to enhance the resilience and reliability of your microservices using *MicroProfile Fault Tolerance* and demonstrates how to implement key strategies such as retries, circuit breakers, timeouts, and fallbacks. By the end of the chapter, you will have a thorough understanding of how to ensure the resilience and stability of your microservices architecture.
+
+== Topics to be Covered
+- Introduction to Fault Tolerance
+- Strategies (Retry, Circuit Breaker, Timeout, Fallback)
+- Implementation Retry Policies and Configuration
+- Avoiding Cascading Failures
+- Configuring Circuit Breaker
+- Setting Timeouts
+- Implementing Fallback Logic
+- Isolating Resources for Fault Tolerance
+
+== Introduction to Fault Tolerance
+
+Fault tolerance is the ability of a system to continue operating correctly even in the event of unexpected failures or errors. A fault-tolerant system is one that can detect, isolate, and recover from errors without human intervention. This resilience is critical for maintaining reliability and consistency in distributed or complex environments, especially in modern microservices architectures where individual component failures are inevitable.
