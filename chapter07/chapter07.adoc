@@ -170,7 +170,7 @@ You can visit the following URL `++https://localhost:<port>/metrics?scope=applic
 [source]
 ----
 …
-# HELP productLookupTime_seconds_max Time spent to looking up products
+# HELP productLookupTime_seconds_max Time spent looking up products
 # TYPE productLookupTime_seconds_max gauge
 productLookupTime_seconds_max{method="getProduct",mp_scope="application",} 0.002270643
 …
