@@ -309,7 +309,6 @@ Fallbacks help to:
 - Provide a meaningful response to users instead of complete failure.
 - Improve user experience by minimizing disruptions.
 
-
 [source,java]
 ----
 import org.eclipse.microprofile.faulttolerance.Fallback;
@@ -368,22 +367,43 @@ Example:
 
 [source,java]
 ----
+
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Timeout;
+
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class ProductService {
 
-    @Timeout(2000)
-    @Fallback(fallbackMethod = "defaultData")
-    public String fetchProductDetails(Long productId) {
-        // Simulated long-running operation
-        Thread.sleep(3000);
-        return "Actual data";
+    @Inject
+    private ProductRepository productRepository; // Access to the database
+
+    @Inject
+    private ProductCache productCache; // Cache mechanism
+
+    /**
+     * Retrieves a list of products. If the operation takes longer than 2 seconds,
+     * fallback to cached data.
+     */
+    @Timeout(2000) // Set timeout to 2 seconds
+    @Fallback(fallbackMethod = "getProductsFromCache") // Fallback method
+    public List<Product> getProducts() {
+        // Simulating database call
+        return productRepository.findAllProducts();
     }
 
-    public String defaultData() {
-        return "Fallback data due to timeout.";
+    /**
+     * Fallback method to retrieve products from the cache.
+     */
+    public List<Product> getProductsFromCache() {
+        System.out.println("Fetching products from cache...");
+        return productCache.getCachedProducts();
     }
-    // ...
 }
 ----
+
+This example demonstrates the use of MicroProfile Fault Tolerance annotations `@Timeout` and `@Fallback` to enhance the resilience of a ProductService. The `@Timeout` annotation ensures that the `getProducts()` method, which fetches product data from a database, completes within a specified duration (2 seconds in this case). If the method exceeds this time or an exception occurs, the `@Fallback` annotation directs the application to invoke the `getProductsFromCache()` method, which retrieves data from a cache. This approach ensures consistent service availability and a seamless user experience, even during database delays or failures​.
 
 ==== Best Practices for Fallbacks
 
@@ -392,10 +412,150 @@ public class ProductService {
 - **Monitor Fallback Usage:** Use metrics to track the frequency of fallback execution, which can indicate service health and the need for improvements.
 - **Plan for Degraded Functionality:** Ensure the fallback behavior aligns with business priorities and provides the most critical features.
 
-
 === Combining Fault Tolerance Strategies
 
 Combining fault tolerance strategies, such as `@Timeout`, `@Fallback`, `@CircuitBreaker`, and `@Retry`, ensures resilience and efficient resource usage. Externalize configurations with MicroProfile Config for flexibility across environments.
+
+=== Isolating Resources for Fault Tolerance
+
+Resource isolation is a key principle in building resilient microservices. By isolating resources, you prevent failures in one part of the system from spreading and affecting others. MicroProfile Fault Tolerance provides features like bulkheads to achieve resource isolation and ensure critical components remain functional, even when others fail.
+
+==== Why Resource Isolation Matters
+
+In a distributed system, shared resources like thread pools, database connections, and network bandwidth can quickly become bottlenecks if not adequately managed. Resource isolation ensures:
+- Failures in one service do not deplete resources for other services.
+- Critical operations remain functional even under load or failure conditions.
+- Better predictability and control over system behavior.
+
+==== Using Bulkheads to Isolate Resources
+
+Bulkheads are a common pattern for isolating resources by dividing a system into separate pools or partitions. This ensures that a failure in one area does not impact others. The MicroProfile Fault Tolerance standard provides the `@Bulkhead` annotation to implement this pattern.
+
+==== Bulkhead Types
+
+MicroProfile supports two types of bulkheads:
+- **Semaphore-Style Bulkhead:** Limits the number of concurrent requests.
+- **Thread Pool-Style Bulkhead:** Uses a dedicated thread pool to isolate operations.
+
+===== Semaphore-Style Bulkhead
+
+The semaphore-style bulkhead pattern limits the number of concurrent requests that can be processed by a service or method at any given time. Any additional requests are immediately rejected when the specified concurrency limit is reached. This approach prevents resource contention and protects the system from being overwhelmed during high traffic or failure scenarios.
+
+[source,java]
+----
+package io.microprofile.tutorial.store.payment.service;
+
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class PaymentService {
+
+    /**
+     * Processes payment transactions with limited concurrency to prevent
+     * system overload and ensure stability during high traffic.
+     *
+     * The @Bulkhead annotation ensures that only a limited number of
+     * concurrent requests (5 in this case) can access this method.
+     *
+     * @return A success message indicating the processing status.
+     */
+    @Bulkhead(value = 5)
+    public String processPayment() {
+        simulateDelay();
+        return "Payment processed with limited concurrency.";
+    }
+
+    private void simulateDelay() {
+        try {
+            Thread.sleep(1000); // Simulating a delay
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Error during payment processing simulation", e);
+        }
+    }
+}
+----
+
+In this example:
+- The method allows up to 5 concurrent invocations (`value = 5`).
+- Any additional requests are rejected to prevent overload, ensuring system stability.
+
+===== Thread Pool-Style Bulkhead
+
+The thread-pool-style bulkhead pattern leverages a dedicated thread pool to achieve resource isolation. Incoming requests are placed into a queue when all threads in the pool are in use and executed as threads become available. This design helps manage resource contention effectively.
+
+[source,java]
+----
+package io.microprofile.tutorial.store.payment.service;
+
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class PaymentService {
+
+    /**
+     * Processes payment transactions using an isolated thread pool to ensure
+     * stability during high traffic and prevent contention with other operations.
+     *
+     * The @Bulkhead annotation configures a thread pool with a maximum of
+     * 5 concurrent threads and a waiting task queue of size 10.
+     *
+     * @return A success message indicating the payment status.
+     */
+    @Bulkhead(value = 5, waitingTaskQueue = 10)
+    public String processPayment() {
+        simulatePaymentProcessing();
+        return "Payment processed successfully with an isolated thread pool.";
+    }
+
+    private void simulatePaymentProcessing() {
+        try {
+            Thread.sleep(3000); // Simulating a resource-intensive task
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Error during payment processing simulation", e);
+        }
+    }
+}
+----
+
+In this example:
+- The method uses a thread pool with up to 5 concurrent threads (`value = 5`) and a queue of up to 10 tasks (`waitingTaskQueue = 10`).
+- This configuration prevents failures in one operation from depleting shared resources.
+
+==== Externalizing Bulkhead Configuration
+
+Bulkhead resource limits can be externalized using MicroProfile Config to allow runtime adjustments. For example:
+
+Annotate the method without specific values:
+
+[source,java]
+----
+@Bulkhead
+public String processPayment() {
+    simulatePaymentProcessing();
+    return "Payment processed successfully with an isolated thread pool.";
+}
+----
+
+Define bulkhead parameters in `microprofile-config.properties`:
+
+[source,properties]
+----
+com.example.Service/dynamicBulkheadOperation/Bulkhead/value=5
+com.example.Service/dynamicBulkheadOperation/Bulkhead/waitingTaskQueue=10
+----
+
+==== Best Practices for Resource Isolation
+
+- **Isolate Critical Resources:** Use bulkheads for high-priority operations, such as authentication, to ensure they are not impacted by failures elsewhere.
+- **Monitor Usage:** Track bulkhead metrics using MicroProfile Metrics to identify bottlenecks and adjust limits.
+- **Plan for Scaling:** Test bulkhead configurations under various load conditions to ensure scalability.
+- **Combine with Graceful Degradation:** Pair bulkheads with fallbacks to handle rejected requests gracefully.
+
+By effectively isolating resources, you can ensure that your microservices remain reliable and resilient, even in the face of unexpected failures or high demand. This approach not only protects critical operations but also improves overall system stability.
 
 == Summary
 
