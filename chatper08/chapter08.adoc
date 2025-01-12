@@ -560,6 +560,7 @@ By effectively isolating resources, you can ensure that your microservices remai
 == Summary
 
 This chapter explored the MicroProfile Fault Tolerance API and essential fault tolerance strategies:
+
 - **Retries:** Automatically reattempt failed operations for transient errors.
 - **Timeouts:** Define maximum execution times for operations to avoid resource blocking.
 - **Circuit Breakers:** Prevent repeated calls to failing services and allow graceful recovery.
