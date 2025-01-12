@@ -48,7 +48,7 @@ A fallback provides a default response if an operation fails. It ensures the sys
 
 A circuit breaker stops an application from making too many unsuccessful requests to another system. If the number of failures exceeds a threshold, the circuit breaker will "open," causing all subsequent requests to fail immediately. After a configured delay, the circuit breaker will "half-open" and allow limited requests. If those requests succeed, the circuit breaker will "close" and let all requests go through.
 
-==== Example of Circuit Breaker States
+image::../images/figure8-1.png[Figure 8-1: Circuit Breaker states, width=600, align="center"]
 
 For example, a circuit breaker can be applied to calls to an external inventory service in the Product Catalog Microservice. If the inventory service starts failing or becomes unresponsive, the circuit breaker will "open," preventing repeated requests and reducing load. After a configured delay, the circuit breaker will "half-open" to test the availability of the inventory service with a few requests. If those succeed, the circuit breaker will "close," resuming normal operations.
 
@@ -96,8 +96,6 @@ The MicroProfile Fault Tolerance Annotations provide a declarative way to implem
 
 Retries are a fundamental fault tolerance strategy for managing transient failures such as temporary network outages or intermittent service unavailability. The `@Retry` annotation in the MicroProfile Fault Tolerance API provides a simple and effective way to implement retry policies. By customizing parameters such as the number of retries, delay between attempts, and conditions for retries, you can ensure your application responds to failures gracefully and minimizes downtime.
 
-==== Example: Retry Implementation in PaymentService
-
 Below is an example of applying the `@Retry` annotation in a `processPayment` method within a `PaymentService` class of the MicroProfile e-commerce project:
 
 [source,java]
@@ -128,6 +126,10 @@ public class PaymentService {
         return Response.ok("{\"status\":\"success\"}", MediaType.APPLICATION_JSON).build();
     }
 }
+----
+
+[source,java]
+----
 
 class PaymentDetails {
     private double amount;
@@ -142,7 +144,38 @@ class PaymentDetails {
 }
 ----
 
+[source,java]
+----
+
+package io.microprofile.tutorial.store.payment.exception;
+
+public class PaymentProcessingException extends Exception {
+   public PaymentProcessingException(String message) {
+       super(message);
+   }
+}
+
+----
+
+
+[source,java]
+----
+package io.microprofile.tutorial.store.payment.exception;
+
+class CriticalPaymentException extends Exception {
+    public CriticalPaymentException(String message) {
+        super(message);
+    }
+}
+----
+
+In this example, the `processPayment` method attempts to process a payment. If a transient failure occurs (e.g., `PaymentProcessingException`), the method retries up to three times (`maxRetries = 3`), there is a delay of 2000 milliseconds between retries (`delay = 2000`), with a random variation of up to 500 milliseconds is added to the delay (`jitter  = 500`) to avoid synchronized retries (e.g. thundering herd problem). 
+The retries are attempted only for the exception `PaymentProcessingException` (`retryOn = PaymentProcessingException.class`) and are aborted if a `CriticalPaymentException` is encountered (`abortOn = CriticalPaymentException.class`).
+
+
 ==== Understanding the `@Retry` Parameters
+
+A retry policy specifies the conditions under which an operation should be retried. The key attributes of the `@Retry` annotation include:
 
 |=== 
 | Parameter       | Description 
@@ -195,7 +228,7 @@ A circuit breaker is a critical fault tolerance mechanism that protects a system
 | `failOn`                  | Specifies the exception(s) considered failures contributing to the failure ratio.
 |===
 
-==== Example: Circuit Breaker Implementation
+Below is an example of configuring a circuit breaker for a service method using the `@CircuitBreaker` annotation:
 
 [source,java]
 ----
@@ -215,16 +248,150 @@ public String getProduct(Long id) {
 }
 ----
 
-In this example:
-- The circuit breaker opens if 50% of requests fail (`failureRatio = 0.5`) after at least 10 requests (`requestVolumeThreshold = 10`).
-- It remains open for 5 seconds (`delay = 5000`) and transitions to the "half-open" state to test recovery.
-- Two consecutive successful requests (`successThreshold = 2`) in the "half-open" state close the circuit breaker.
+In the above code, the circuit breaker opens if 50% of requests fail (`failureRatio = 0.5`) after at least 10 requests (`requestVolumeThreshold = 10`). It remains open for 5 seconds (`delay = 5000`) and transitions to the "half-open" state to test recovery. Two consecutive successful requests (`successThreshold = 2`) in the "half-open" state close the circuit breaker.
 
 ==== Best Practices for Circuit Breaker
 
 - **Set Realistic Failure Ratios and Thresholds:** Tailor parameters to your services' expected load and failure behavior.
 - **Monitor Metrics:** Use MicroProfile Metrics to monitor circuit breaker state transitions.
 - **Combine with Other Strategies:** Use circuit breakers alongside retries and timeouts for a robust fault tolerance setup.
+
+=== Setting Timeouts
+
+Timeouts are an essential fault tolerance strategy to prevent long-running operations from consuming resources indefinitely. Slow or unresponsive services can degrade overall system performance and reliability in a microservices architecture. The `@Timeout` annotation provided by MicroProfile Fault Tolerance allows you to define a maximum duration for a method to complete, ensuring that system resources remain available for other tasks.
+
+==== Why Use Timeouts?
+
+In distributed systems, slow responses from downstream services can cascade through the system, leading to resource contention and degraded performance. Timeouts allow you to:
+- Abort operations that exceed acceptable time limits.
+- Free system resources for other operations.
+- Trigger alternative strategies, such as fallbacks, to maintain functionality.
+
+[source,java]
+----
+import org.eclipse.microprofile.faulttolerance.Timeout;
+
+public class PaymentService {
+
+    @Timeout(1000)
+    public String processPayment(PaymentDetails paymentDetails) {
+        // Simulate a long-running process
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Processing interrupted");
+        }
+        return "Payment processed successfully.";
+    }
+}
+----
+
+In this example:
+- The `@Timeout(1000)` annotation specifies that the `processPayment` method must complete within 1000 milliseconds (1 second).
+- If the execution exceeds this time, a `TimeoutException` will be thrown, and the process will terminate.
+
+==== Best Practices for Timeouts
+
+- **Align Timeouts with SLAs:** Ensure timeout values align with service-level agreements and user expectations.
+- **Monitor Performance:** Use MicroProfile Metrics to monitor execution times and identify operations requiring optimized timeout values.
+- **Combine with Fallbacks:** Always pair timeouts with fallback logic to provide a reliable response in case of delays.
+- **Avoid Overly Short Timeouts:** Overly aggressive timeout settings may cause unnecessary failures, particularly in high-latency environments.
+
+=== Implementing Fallbacks
+
+Fallbacks provide a default response when an operation fails. They ensure the system continues to function, even if the primary operation cannot complete successfully. The `@Fallback` annotation in MicroProfile Fault Tolerance allows developers to define fallback logic for a method, ensuring graceful degradation.
+
+==== Why Use Fallbacks?
+
+Fallbacks help to:
+- Maintain system availability during failures.
+- Provide a meaningful response to users instead of complete failure.
+- Improve user experience by minimizing disruptions.
+
+
+[source,java]
+----
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import jakarta.ws.rs.core.Response;
+
+public class PaymentService {
+
+    @Fallback(fallbackMethod = "fallbackProcessPayment")
+    public Response processPayment(PaymentDetails paymentDetails) {
+        // Simulate a failure
+        throw new RuntimeException("Service Unavailable");
+    }
+
+    public Response fallbackProcessPayment(PaymentDetails paymentDetails) {
+        return Response.ok("{\"status\":\"failed\", \"message\":\"Payment service is currently unavailable.\"}").build();
+    }
+}
+----
+
+In this example:
+- The `@Fallback` annotation specifies that if the `processPayment` method fails, the `fallbackProcessPayment` method will be executed.
+- The fallback method provides a meaningful response, ensuring the user is informed of the service unavailability.
+
+==== Using Fallback Handlers
+
+A fallback handler class can implement the `FallbackHandler<T>` interface, allowing for reusable fallback logic across multiple methods.
+
+[source,java]
+----
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.FallbackHandler;
+import org.eclipse.microprofile.faulttolerance.ExecutionContext;
+
+@Fallback(FallbackHandlerImpl.class)
+public class ProductService {
+
+    public String fetchProductDetails(Long productId) {
+        throw new RuntimeException("Service Unavailable");
+    }
+}
+
+public class FallbackHandlerImpl implements FallbackHandler<String> {
+    @Override
+    public String handle(ExecutionContext context) {
+        return "Fallback response for product details.";
+    }
+}
+----
+
+==== Combining Fallbacks with Other Fault Tolerance Strategies
+
+Fallback logic can be combined with other fault tolerance mechanisms to create a robust strategy:
+- **Timeout with Fallback:** Ensure operations terminate within a specific time and provide a fallback if they fail.
+
+Example:
+
+[source,java]
+----
+public class ProductService {
+
+    @Timeout(2000)
+    @Fallback(fallbackMethod = "defaultData")
+    public String fetchProductDetails(Long productId) {
+        // Simulated long-running operation
+        Thread.sleep(3000);
+        return "Actual data";
+    }
+
+    public String defaultData() {
+        return "Fallback data due to timeout.";
+    }
+    // ...
+}
+----
+
+==== Best Practices for Fallbacks
+
+- **Keep Fallbacks Lightweight:** Ensure fallback logic is simple and reliable, avoiding dependencies on other potentially failing services.
+- **Provide Meaningful Responses:** The fallback response should maintain a reasonable user experience, even if it cannot replicate full functionality.
+- **Monitor Fallback Usage:** Use metrics to track the frequency of fallback execution, which can indicate service health and the need for improvements.
+- **Plan for Degraded Functionality:** Ensure the fallback behavior aligns with business priorities and provides the most critical features.
+
 
 === Combining Fault Tolerance Strategies
 
