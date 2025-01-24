@@ -602,7 +602,7 @@ public class PaymentService {
 ----
 
 In this example:
-- The method uses a thread pool with up to 5 concurrent threads (`value = 5`) and a queue of up to 10 tasks (`waitingTaskQueue = 10`).
+- The method uses up to 5 concurrent threads (`value = 5`) from a thread pool and a queue of up to 10 tasks (`waitingTaskQueue = 10`).
 - This configuration prevents failures in one operation from depleting shared resources.
 
 ==== Externalizing Bulkhead Configuration
