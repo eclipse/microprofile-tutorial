@@ -14,6 +14,7 @@ This chapter explains how to enhance your microservices' resilience and reliabil
 - Configuring Circuit Breaker
 - Setting Timeouts
 - Implementing Fallback Logic
+- Using `@Asynchronous` Annotation
 - Isolating Resources for Fault Tolerance
 
 == What is Fault Tolerance?
@@ -412,6 +413,76 @@ This example demonstrates the use of MicroProfile Fault Tolerance annotations `@
 - **Provide Meaningful Responses:** The fallback response should maintain a reasonable user experience, even if it cannot replicate full functionality.
 - **Monitor Fallback Usage:** Use metrics to track the frequency of fallback execution, which can indicate service health and the need for improvements.
 - **Plan for Degraded Functionality:** Ensure the fallback behavior aligns with business priorities and provides the most critical features.
+
+=== Using `@Asynchronous` Annotation
+
+The *`@Asynchronous`* annotation in MicroProfile Fault Tolerance is used to enable asynchronous execution of methods. It allows operations to run in a separate thread, freeing up the main thread for other tasks. This approach enhances the application's responsiveness and scalability, particularly in high-concurrency or latency-sensitive scenarios.
+
+==== Why Use `@Asynchronous`?
+
+1. *Improved Responsiveness*: The caller does not need to wait for the method execution to complete, allowing the application to remain interactive.
+2. *Non-Blocking Execution*: Long-running operations are offloaded to a separate thread pool, preventing bottlenecks in the primary thread pool.
+3. *Scalability*: By decoupling method execution from the calling thread, you can handle higher loads without increasing thread contention.
+
+==== Implementation
+
+Below is an example of using the *`@Asynchronous`* annotation with MicroProfile Fault Tolerance:
+
+[source,java]
+----
+package io.microprofile.tutorial.store.payment.service;
+
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.Asynchronous;
+import java.util.concurrent.CompletableFuture;
+
+@ApplicationScoped
+public class PaymentService {
+
+    /**
+     * Processes payments asynchronously with a thread pool-style bulkhead
+     * to handle concurrent requests effectively.
+     *
+     * @return A CompletableFuture with the result of the operation.
+     */
+    @Asynchronous
+    @Bulkhead(value = 5)
+    public CompletableFuture<String> processPayment() {
+        simulateDelay();
+        return CompletableFuture.completedFuture("Payment processed asynchronously.");
+    }
+
+    private void simulateDelay() {
+        try {
+            Thread.sleep(2000); // Simulating delay
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Error during simulated delay", e);
+        }
+    }
+}
+----
+
+==== Best Practices for Using @Asynchronous
+
+- *Use CompletableFuture or Future*: Return types like `CompletableFuture` allow asynchronous methods to integrate seamlessly with other asynchronous workflows.
+- *Timeout Integration*: Combine *`@Asynchronous`* with *`@Timeout`* to ensure long-running asynchronous operations do not block system resources indefinitely.
+
+==== Asynchronous Execution in Fault Tolerance Strategies
+
+When used with other fault tolerance strategies, *`@Asynchronous`* provides a powerful mechanism to handle faults without impacting the system's responsiveness:
+
+1. *Asynchronous with Bulkhead*:
+   - Isolates resources while maintaining non-blocking execution.
+   - Handles concurrent requests efficiently using thread pools.
+
+2. *Asynchronous with Circuit Breaker*:
+   - Prevents system overload during failures by breaking the circuit for failing asynchronous methods.
+   - The circuit breaker's delay allows recovery while new threads are available for other tasks.
+
+3. *Asynchronous with Timeout*:
+   - Ensures operations terminate within an acceptable duration even when executed asynchronously.
 
 === Combining Fault Tolerance Strategies
 
