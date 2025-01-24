@@ -79,7 +79,7 @@ The Fault Tolerance API defines a contract for fault tolerance implementations.
 
 == MicroProfile Fault Tolerance Annotations
 
-The MicroProfile Fault Tolerance Annotations provide a declarative way to implement fault-tolerant behavior in Java methods, allowing developers to handle failures gracefully with minimal code changes.
+The MicroProfile Fault Tolerance annotations provide a declarative way to implement fault-tolerant behavior in Java methods, allowing developers to handle failures gracefully with minimal code changes.
 
 === List of Annotations
 
