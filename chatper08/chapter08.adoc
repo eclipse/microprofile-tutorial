@@ -567,7 +567,7 @@ package io.microprofile.tutorial.store.payment.service;
 
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ejb.Asynchronous;
+import org.eclipse.microprofile.faulttolerance.Asynchronous;
 
 @ApplicationScoped
 public class PaymentService {
