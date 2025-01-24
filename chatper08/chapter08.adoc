@@ -4,7 +4,7 @@ In Microservices architecture, an application consists of multiple smaller, auto
 
 *MicroProfile Fault Tolerance* offers strategies for building resilient and reliable microservices, ensuring service continuity and stability even during unexpected failures.
 
-This chapter explains how to enhance your microservices' resilience and reliability using MicroProfile Fault Tolerance capabilities, detailing its annotations. We will also demonstrate how to implement key strategies such as timeouts, retries, fallbacks, circuit breakers, and bulkheads to handle faults. By the end of the chapter, you will understand how to use these strategies to enhance the resilience of your microservices.
+This chapter explains how to enhance your microservices' resilience and reliability using MicroProfile Fault Tolerance capabilities and annotations. We will also demonstrate how to implement key strategies such as timeouts, retries, fallbacks, circuit breakers, and bulkheads to handle faults. By the end of the chapter, you will understand how to use these strategies to enhance the resilience of your microservices.
 
 == Topics to be Covered
 - What is Fault Tolerance?
