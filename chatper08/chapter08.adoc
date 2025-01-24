@@ -559,7 +559,7 @@ In this example:
 
 ===== Thread Pool-Style Bulkhead
 
-The thread-pool-style bulkhead pattern leverages a dedicated thread pool to achieve resource isolation. Incoming requests are placed into a queue when all threads in the pool are in use and executed as threads become available. This design helps manage resource contention effectively.
+The thread-pool-style bulkhead pattern leverages a thread pool to achieve resource isolation. Incoming requests are placed into a queue when the maximum allowed number of threads are in use. Queued requests are executed as threads become available. This design helps manage resource contention effectively.
 
 [source,java]
 ----
