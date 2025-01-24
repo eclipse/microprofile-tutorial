@@ -39,7 +39,7 @@ For example, a payment service can retry a failed payment authorization request 
 
 A bulkhead isolates failures in one part of a system from other parts by segregating resources, such as thread pools, connection pools, or memory, among different microservices interactions.
 
-For example, in an e-commerce application, the catalog service can implement bulkheads using separate thread pools or connection pools for different upstream dependencies, such as the product database and the pricing service. If the pricing service becomes slow or unresponsive, its dedicated resources (thread pool or connections) prevent it from consuming all the resources of the catalog service, ensuring that requests to fetch product details from the database continue to work unaffected.
+For example, in an e-commerce application, the catalog service can implement bulkheads using separate thread pools or connection pools for different upstream dependencies, such as the product database and the pricing service. If the pricing service becomes slow or unresponsive, a bulkhead prevents it from consuming all the resources of the catalog service, ensuring that requests to fetch product details from the database continue to work unaffected.
 
 === Fallback
 
