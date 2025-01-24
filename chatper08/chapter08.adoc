@@ -170,7 +170,7 @@ class CriticalPaymentException extends Exception {
 }
 ----
 
-In this example, the `processPayment` method attempts to process a payment. If a transient failure occurs (e.g., `PaymentProcessingException`), the method retries up to three times (`maxRetries = 3`), there is a delay of 2000 milliseconds between retries (`delay = 2000`), with a random variation of up to 500 milliseconds is added to the delay (`jitter  = 500`) to avoid synchronized retries (e.g. thundering herd problem). 
+In this example, the `processPayment` method attempts to process a payment. If a transient failure occurs (e.g., `PaymentProcessingException`), the method retries up to three times (`maxRetries = 3`), and there is a delay of 2000 milliseconds between retries (`delay = 2000`), with a random variation of up to 500 milliseconds added to the delay (`jitter  = 500`) to avoid synchronized retries (e.g. thundering herd problem). 
 The retries are attempted only for the exception `PaymentProcessingException` (`retryOn = PaymentProcessingException.class`) and are aborted if a `CriticalPaymentException` is encountered (`abortOn = CriticalPaymentException.class`).
 
 
