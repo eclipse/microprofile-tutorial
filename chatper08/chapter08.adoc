@@ -448,6 +448,7 @@ package io.microprofile.tutorial.store.payment.service;
 
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.Asynchronous;
 
 @ApplicationScoped
 public class PaymentService {
@@ -458,9 +459,12 @@ public class PaymentService {
      *
      * The @Bulkhead annotation ensures that only a limited number of
      * concurrent requests (5 in this case) can access this method.
+     * The @Asynchronous annotation enables the use of the thread pool
+     * style bulkhead for non-blocking execution.
      *
      * @return A success message indicating the processing status.
      */
+    @Asynchronous
     @Bulkhead(value = 5)
     public String processPayment() {
         simulateDelay();
@@ -492,34 +496,38 @@ package io.microprofile.tutorial.store.payment.service;
 
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.Asynchronous;
 
 @ApplicationScoped
 public class PaymentService {
 
     /**
-     * Processes payment transactions using an isolated thread pool to ensure
-     * stability during high traffic and prevent contention with other operations.
+     * Processes payment transactions with limited concurrency using a thread pool
+     * to prevent system overload and ensure stability during high traffic.
      *
-     * The @Bulkhead annotation configures a thread pool with a maximum of
-     * 5 concurrent threads and a waiting task queue of size 10.
+     * The @Bulkhead annotation ensures that only a limited number of concurrent
+     * requests (5 in this case) can access this method, and the @Asynchronous
+     * annotation allows the use of the thread pool style bulkhead.
      *
-     * @return A success message indicating the payment status.
+     * @return A success message indicating the processing status.
      */
-    @Bulkhead(value = 5, waitingTaskQueue = 10)
-    public String processPayment() {
-        simulatePaymentProcessing();
-        return "Payment processed successfully with an isolated thread pool.";
+    @Asynchronous
+    @Bulkhead(value = 5)
+    public void processPayment() {
+        simulateDelay();
+        System.out.println("Payment processed with limited concurrency.");
     }
 
-    private void simulatePaymentProcessing() {
+    private void simulateDelay() {
         try {
-            Thread.sleep(3000); // Simulating a resource-intensive task
+            Thread.sleep(1000); // Simulating a delay
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException("Error during payment processing simulation", e);
         }
     }
 }
+
 ----
 
 In this example:
