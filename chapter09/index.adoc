@@ -1,22 +1,22 @@
-== Chapter 9: MicroProfile OpenTelemetry
+== Chapter 9: MicroProfile Telemetry
 
-This chapter focuses on distributed tracing and observability for Java-based microservices.  In a microservices architecture, where requests traverse multiple services, understanding the flow of operations across these services is crucial for monitoring performance, diagnosing issues, and optimizing system behavior. MicroProfile OpenTelemetry enables developers to capture and visualize telemetry data, such as trace information and context propagation, ensuring transparency and enhancing the reliability of complex distributed systems. This chapter covers various topics about how to gain insights into the flow of requests and monitor the performance of service, and implement robust tracing mechanisms to optimize the behavior and reliability of microservices.
+This chapter focuses on distributed tracing and observability for Java-based microservices.  In a microservices architecture, where requests traverse multiple services, understanding the flow of operations across these services is crucial for monitoring performance, diagnosing issues, and optimizing system behavior. MicroProfile Telemetry enables developers to capture and visualize telemetry data, such as trace information and context propagation, ensuring transparency and enhancing the reliability of complex distributed systems. This chapter covers various topics about how to gain insights into the flow of requests and monitor the performance of service, and implement robust tracing mechanisms to optimize the behavior and reliability of microservices.
 
 === Topics to be covered:
 
-* Introduction to MicroProfile OpenTelemetry
+* Introduction to MicroProfile Telemetry
 * Trancing Concepts (Spans, Traces and Context Propagation)
-* Instrumenting OpenTelemetry
-* Setting up Tracing Providers
+* Instrumenting MicroProfile Telemetry
+* Switching Tracing Providers
 * Context Propagation and Correlation
 * Analyzing Traces
 * Security Considerations for Tracing
 
-=== Introduction to MicroProfile OpenTelemetry
+=== Introduction to MicroProfile Telemetry
 
-MicroProfile OpenTelemetry is a specification that provides a vendor-neutral API for instrumenting, collecting, and exporting telemetry data from microservices applications. Built on the OpenTelemetry project, an open-source observability framework, it offers a comprehensive set of tools and libraries for collecting and analyzing telemetry data. By integrating seamlessly with MicroProfile, it allows developers to implement distributed tracing, metrics, and logging with minimal effort.
+MicroProfile Telemetry is a specification that provides a vendor-neutral API for instrumenting, collecting, and exporting telemetry data from microservices applications. Built on the OpenTelemetry project, an open-source observability framework, it offers a comprehensive set of tools and libraries for collecting and analyzing telemetry data. By integrating seamlessly with MicroProfile, it allows developers to implement distributed tracing, metrics, and logging with minimal effort.
 
-MicroProfile OpenTelemetry makes it easy for developers to add tracing, metrics, and logging to their microservices applications. It provides a consistent API across different vendors, so developers can easily switch between different implementations without having to rewrite their code, promoting portability and reducing vendor lock-in. The specification supports capturing detailed telemetry data, such as trace information and context propagation, enabling better monitoring and debugging of distributed systems. This enhanced visibility is critical for optimizing system behavior, ensuring reliability, and improving the overall user experience in complex microservices architectures.
+MicroProfile Telemetry makes it easy for developers to add tracing, metrics, and logging to their microservices applications. It provides a consistent API across different vendors, so developers can easily switch between different implementations without having to rewrite their code, promoting portability and reducing vendor lock-in. The specification supports capturing detailed telemetry data, such as trace information and context propagation, enabling better monitoring and debugging of distributed systems. This enhanced visibility is critical for optimizing system behavior, ensuring reliability, and improving the overall user experience in complex microservices architectures.
 
 === Tracing Concepts (Spans, Traces and Context Propagation)
 
@@ -50,20 +50,20 @@ In Java, context propagation is often implemented using thread-local variables o
 
 Together, these concepts form the foundation of distributed tracing, enabling developers to monitor, analyze, and optimize the performance of their microservices effectively.
 
-=== Instrumenting OpenTelemetry
+=== Instrumenting MicroProfile Telemetry
 
 Instrumenting Open Telemetry in an E-commerce Application
 
-*Step 1: Add the MicroProfile OpenTelemetry Dependency*
+*Step 1: Add the MicroProfile Telemetry Dependency*
 
-First, include the necessary dependencies for MicroProfile OpenTelemetry in your `pom.xml` file. These dependencies enable tracing and exporting of telemetry data.
+First, include the necessary dependencies for MicroProfile Telemetry in your `pom.xml` file. These dependencies enable tracing and exporting of telemetry data.
 
 [source, xml]
 ----
 <dependency>
-  <groupId>org.microprofile.opentelemetry</groupId>
+  <groupId>org.eclipse.microprofile.telemetry</groupId>
   <artifactId>microprofile-opentelemetry-api</artifactId>
-  <version>1.8.0</version>
+  <version>2.0.1</version>
 </dependency>
 ----
 
@@ -120,9 +120,9 @@ Add the Jaeger Exporter Dependency:
 [source, xml]
 ----
 <dependency>
-  <groupId>org.microprofile.opentelemetry</groupId>
-  <artifactId>microprofile-opentelemetry-exporter-jaeger</artifactId>
-  <version>1.8.0</version>
+    <groupId>io.opentelemetry</groupId>
+    <artifactId>opentelemetry-exporter-jaeger</artifactId>
+    <version>1.34.1</version>
 </dependency>
 ----
 
@@ -144,39 +144,11 @@ After implementing tracing, verify that the traces are being collected and expor
 . Open the Jaeger UI at http://localhost:16686[http://localhost:16686].
 . Search for traces associated with your application and confirm that the telemetry data is visible.
 
-=== Setting up Tracing Providers
+=== Switching to Tracing Providers
 
-MicroProfile OpenTelemetry supports multiple tracing providers, for exporting and analyzing traces. The default tracing provider is Jaeger, but developers can also use other providers such as Zipkin or OpenCensus.
-
-To set up a tracing provider:  
-
-. Add the appropriate dependency to their project's pom.xml file. For example, to use Jaeger, developers would add the following dependency:
-
-[source, xml]
-----
-<dependency>
-  <groupId>org.microprofile.opentelemetry</groupId>
-  <artifactId>microprofile-opentelemetry-exporter-jaeger</artifactId>
-  <version>1.8.0</version>
-</dependency>
-
-----
-
-Once the dependency has been added, configure the tracing provider by setting the following properties in the project's application.properties file:
-
-[source, xml]
-----
-otel.traces.exporter=jaeger
-otel.exporter.jaeger.endpoint=http://localhost:14268/api/traces
-----
-
-The `otel.traces.exporter` property specifies the tracing provider to use, and the `otel.exporter.jaeger.endpoint` property specifies the endpoint of the Jaeger collector.
-
-*Switching to Other Providers*
+MicroProfile Telemetry supports multiple tracing providers, for exporting and analyzing traces. The default tracing provider is Jaeger, but developers can also use other providers such as Zipkin or OpenCensus.
 
 To switch to another tracing provider, replace the Jaeger dependency with the appropriate exporter dependency, such as *Zipkin*, and update the configuration properties accordingly.
-
-By following these steps, you can effectively instrument your application with OpenTelemetry, enabling comprehensive observability and traceability for your microservices.
 
 === Context Propagation and Correlation
 
@@ -470,12 +442,10 @@ By following these security considerations, you can leverage the benefits of dis
 
 === Conclusion
 
-MicroProfile OpenTelemetry provides a robust foundation for observability in Java-based microservices, enabling developers to implement distributed tracing seamlessly. By leveraging this specification, you can gain deep insights into the flow of requests, identify bottlenecks, and enhance the reliability and performance of your applications. The integration of standardized tracing concepts like spans, traces, and context propagation ensures that developers can maintain a cohesive understanding of their system's behavior across service boundaries.
+MicroProfile Telemetry provides a robust foundation for observability in Java-based microservices, enabling developers to implement distributed tracing seamlessly. By leveraging this specification, you can gain deep insights into the flow of requests, identify bottlenecks, and enhance the reliability and performance of your applications. The integration of standardized tracing concepts like spans, traces, and context propagation ensures that developers can maintain a cohesive understanding of their system's behavior across service boundaries.
 
-Through instrumentation, context propagation, and effective trace analysis, MicroProfile OpenTelemetry simplifies the complexities of monitoring and debugging distributed systems. It empowers teams to proactively address issues, optimize performance, and improve the user experience. Moreover, by adhering to security best practices, developers can ensure that telemetry data is protected, compliant with regulations, and free of sensitive information.
+Through instrumentation, context propagation, and effective trace analysis, MicroProfile Telemetry simplifies the complexities of monitoring and debugging distributed systems. It empowers teams to proactively address issues, optimize performance, and improve the user experience. Moreover, by adhering to security best practices, developers can ensure that telemetry data is protected, compliant with regulations, and free of sensitive information.
 
-In this chapter, we explored the critical security considerations surrounding tracing within the MicroProfile OpenTelemetry framework. We emphasized the importance of safeguarding sensitive data by avoiding the inclusion of Personally Identifiable Information (PII) in trace spans. Additionally, we discussed the potential security risks associated with tracing in production environments and the significance of carefully managing sampling rates and data retention policies. By adhering to these security best practices, developers can harness the power of tracing for observability while ensuring the confidentiality and integrity of their applications.
+In this chapter, we explored the critical security considerations surrounding tracing within the MicroProfile Telemetry framework. We emphasized the importance of safeguarding sensitive data by avoiding the inclusion of Personally Identifiable Information (PII) in trace spans. Additionally, we discussed the potential security risks associated with tracing in production environments and the significance of carefully managing sampling rates and data retention policies. By adhering to these security best practices, developers can harness the power of tracing for observability while ensuring the confidentiality and integrity of their applications.
 
-As microservices architectures continue to evolve, the ability to observe and trace system interactions will remain a critical factor in maintaining resilient and efficient applications. MicroProfile OpenTelemetry stands as a valuable tool in achieving these goals, providing developers with the observability they need to deliver reliable, high-performance microservices in modern cloud-native environments.
-
-
+As microservices architectures continue to evolve, the ability to observe and trace system interactions will remain a critical factor in maintaining resilient and efficient applications. MicroProfile Telemetry stands as a valuable tool in achieving these goals, providing developers with the observability they need to deliver reliable, high-performance microservices in modern cloud-native environments.
