@@ -297,6 +297,7 @@ In this example:
 - **Monitor Performance:** Use MicroProfile Metrics to monitor execution times and identify operations requiring optimized timeout values.
 - **Combine with Fallbacks:** Always pair timeouts with fallback logic to provide a reliable response in case of delays.
 - **Avoid Overly Short Timeouts:** Overly aggressive timeout settings may cause unnecessary failures, particularly in high-latency environments.
+- **Combine Timeout with Asynchronous:** Use timeout together with asynchronous to improve responsiveness and prevent blocking the calling thread. This approach ensures better resource utilization and system scalability during long-running operations.
 
 === Implementing Fallbacks
 
