@@ -507,7 +507,7 @@ Bulkheads are a common pattern for isolating resources by dividing a system into
 
 MicroProfile supports two types of bulkheads:
 - **Semaphore-Style Bulkhead:** Limits the number of concurrent requests.
-- **Thread Pool-Style Bulkhead:** Uses a dedicated thread pool to isolate operations.
+- **Thread Pool-Style Bulkhead:** Runs a maximum number of requests on a thread pool to isolate operations.
 
 ===== Semaphore-Style Bulkhead
 
