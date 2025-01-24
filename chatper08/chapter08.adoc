@@ -50,7 +50,7 @@ A circuit breaker stops an application from making too many unsuccessful request
 
 image::../images/figure8-1.png[Figure 8-1: Circuit Breaker states, width=600, align="center"]
 
-For example, a circuit breaker can be applied to calls to an external inventory service in the Product Catalog Microservice. If the inventory service starts failing or becomes unresponsive, the circuit breaker will "open," preventing repeated requests and reducing load. After a configured delay, the circuit breaker will "half-open" to test the availability of the inventory service with a few requests. If those succeed, the circuit breaker will "close," resuming normal operations.
+For example, a circuit breaker can be applied to calls to an external inventory service in the Product Catalog Microservice. If the inventory service starts failing or becomes unresponsive, the circuit breaker will `open`, preventing repeated requests and reducing load. After a configured delay, the circuit breaker will `half-open` to test the availability of the inventory service with a few requests. If those succeed, the circuit breaker will `close`, resuming normal operations.
 
 === Asynchronous Execution
 
