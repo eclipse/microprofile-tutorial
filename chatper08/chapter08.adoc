@@ -290,7 +290,7 @@ public class PaymentService {
 
 In this example:
 - The `@Timeout(1000)` annotation specifies that the `processPayment` method must complete within 1000 milliseconds (1 second).
-- If the execution exceeds this time, a `TimeoutException` will be thrown, and the process will terminate.
+- If the execution exceeds this time, an attempt is made to interrupt the process, and a `TimeoutException` will be thrown when the process terminates.
 
 ==== Best Practices for Timeouts
 
