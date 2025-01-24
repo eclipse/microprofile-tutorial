@@ -46,7 +46,7 @@ A fallback provides a default response if an operation fails. It ensures the sys
 
 === Circuit Breaker
 
-A circuit breaker stops an application from making too many unsuccessful requests to another system. If the number of failures exceeds a threshold, the circuit breaker will "open," causing all subsequent requests to fail immediately. After a configured delay, the circuit breaker will "half-open" and allow limited requests. If those requests succeed, the circuit breaker will "close" and let all requests go through.
+A circuit breaker stops an application from making too many unsuccessful requests to another system. If the number of failures exceeds a threshold, the circuit breaker will `open`, causing all subsequent requests to fail immediately. After a configured delay, the circuit breaker will `half-open` and allow limited requests. If those requests succeed, the circuit breaker will `close` and let all requests go through.
 
 image::../images/figure8-1.png[Figure 8-1: Circuit Breaker states, width=600, align="center"]
 
