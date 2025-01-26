@@ -342,11 +342,17 @@ import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.FallbackHandler;
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 
-@Fallback(FallbackHandlerImpl.class)
-public class ProductService {
 
-    public String fetchProductDetails(Long productId) {
-        throw new RuntimeException("Service Unavailable");
+public class ProductService {
+    
+    @Fallback(FallbackHandlerImpl.class)
+    public Product getProduct(Long id) {
+        // Logic to call the product details service
+        if (Math.random() > 0.7) {
+            throw new RuntimeException("Simulated service failure");
+        }
+
+        return productRepository.findProductById(id);
     }
 }
 
