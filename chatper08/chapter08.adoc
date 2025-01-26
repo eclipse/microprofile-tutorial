@@ -469,7 +469,6 @@ public class PaymentService {
      * @return A CompletableFuture with the result of the operation.
      */
     @Asynchronous
-    @Bulkhead(value = 5)
     public CompletableFuture<String> processPayment() {
         simulateDelay();
         return CompletableFuture.completedFuture("Payment processed asynchronously.");
@@ -528,6 +527,7 @@ Bulkheads are a common pattern for isolating resources by dividing a system into
 ==== Bulkhead Types
 
 MicroProfile supports two types of bulkheads:
+
 - **Semaphore-Style Bulkhead:** Limits the number of concurrent requests.
 - **Thread Pool-Style Bulkhead:** Runs a maximum number of requests on a thread pool to isolate operations.
 
