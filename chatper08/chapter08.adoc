@@ -387,7 +387,10 @@ import org.eclipse.microprofile.faulttolerance.Timeout;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
-@ApplicationScoped
+import io.microprofile.tutorial.store.product.cache.ProductCache;
+import io.microprofile.tutorial.store.product.entity.Product;
+
+@RequestScoped
 public class ProductService {
 
     @Inject
@@ -403,7 +406,10 @@ public class ProductService {
     @Timeout(2000) // Set timeout to 2 seconds
     @Fallback(fallbackMethod = "getProductsFromCache") // Fallback method
     public List<Product> getProducts() {
-        // Simulating database call
+        if (Math.random() > 0.7) {
+            throw new RuntimeException("Simulated service failure");
+        }
+        // database call
         return productRepository.findAllProducts();
     }
 
@@ -412,7 +418,9 @@ public class ProductService {
      */
     public List<Product> getProductsFromCache() {
         System.out.println("Fetching products from cache...");
-        return productCache.getCachedProducts();
+        return productCache.getAll().stream()
+                .map(obj -> (Product) obj)
+                .collect(Collectors.toList());
     }
 }
 ----
