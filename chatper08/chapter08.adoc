@@ -463,8 +463,7 @@ import java.util.concurrent.CompletableFuture;
 public class PaymentService {
 
     /**
-     * Processes payments asynchronously with a thread pool-style bulkhead
-     * to handle concurrent requests effectively.
+     * Processes payments asynchronously
      *
      * @return A CompletableFuture with the result of the operation.
      */
@@ -559,9 +558,9 @@ public class PaymentService {
      */
     @Asynchronous
     @Bulkhead(value = 5)
-    public String processPayment() {
+    public CompletableFuture<String> processPayment() {
         simulateDelay();
-        return "Payment processed with limited concurrency.";
+        return CompletableFuture.completedFuture("Payment processed asynchronously.");
     }
 
     private void simulateDelay() {
@@ -605,7 +604,7 @@ public class PaymentService {
      * @return A success message indicating the processing status.
      */
     @Asynchronous
-    @Bulkhead(value = 5)
+    @Bulkhead(value = 5, waitingTaskQueue = 10)
     public void processPayment() {
         simulateDelay();
         System.out.println("Payment processed with limited concurrency.");
@@ -635,9 +634,9 @@ Annotate the method without specific values:
 ----
 @Asynchronous
 @Bulkhead
-public String processPayment() {
+public CompletableFuture<String> processPayment() {
     simulatePaymentProcessing();
-    return "Payment processed successfully with an isolated thread pool.";
+    return CompletableFuture.completedFuture("Payment processed successfully with an isolated thread pool.");
 }
 ----
 
