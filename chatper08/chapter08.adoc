@@ -275,7 +275,8 @@ import org.eclipse.microprofile.faulttolerance.Timeout;
 public class PaymentService {
 
     @Timeout(1000)
-    public String processPayment(PaymentDetails paymentDetails) {
+    public Response processPayment(PaymentDetails paymentDetails) throws PaymentProcessingException{
+   	
         // Simulate a long-running process
         try {
             Thread.sleep(1500);
@@ -283,14 +284,21 @@ public class PaymentService {
             Thread.currentThread().interrupt();
             throw new RuntimeException("Processing interrupted");
         }
-        return "Payment processed successfully.";
+        System.out.println("Processing payment for amount: " + paymentDetails.getAmount());
+
+        // Simulating a transient failure
+        if (Math.random() > 0.7) {
+            throw new PaymentProcessingException("Temporary payment processing failure");
+        }
+
+        // response for successful payment processing
+        String result = "{\"status\":\"success\", \"message\":\"Payment processed successfully.\"}";
+        return Response.ok(result, MediaType.APPLICATION_JSON).build();
     }
 }
 ----
 
-In this example:
-- The `@Timeout(1000)` annotation specifies that the `processPayment` method must complete within 1000 milliseconds (1 second).
-- If the execution exceeds this time, an attempt is made to interrupt the process, and a `TimeoutException` will be thrown when the process terminates.
+In this example, the `@Timeout(1000)` annotation specifies that the `processPayment` method must complete within 1000 milliseconds (1 second). If the execution exceeds this time, a `TimeoutException` will be thrown, and the process will terminate.
 
 ==== Best Practices for Timeouts
 
@@ -344,11 +352,17 @@ import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.FallbackHandler;
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 
-@Fallback(FallbackHandlerImpl.class)
-public class ProductService {
 
-    public String fetchProductDetails(Long productId) {
-        throw new RuntimeException("Service Unavailable");
+public class ProductService {
+    
+    @Fallback(FallbackHandlerImpl.class)
+    public Product getProduct(Long id) {
+        // Logic to call the product details service
+        if (Math.random() > 0.7) {
+            throw new RuntimeException("Simulated service failure");
+        }
+
+        return productRepository.findProductById(id);
     }
 }
 
@@ -375,7 +389,10 @@ import org.eclipse.microprofile.faulttolerance.Timeout;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
-@ApplicationScoped
+import io.microprofile.tutorial.store.product.cache.ProductCache;
+import io.microprofile.tutorial.store.product.entity.Product;
+
+@RequestScoped
 public class ProductService {
 
     @Inject
@@ -391,7 +408,10 @@ public class ProductService {
     @Timeout(2000) // Set timeout to 2 seconds
     @Fallback(fallbackMethod = "getProductsFromCache") // Fallback method
     public List<Product> getProducts() {
-        // Simulating database call
+        if (Math.random() > 0.7) {
+            throw new RuntimeException("Simulated service failure");
+        }
+        // database call
         return productRepository.findAllProducts();
     }
 
@@ -400,7 +420,9 @@ public class ProductService {
      */
     public List<Product> getProductsFromCache() {
         System.out.println("Fetching products from cache...");
-        return productCache.getCachedProducts();
+        return productCache.getAll().stream()
+                .map(obj -> (Product) obj)
+                .collect(Collectors.toList());
     }
 }
 ----
@@ -601,9 +623,7 @@ public class PaymentService {
 
 ----
 
-In this example:
-- The method uses up to 5 concurrent threads (`value = 5`) from a thread pool and a queue of up to 10 tasks (`waitingTaskQueue = 10`).
-- This configuration prevents failures in one operation from depleting shared resources.
+In this example, The method uses up to 5 concurrent threads (`value = 5`) from a thread pool and a queue of up to 10 tasks (`waitingTaskQueue = 10`).This configuration prevents failures in one operation from depleting shared resources.
 
 ==== Externalizing Bulkhead Configuration
 
@@ -613,6 +633,7 @@ Annotate the method without specific values:
 
 [source,java]
 ----
+@Asynchronous
 @Bulkhead
 public String processPayment() {
     simulatePaymentProcessing();
