@@ -1,10 +1,10 @@
 = Chapter 8: MicroProfile Fault Tolerance
 
-In Microservices architecture, an application consists of multiple smaller, autonomous services. It enhances development flexibility, agility, and scalability but introduces new challenges, particularly in ensuring the application's reliability and managing failures. Unlike monolithic applications, where defects are localized, a single failure in one microservice can propagate across the entire application, potentially causing widespread outages. Therefore, fault tolerance is critical for microservices architecture to ensure that failures are seamlessly isolated, managed, and recovered.
+In a Microservices architecture, an application consists of multiple smaller, autonomous services. This architecture enhances development flexibility, agility, and scalability but introduces new challenges, particularly in ensuring the application's reliability and managing failures. Unlike monolithic applications, where defects are localized, a single failure in one microservice can propagate across the entire application, potentially causing widespread outages. Therefore, fault tolerance is critical in a microservices architecture to ensure that failures are seamlessly isolated, managed, and recovered.
 
 *MicroProfile Fault Tolerance* offers strategies for building resilient and reliable microservices, ensuring service continuity and stability even during unexpected failures.
 
-This chapter explains how to enhance your microservices' resilience and reliability using MicroProfile Fault Tolerance capabilities, detailing its annotations. We will also demonstrate how to implement key strategies such as timeouts, retries, fallbacks, circuit breakers, and bulkheads to handle faults. By the end of the chapter, you will understand how to use these strategies to enhance the resilience of your microservices.
+This chapter explains how to enhance your microservices' resilience and reliability using MicroProfile Fault Tolerance capabilities and annotations. We will also demonstrate how to implement key strategies such as timeouts, retries, fallbacks, circuit breakers, and bulkheads to handle faults. By the end of the chapter, you will understand how to use these strategies to enhance the resilience of your microservices.
 
 == Topics to be Covered
 - What is Fault Tolerance?
@@ -14,6 +14,7 @@ This chapter explains how to enhance your microservices' resilience and reliabil
 - Configuring Circuit Breaker
 - Setting Timeouts
 - Implementing Fallback Logic
+- Using `@Asynchronous` Annotation
 - Isolating Resources for Fault Tolerance
 
 == What is Fault Tolerance?
@@ -38,7 +39,7 @@ For example, a payment service can retry a failed payment authorization request 
 
 A bulkhead isolates failures in one part of a system from other parts by segregating resources, such as thread pools, connection pools, or memory, among different microservices interactions.
 
-For example, in an e-commerce application, the catalog service can implement bulkheads using separate thread pools or connection pools for different upstream dependencies, such as the product database and the pricing service. If the pricing service becomes slow or unresponsive, its dedicated resources (thread pool or connections) prevent it from consuming all the resources of the catalog service, ensuring that requests to fetch product details from the database continue to work unaffected.
+For example, in an e-commerce application, the catalog service can implement bulkheads using separate thread pools or connection pools for different upstream dependencies, such as the product database and the pricing service. If the pricing service becomes slow or unresponsive, a bulkhead prevents it from consuming all the resources of the catalog service, ensuring that requests to fetch product details from the database continue to work unaffected.
 
 === Fallback
 
@@ -46,11 +47,11 @@ A fallback provides a default response if an operation fails. It ensures the sys
 
 === Circuit Breaker
 
-A circuit breaker stops an application from making too many unsuccessful requests to another system. If the number of failures exceeds a threshold, the circuit breaker will "open," causing all subsequent requests to fail immediately. After a configured delay, the circuit breaker will "half-open" and allow limited requests. If those requests succeed, the circuit breaker will "close" and let all requests go through.
+A circuit breaker stops an application from making too many unsuccessful requests to another system. If the number of failures exceeds a threshold, the circuit breaker will `open`, causing all subsequent requests to fail immediately. After a configured delay, the circuit breaker will `half-open` and allow limited requests. If those requests succeed, the circuit breaker will `close` and let all requests go through.
 
 image::../images/figure8-1.png[Figure 8-1: Circuit Breaker states, width=600, align="center"]
 
-For example, a circuit breaker can be applied to calls to an external inventory service in the Product Catalog Microservice. If the inventory service starts failing or becomes unresponsive, the circuit breaker will "open," preventing repeated requests and reducing load. After a configured delay, the circuit breaker will "half-open" to test the availability of the inventory service with a few requests. If those succeed, the circuit breaker will "close," resuming normal operations.
+For example, a circuit breaker can be applied to calls to an external inventory service in the Product Catalog Microservice. If the inventory service starts failing or becomes unresponsive, the circuit breaker will `open`, preventing repeated requests and reducing load. After a configured delay, the circuit breaker will `half-open` to test the availability of the inventory service with a few requests. If those succeed, the circuit breaker will `close`, resuming normal operations.
 
 === Asynchronous Execution
 
@@ -79,7 +80,7 @@ The Fault Tolerance API defines a contract for fault tolerance implementations.
 
 == MicroProfile Fault Tolerance Annotations
 
-The MicroProfile Fault Tolerance Annotations provide a declarative way to implement fault-tolerant behavior in Java methods, allowing developers to handle failures gracefully with minimal code changes.
+The MicroProfile Fault Tolerance annotations provide a declarative way to implement fault-tolerant behavior in Java methods, allowing developers to handle failures gracefully with minimal code changes.
 
 === List of Annotations
 
@@ -169,7 +170,7 @@ class CriticalPaymentException extends Exception {
 }
 ----
 
-In this example, the `processPayment` method attempts to process a payment. If a transient failure occurs (e.g., `PaymentProcessingException`), the method retries up to three times (`maxRetries = 3`), there is a delay of 2000 milliseconds between retries (`delay = 2000`), with a random variation of up to 500 milliseconds is added to the delay (`jitter  = 500`) to avoid synchronized retries (e.g. thundering herd problem). 
+In this example, the `processPayment` method attempts to process a payment. If a transient failure occurs (e.g., `PaymentProcessingException`), the method retries up to three times (`maxRetries = 3`), and there is a delay of 2000 milliseconds between retries (`delay = 2000`), with a random variation of up to 500 milliseconds added to the delay (`jitter  = 500`) to avoid synchronized retries (e.g. thundering herd problem). 
 The retries are attempted only for the exception `PaymentProcessingException` (`retryOn = PaymentProcessingException.class`) and are aborted if a `CriticalPaymentException` is encountered (`abortOn = CriticalPaymentException.class`).
 
 
@@ -305,6 +306,7 @@ In this example, the `@Timeout(1000)` annotation specifies that the `processPaym
 - **Monitor Performance:** Use MicroProfile Metrics to monitor execution times and identify operations requiring optimized timeout values.
 - **Combine with Fallbacks:** Always pair timeouts with fallback logic to provide a reliable response in case of delays.
 - **Avoid Overly Short Timeouts:** Overly aggressive timeout settings may cause unnecessary failures, particularly in high-latency environments.
+- **Combine Timeout with Asynchronous:** Use timeout together with asynchronous to improve responsiveness and prevent blocking the calling thread. This approach ensures better resource utilization and system scalability during long-running operations.
 
 === Implementing Fallbacks
 
@@ -434,6 +436,76 @@ This example demonstrates the use of MicroProfile Fault Tolerance annotations `@
 - **Monitor Fallback Usage:** Use metrics to track the frequency of fallback execution, which can indicate service health and the need for improvements.
 - **Plan for Degraded Functionality:** Ensure the fallback behavior aligns with business priorities and provides the most critical features.
 
+=== Using `@Asynchronous` Annotation
+
+The *`@Asynchronous`* annotation in MicroProfile Fault Tolerance is used to enable asynchronous execution of methods. It allows operations to run in a separate thread, freeing up the main thread for other tasks. This approach enhances the application's responsiveness and scalability, particularly in high-concurrency or latency-sensitive scenarios.
+
+==== Why Use `@Asynchronous`?
+
+1. *Improved Responsiveness*: The caller does not need to wait for the method execution to complete, allowing the application to remain interactive.
+2. *Non-Blocking Execution*: Long-running operations are offloaded to a separate thread, preventing bottlenecks.
+3. *Scalability*: By decoupling method execution from the calling thread, you can handle higher loads without increasing thread contention.
+
+==== Implementation
+
+Below is an example of using the *`@Asynchronous`* annotation with MicroProfile Fault Tolerance:
+
+[source,java]
+----
+package io.microprofile.tutorial.store.payment.service;
+
+import org.eclipse.microprofile.faulttolerance.Bulkhead;
+import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.faulttolerance.Asynchronous;
+import java.util.concurrent.CompletableFuture;
+
+@ApplicationScoped
+public class PaymentService {
+
+    /**
+     * Processes payments asynchronously with a thread pool-style bulkhead
+     * to handle concurrent requests effectively.
+     *
+     * @return A CompletableFuture with the result of the operation.
+     */
+    @Asynchronous
+    @Bulkhead(value = 5)
+    public CompletableFuture<String> processPayment() {
+        simulateDelay();
+        return CompletableFuture.completedFuture("Payment processed asynchronously.");
+    }
+
+    private void simulateDelay() {
+        try {
+            Thread.sleep(2000); // Simulating delay
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Error during simulated delay", e);
+        }
+    }
+}
+----
+
+==== Best Practices for Using @Asynchronous
+
+- *Use CompletableFuture or Future*: Return types like `CompletableFuture` allow asynchronous methods to integrate seamlessly with other asynchronous workflows.
+- *Timeout Integration*: Combine *`@Asynchronous`* with *`@Timeout`* to ensure long-running asynchronous operations do not block system resources indefinitely.
+
+==== Asynchronous Execution in Fault Tolerance Strategies
+
+When used with other fault tolerance strategies, *`@Asynchronous`* provides a powerful mechanism to handle faults without impacting the system's responsiveness:
+
+1. *Asynchronous with Bulkhead*:
+   - Isolates resources while maintaining non-blocking execution.
+   - Handles concurrent requests efficiently using thread pools.
+
+2. *Asynchronous with Circuit Breaker*:
+   - Prevents system overload during failures by breaking the circuit for failing asynchronous methods.
+   - The circuit breaker's delay allows recovery while new threads are available for other tasks.
+
+3. *Asynchronous with Timeout*:
+   - Ensures operations terminate within an acceptable duration even when executed asynchronously.
+
 === Combining Fault Tolerance Strategies
 
 Combining fault tolerance strategies, such as `@Timeout`, `@Fallback`, `@CircuitBreaker`, and `@Retry`, ensures resilience and efficient resource usage. Externalize configurations with MicroProfile Config for flexibility across environments.
@@ -457,7 +529,7 @@ Bulkheads are a common pattern for isolating resources by dividing a system into
 
 MicroProfile supports two types of bulkheads:
 - **Semaphore-Style Bulkhead:** Limits the number of concurrent requests.
-- **Thread Pool-Style Bulkhead:** Uses a dedicated thread pool to isolate operations.
+- **Thread Pool-Style Bulkhead:** Runs a maximum number of requests on a thread pool to isolate operations.
 
 ===== Semaphore-Style Bulkhead
 
@@ -469,6 +541,7 @@ package io.microprofile.tutorial.store.payment.service;
 
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.faulttolerance.Asynchronous;
 
 @ApplicationScoped
 public class PaymentService {
@@ -479,9 +552,12 @@ public class PaymentService {
      *
      * The @Bulkhead annotation ensures that only a limited number of
      * concurrent requests (5 in this case) can access this method.
+     * The @Asynchronous annotation enables the use of the thread pool
+     * style bulkhead for non-blocking execution.
      *
      * @return A success message indicating the processing status.
      */
+    @Asynchronous
     @Bulkhead(value = 5)
     public String processPayment() {
         simulateDelay();
@@ -505,7 +581,7 @@ In this example:
 
 ===== Thread Pool-Style Bulkhead
 
-The thread-pool-style bulkhead pattern leverages a dedicated thread pool to achieve resource isolation. Incoming requests are placed into a queue when all threads in the pool are in use and executed as threads become available. This design helps manage resource contention effectively.
+The thread-pool-style bulkhead pattern leverages a thread pool to achieve resource isolation. Incoming requests are placed into a queue when the maximum allowed number of threads are in use. Queued requests are executed as threads become available. This design helps manage resource contention effectively.
 
 [source,java]
 ----
@@ -513,39 +589,41 @@ package io.microprofile.tutorial.store.payment.service;
 
 import org.eclipse.microprofile.faulttolerance.Bulkhead;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.faulttolerance.Asynchronous;
 
 @ApplicationScoped
 public class PaymentService {
 
     /**
-     * Processes payment transactions using an isolated thread pool to ensure
-     * stability during high traffic and prevent contention with other operations.
+     * Processes payment transactions with limited concurrency using a thread pool
+     * to prevent system overload and ensure stability during high traffic.
      *
-     * The @Bulkhead annotation configures a thread pool with a maximum of
-     * 5 concurrent threads and a waiting task queue of size 10.
+     * The @Bulkhead annotation ensures that only a limited number of concurrent
+     * requests (5 in this case) can access this method, and the @Asynchronous
+     * annotation allows the use of the thread pool style bulkhead.
      *
-     * @return A success message indicating the payment status.
+     * @return A success message indicating the processing status.
      */
-    @Bulkhead(value = 5, waitingTaskQueue = 10)
-    public String processPayment() {
-        simulatePaymentProcessing();
-        return "Payment processed successfully with an isolated thread pool.";
+    @Asynchronous
+    @Bulkhead(value = 5)
+    public void processPayment() {
+        simulateDelay();
+        System.out.println("Payment processed with limited concurrency.");
     }
 
-    private void simulatePaymentProcessing() {
+    private void simulateDelay() {
         try {
-            Thread.sleep(3000); // Simulating a resource-intensive task
+            Thread.sleep(1000); // Simulating a delay
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException("Error during payment processing simulation", e);
         }
     }
 }
+
 ----
 
-In this example:
-- The method uses a thread pool with up to 5 concurrent threads (`value = 5`) and a queue of up to 10 tasks (`waitingTaskQueue = 10`).
-- This configuration prevents failures in one operation from depleting shared resources.
+In this example, The method uses up to 5 concurrent threads (`value = 5`) from a thread pool and a queue of up to 10 tasks (`waitingTaskQueue = 10`).This configuration prevents failures in one operation from depleting shared resources.
 
 ==== Externalizing Bulkhead Configuration
 
@@ -555,6 +633,7 @@ Annotate the method without specific values:
 
 [source,java]
 ----
+@Asynchronous
 @Bulkhead
 public String processPayment() {
     simulatePaymentProcessing();
