@@ -5,7 +5,7 @@ This chapter focuses on distributed tracing and observability for Java-based mic
 === Topics to be covered:
 
 * Introduction to MicroProfile Telemetry
-* Trancing Concepts (Spans, Traces and Context Propagation)
+* Tracing Concepts (Spans, Traces and Context Propagation)
 * Instrumenting MicroProfile Telemetry
 * Switching Tracing Providers
 * Context Propagation and Correlation
