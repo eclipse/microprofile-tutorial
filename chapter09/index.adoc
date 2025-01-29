@@ -64,6 +64,7 @@ First, include the necessary dependencies for MicroProfile Telemetry in your `po
   <groupId>org.eclipse.microprofile.telemetry</groupId>
   <artifactId>microprofile-opentelemetry-api</artifactId>
   <version>2.0.1</version>
+  <scope>provided</scope>
 </dependency>
 ----
 
